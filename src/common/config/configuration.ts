@@ -7,13 +7,14 @@ export default () => ({
   },
   database: {
     mongodb: {
-      uri: `mongodb://${process.env.MONGO_USERNAME}:${process.env.MONGO_PASSWORD}@${process.env.MONGO_HOST}:${process.env.MONGO_PORT}/${process.env.MONGO_DB}?authSource=${process.env.MONGO_AUTH_DB}`,
-      useNewUrlParser: process.env.MONGO_NEW_URL_PARSER || true,
-      useUnifiedTopology: process.env.MONGO_UNIFIED_TOPOLOGY || true,
-      serverSelectionTimeoutMS:
-        parseInt(process.env.MONGO_SERVER_SELECTION_TIMEOUT, 10) || 50,
-      connectTimeoutMS:
-        parseInt(process.env.MONGO_CONNECT_TIMEOUT, 10) || 50,
+      uri: `mongodb+srv://${process.env.MONGO_CLUSTER_USERNAME}:${process.env.MONGO_CLUSTER_PASSWORD}@${process.env.MONGO_CLUSTER}.mongodb.net/${process.env.MONGO_DB}?retryWrites=true&w=majority`,
+      // uri: `mongodb://${process.env.MONGO_USERNAME}:${process.env.MONGO_PASSWORD}@${process.env.MONGO_HOST}:${process.env.MONGO_PORT}/${process.env.MONGO_DB}?authSource=${process.env.MONGO_AUTH_DB}`,
+      // useNewUrlParser: process.env.MONGO_NEW_URL_PARSER || true,
+      // useUnifiedTopology: process.env.MONGO_UNIFIED_TOPOLOGY || true,
+      // serverSelectionTimeoutMS:
+      //   parseInt(process.env.MONGO_SERVER_SELECTION_TIMEOUT, 10) || 50,
+      // connectTimeoutMS:
+      //   parseInt(process.env.MONGO_CONNECT_TIMEOUT, 10) || 50,
     },
   },
   log: {

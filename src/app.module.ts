@@ -16,7 +16,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
     MongooseModule.forRootAsync({
       useFactory: async (configService: ConfigService) => {
         const mongoConnectionObject = configService.get('database.mongodb');
-        console.log(`MongoDB connection settings [URI: ${mongoConnectionObject.uri}]`)
+        // console.log(`MongoDB connection settings [URI: ${mongoConnectionObject.uri}]`)
         return mongoConnectionObject;
       },
       inject: [ConfigService]
