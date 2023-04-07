@@ -8,14 +8,27 @@ export default () => ({
   database: {
     mongodb: {
       uri: `mongodb://${process.env.MONGO_USERNAME}:${process.env.MONGO_PASSWORD}@${process.env.MONGO_HOST}:${process.env.MONGO_PORT}/${process.env.MONGO_DB}?authSource=${process.env.MONGO_AUTH_DB}`,
-      userNewUrlParser: process.env.MONGO_NEW_URL_PARSER || true,
+      useNewUrlParser: process.env.MONGO_NEW_URL_PARSER || true,
       useUnifiedTopology: process.env.MONGO_UNIFIED_TOPOLOGY || true,
-      serverSelectionTimeoutMs:
+      serverSelectionTimeoutMS:
         parseInt(process.env.MONGO_SERVER_SELECTION_TIMEOUT, 10) || 50,
-      connectionTimeoutMs:
-        parseInt(process.env.MONGO_CONNECTION_TIMEOUT, 10) || 50,
+      connectTimeoutMS:
+        parseInt(process.env.MONGO_CONNECT_TIMEOUT, 10) || 50,
     },
   },
+  log: {
+    app: {
+      level: process.env.LOG_LEVEL || 'info',
+      directoryMount: process.env.LOG_DIRECTORY_MOUNT || 'logs',
+      subDirectory: process.env.LOG_SUB_DIRECTORY || '',
+      filePrefix: process.env.LOG_FILE_PREFIX || 'combined',
+      errorFilePrefix: process.env.LOG_ERROR_FILE_PREFIX || 'error',
+      datePattern: process.env.LOG_DATE_PATTERN || 'MM-DD-YYYY',
+      maxSize: process.env.LOG_MAX_SIZE || '100m',
+      maxFile: process.env.LOG_MAX_FILE || '30d',
+      zippedArchive: process.env.LOG_ZIPPED_ARCHIVE === 'true' || true,
+    }
+  }
 });
 
 export const config = {
