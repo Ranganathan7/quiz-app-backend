@@ -5,6 +5,7 @@ import configuration, { CONSTANTS } from './common/config/configuration';
 import { CoreModule } from './common/core.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { UserModule } from './user/user.module';
 
 @Module({
   imports: [
@@ -20,7 +21,8 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
         return mongoConnectionObject;
       },
       inject: [ConfigService]
-    })
+    }),
+    UserModule,
   ],
   controllers: [AppController],
   providers: [AppService],

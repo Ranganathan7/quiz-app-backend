@@ -1,17 +1,17 @@
 import { ApiResponseOptions } from '@nestjs/swagger';
 
-const apiOkResponse: ApiResponseOptions = {
+const apiOkResponse = (sampleResponse: any): ApiResponseOptions => ({
   description: 'Successfull Operation.',
   schema: {
     example: {
       statusCode: 200,
       message: 'Response fetched successfully',
       timestamp: '2022-04-01T00:00:01Z',
-      requestId: 'username-36b8f84d-df4e-4d49-b662-bcde71a8764f',
-      data: {},
+      requestId: '36b8f84d-df4e-4d49-b662-bcde71a8764f',
+      data: sampleResponse,
     },
   },
-};
+});
 
 const apiBadRequestResponse: ApiResponseOptions = {
   description: 'Invalid/Incorrect details supplied.',
@@ -20,7 +20,7 @@ const apiBadRequestResponse: ApiResponseOptions = {
       statusCode: 400,
       message: 'BadRequestException',
       timestamp: '2023-02-15T17:01:19.502Z',
-      requestId: 'username-36b8f84d-df4e-4d49-b662-bcde71a8764f',
+      requestId: '36b8f84d-df4e-4d49-b662-bcde71a8764f',
       error: {
         description: 'firstName must contain only letters (a-zA-Z)',
         stack: {},
@@ -36,7 +36,7 @@ const apiUnauthorizedResponse: ApiResponseOptions = {
       statusCode: 401,
       message: 'Unauthorized',
       timestamp: '2022-04-01T00:00:01Z',
-      requestId: 'username-36b8f84d-df4e-4d49-b662-bcde71a8764f',
+      requestId: '36b8f84d-df4e-4d49-b662-bcde71a8764f',
       error: {
         description: 'No valid Service key provided',
         stack: {},
@@ -53,7 +53,7 @@ const apiForbiddenResponse: ApiResponseOptions = {
       statusCode: 403,
       message: 'Forbidden',
       timestamp: '2022-04-01T00:00:01Z',
-      requestId: 'username-36b8f84d-df4e-4d49-b662-bcde71a8764f',
+      requestId: '36b8f84d-df4e-4d49-b662-bcde71a8764f',
       error: {
         description:
           "The Service key doesn't have permissions to perform the request",
@@ -70,7 +70,7 @@ const apiNotFoundResponse: ApiResponseOptions = {
       statusCode: 404,
       timestamp: '2023-02-15T17:00:14.930Z',
       message: 'Not Found',
-      requestId: 'username-36b8f84d-df4e-4d49-b662-bcde71a8764f',
+      requestId: '36b8f84d-df4e-4d49-b662-bcde71a8764f',
       error: {
         description: "The requested resource doesn't exist",
         stack: {},
@@ -86,7 +86,7 @@ const apiInternalServerErrorResponse: ApiResponseOptions = {
       statusCode: 500,
       message: 'Server Error',
       timestamp: '2022-04-01T00:00:01Z',
-      requestId: 'username-36b8f84d-df4e-4d49-b662-bcde71a8764f',
+      requestId: '36b8f84d-df4e-4d49-b662-bcde71a8764f',
       error: {
         description: 'Something went wrong',
         stack: {},

@@ -53,12 +53,16 @@ export const CONSTANTS = {
     BASE: '',
     API: 'api',
     GET: 'GET',
-    EXAMPLE: {
-      CONTROLLER: '',
-      TAG: '',
-      EXAMPLE_SERVICE: {
-        PATH: '',
-        TAG: '',
+    USER: {
+      CONTROLLER: 'user',
+      TAG: 'user',
+      LOGIN: {
+        PATH: 'login',
+        TAG: 'login',
+      },
+      SIGNUP: {
+        PATH: 'signup',
+        TAG: 'signup',
       },
     },
   },
