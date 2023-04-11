@@ -6,6 +6,8 @@ import { CoreModule } from './common/core.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { UserModule } from './user/user.module';
+import { JwtModule } from '@nestjs/jwt';
+import { AuthGuard } from './common/auth/auth.guard';
 
 @Module({
   imports: [
@@ -22,9 +24,16 @@ import { UserModule } from './user/user.module';
       },
       inject: [ConfigService]
     }),
+    JwtModule.registerAsync({
+      useFactory: async (configService: ConfigService) => ({
+        secret: configService.get('jwt.secret'),
+        signOptions: { expiresIn: '1d' },
+      }),
+      inject: [ConfigService],
+    }),
     UserModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, AuthGuard],
 })
 export class AppModule {}

@@ -5,12 +5,14 @@ import { User } from '../entity/user.entity';
 import { Model } from 'mongoose';
 import { LOGGER } from '../../common/core.module';
 import { Logger } from 'winston';
+import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 
 export class UserRepository {
   constructor(
     @InjectModel(User.name)
     private readonly userModel: Model<User>,
+    private jwtService: JwtService,
     @Inject(LOGGER) private readonly logger: Logger,
   ) {}
 
@@ -48,13 +50,17 @@ export class UserRepository {
     }
     try {
       //hashing the password
-      signupDto.password = await bcrypt.hash(signupDto.password, 12);
+      const hashedPassword = await bcrypt.hash(signupDto.password, 12);
       const newUser = new this.userModel({
         ...signupDto,
+        password: hashedPassword,
         createdQuizzes: [],
         attendedQuizzes: [],
       });
-      return await newUser.save();
+      //creating the user
+      await newUser.save();
+      //logging in the user
+      return await this.getUser({ emailId: signupDto.emailId, password: signupDto.password }, requestId);
     } catch (error) {
       this.logger.error(`[UserRepository]: ${error.message}`, [requestId]);
       if (error instanceof HttpException) {
@@ -76,11 +82,11 @@ export class UserRepository {
     try {
       const user = await this.userModel.findOne({
         emailId: loginDto.emailId,
-      });
+      }).lean();
       if (!user) {
         throw new HttpException(
           {
-            message: 'No user found with given credentials.',
+            message: 'Invalid credentials.',
             requestId: requestId,
           },
           HttpStatus.NOT_FOUND,
@@ -89,13 +95,17 @@ export class UserRepository {
       if (!(await bcrypt.compare(loginDto.password, user.password))) {
         throw new HttpException(
           {
-            message: 'No user found with given credentials.',
+            message: 'Invalid credentials.',
             requestId: requestId,
           },
           HttpStatus.NOT_FOUND,
         );
       }
-      return user;
+      //generating a token using jwt
+      const token =  await this.generateJwtToken(user.emailId, user.userName, requestId);
+      //removing userName emailId and password from response as token has it as payload
+      const {userName, emailId, password, ...filteredUser} = user;
+      return {...token, ...filteredUser};
     } catch (error) {
       this.logger.error(`[UserRepository]: ${error.message}`, [requestId]);
       if (error instanceof HttpException) throw error;
@@ -136,6 +146,17 @@ export class UserRepository {
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }
+  }
+
+  async generateJwtToken(userName: string, emailId: string, requestId: string ) {
+    const payload = { userName: userName, emailId: emailId };
+    this.logger.info(
+      '[UserRepository]: Api called to generate JWT token',
+      [requestId],
+    );
+    return {
+      access_token: await this.jwtService.signAsync(payload),
+    };
   }
 
   // for unit testing

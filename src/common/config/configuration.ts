@@ -29,6 +29,10 @@ export default () => ({
       maxFile: process.env.LOG_MAX_FILE || '30d',
       zippedArchive: process.env.LOG_ZIPPED_ARCHIVE === 'true' || true,
     }
+  },
+  jwt: {
+    secret: process.env.JWT_SECRET || 'quiz-app-api_jwt-secret',
+    expiresIn: process.env.JWT_EXPIRES_IN || '1d',
   }
 });
 
