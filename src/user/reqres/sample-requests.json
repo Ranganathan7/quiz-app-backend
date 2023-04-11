@@ -1,0 +1,11 @@
+{
+  "login": {
+    "emailId": "example1@gmail.com",
+    "password": "aA1!1111"
+  },
+  "signup": {
+    "emailId": "example1@gmail.com",
+    "userName": "example1",
+    "password": "aA1!1111"
+  }
+}
