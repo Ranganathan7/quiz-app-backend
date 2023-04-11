@@ -1,17 +1,73 @@
 {
   "signup": {
-      
+    "statusCode": 200,
+    "timestamp": "2023-04-11T11:21:33.355Z",
+    "requestId": "dd6bcc7c-4452-4923-ab9e-50f365a3f107",
+    "message": "User registered successfully!",
+    "data": {
+      "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbElkIjoiZXhhbXBsZTRAZ21haWwuY29tIiwiaWF0IjoxNjgxMjEyMDkzLCJleHAiOjE2ODEyOTg0OTN9.jVxmIs1c0BT2xaMAdslNoMLrQ1hQ92tITEHEm80hkvE",
+      "_id": "643542bc0ad56ab97229c226",
+      "userName": "example4",
+      "createdQuizzes": [],
+      "attendedQuizzes": [],
+      "createdAt": "2023-04-11T11:21:32.700Z",
+      "updatedAt": "2023-04-11T11:21:32.700Z",
+      "__v": 0
+    }
   },
   "login": {
-    
+    "statusCode": 200,
+    "timestamp": "2023-04-11T11:14:46.326Z",
+    "requestId": "ad4bec18-f648-44b5-b20f-a2e04f90d10e",
+    "message": "Login successful!",
+    "data": {
+      "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbElkIjoiZXhhbXBsZTFAZ21haWwuY29tIiwiaWF0IjoxNjgxMjExNjg2LCJleHAiOjE2ODEyOTgwODZ9.Gat1icKPzeenNI4IjjF7lZOzyg4aSMfY8zKJ5mY74ag",
+      "_id": "6433ee1e500433f7b7bfdf64",
+      "userName": "example1",
+      "createdQuizzes": [],
+      "attendedQuizzes": [],
+      "createdAt": "2023-04-10T11:08:14.858Z",
+      "updatedAt": "2023-04-11T10:46:49.242Z",
+      "__v": 0
+    }
   },
   "editProfile": {
-    
+    "statusCode": 200,
+    "timestamp": "2023-04-11T11:17:30.852Z",
+    "requestId": "7bdd47ff-ec88-4e55-8f60-e5132cf469bd",
+    "message": "User name updated successfully!",
+    "data": {
+      "_id": "6433ee1e500433f7b7bfdf64",
+      "userName": "edited example1",
+      "createdQuizzes": [],
+      "attendedQuizzes": [],
+      "createdAt": "2023-04-10T11:08:14.858Z",
+      "updatedAt": "2023-04-11T11:17:30.801Z",
+      "__v": 0
+    }
   },
   "logout": {
-    
+    "statusCode": 200,
+    "timestamp": "2023-04-11T11:18:35.599Z",
+    "requestId": "9523112d-c83e-4985-ba09-db61d6e91321",
+    "message": "Logout successful!",
+    "data": {
+      "message": "All cookies of quiz-app cleared."
+    }
   },
   "alreadyLoggedin": {
-    
+    "statusCode": 200,
+    "timestamp": "2023-04-11T11:23:24.489Z",
+    "requestId": "ee211964-3dac-4179-a736-d2f419e46fe7",
+    "message": "User is already logged in!",
+    "data": {
+      "_id": "643542bc0ad56ab97229c226",
+      "userName": "example4",
+      "createdQuizzes": [],
+      "attendedQuizzes": [],
+      "createdAt": "2023-04-11T11:21:32.700Z",
+      "updatedAt": "2023-04-11T11:21:32.700Z",
+      "__v": 0
+    }
   }
 }

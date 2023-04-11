@@ -121,7 +121,7 @@ export class UserService {
         };
         return apiResult;
       } else {
-        this.logger.error(`[AuthGuard]: No access token in header.`);
+        this.logger.error(`[UserService]: No access token in header.`);
         throw new HttpException(
           {
             message:
