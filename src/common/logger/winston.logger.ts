@@ -1,7 +1,7 @@
 import * as colors from 'colors/safe';
 import { createLogger, format, transports } from 'winston';
 import { ConfigService } from '@nestjs/config';
-import 'winston-daily-rotate-file'
+import 'winston-daily-rotate-file';
 import { Log } from '../models/config.models';
 import { CONSTANTS } from '../config/configuration';
 
@@ -15,8 +15,8 @@ colors.setTheme({
   silly: 'grey',
 });
 
-const splat = (Symbol.for('splat') as unknown) as string;
-const lvl = (Symbol.for('level') as unknown) as string;
+const splat = Symbol.for('splat') as unknown as string;
+const lvl = Symbol.for('level') as unknown as string;
 
 const formatMetadata = format((info) => {
   info.label = `[${info.label}]`;
@@ -58,21 +58,25 @@ const logFormat = format.printf(
     // `${meta[splat]
     //   .map((context: unknown) => JSON.stringify(context))
     //   .join(' ')}`
-    const requestId = meta?.[splat]?.[0] ?? ''
+    const requestId = meta?.[splat]?.[0] ?? '';
     return `${timestamp} ${label} ${level} ${requestId} ${message} ${ms}`;
   },
 );
 
-export function createLoggerFactory(label: string, configService: ConfigService) {
+export function createLoggerFactory(
+  label: string,
+  configService: ConfigService,
+) {
   const formats = [
     format.timestamp(),
     format.ms(),
     format.label({ label }),
     formatMetadata(),
+    colorize(),
   ];
 
-  const config = configService.get<Log>(CONSTANTS.CONFIG.LOG, { infer: true })
-  const appName = configService.get('app.name', { infer: true })
+  const config = configService.get<Log>(CONSTANTS.CONFIG.LOG, { infer: true });
+  const appName = configService.get('app.name', { infer: true });
 
   const logger = createLogger({
     level: config.app.level,
@@ -84,7 +88,11 @@ export function createLoggerFactory(label: string, configService: ConfigService)
       // - Write all logs with importance level of `info` or less to `combined.log`
       //
       new transports.DailyRotateFile({
-        filename: `${config.app.directoryMount}/${config.app.subDirectory}/${config.app.errorFilePrefix}-%DATE%.log`.replace(/([^:])(\/\/+)/g, '$1/'),
+        filename:
+          `${config.app.directoryMount}/${config.app.subDirectory}/${config.app.errorFilePrefix}-%DATE%.log`.replace(
+            /([^:])(\/\/+)/g,
+            '$1/',
+          ),
         datePattern: config.app.datePattern,
         zippedArchive: config.app.zippedArchive,
         maxSize: config.app.maxSize,
@@ -92,17 +100,26 @@ export function createLoggerFactory(label: string, configService: ConfigService)
         level: 'error',
       }),
       new transports.DailyRotateFile({
-        filename: `${config.app.directoryMount}/${config.app.subDirectory}/${config.app.filePrefix}-%DATE%.log`.replace(/([^:])(\/\/+)/g, '$1/'),
+        filename:
+          `${config.app.directoryMount}/${config.app.subDirectory}/${config.app.filePrefix}-%DATE%.log`.replace(
+            /([^:])(\/\/+)/g,
+            '$1/',
+          ),
         datePattern: config.app.datePattern,
         zippedArchive: config.app.zippedArchive,
         maxSize: config.app.maxSize,
         maxFiles: config.app.maxFile,
         level: config.app.level,
-      })
+      }),
+      new transports.Console({
+        format: format.combine(...formats, logFormat),
+      }),
     ],
   });
 
-  logger.info(`Logger configurations: [Level ${config.app.level}] [Directory: ${config.app.directoryMount}/${config.app.subDirectory}] [FilePrefix: ${config.app.filePrefix}, ErrorFilePrefix: ${config.app.errorFilePrefix}] [MaxFileSize: ${config.app.maxSize}, MaxFileDays: ${config.app.maxFile}]`)
+  logger.info(
+    `Logger configurations: [Level ${config.app.level}] [Directory: ${config.app.directoryMount}/${config.app.subDirectory}] [FilePrefix: ${config.app.filePrefix}, ErrorFilePrefix: ${config.app.errorFilePrefix}] [MaxFileSize: ${config.app.maxSize}, MaxFileDays: ${config.app.maxFile}]`,
+  );
 
   return logger;
 }
