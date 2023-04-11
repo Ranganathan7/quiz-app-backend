@@ -34,6 +34,6 @@ import { AuthGuard } from './common/auth/auth.guard';
     UserModule,
   ],
   controllers: [AppController],
-  providers: [AppService, AuthGuard],
+  providers: [AppService],
 })
 export class AppModule {}

@@ -1,5 +1,5 @@
 import { HttpException, HttpStatus, Inject } from '@nestjs/common';
-import { LoginDto, SignupDto } from '../dto/user.dto';
+import { EditProfileDto, LoginDto, SignupDto } from '../dto/user.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { User } from '../entity/user.entity';
 import { Model } from 'mongoose';
@@ -102,9 +102,9 @@ export class UserRepository {
         );
       }
       //generating a token using jwt
-      const token =  await this.generateJwtToken(user.emailId, user.userName, requestId);
-      //removing userName emailId and password from response as token has it as payload
-      const {userName, emailId, password, ...filteredUser} = user;
+      const token =  await this.generateJwtToken(user.emailId, requestId);
+      //removing emailId and password from response as token has it as payload
+      const {emailId, password, ...filteredUser} = user;
       return {...token, ...filteredUser};
     } catch (error) {
       this.logger.error(`[UserRepository]: ${error.message}`, [requestId]);
@@ -122,7 +122,7 @@ export class UserRepository {
       [requestId],
     );
     try {
-      return this.userModel.findOne({ userName: userName });
+      return await this.userModel.findOne({ userName: userName }).lean();
     } catch (error) {
       this.logger.error(`[UserRepository]: ${error.message}`, [requestId]);
       throw new HttpException(
@@ -138,7 +138,7 @@ export class UserRepository {
       [requestId],
     );
     try {
-      return this.userModel.findOne({ emailId: emailId });
+      return await this.userModel.findOne({ emailId: emailId }).lean();
     } catch (error) {
       this.logger.error(`[UserRepository]: ${error.message}`, [requestId]);
       throw new HttpException(
@@ -148,8 +148,45 @@ export class UserRepository {
     }
   }
 
-  async generateJwtToken(userName: string, emailId: string, requestId: string ) {
-    const payload = { userName: userName, emailId: emailId };
+  async editProfile(editProfileDto: EditProfileDto, requestId: string) {
+    this.logger.info(
+      '[UserRepository]: Api called to edit profile of an user',
+      [requestId],
+    );
+    //checking if new username is unique
+    const existingUserName = await this.isUserNameUnique(
+      editProfileDto.userName,
+      requestId,
+    );
+    if (existingUserName) {
+      throw new HttpException(
+        {
+          message: 'Provided user name already exists.',
+          requestId: requestId,
+        },
+        HttpStatus.CONFLICT,
+      );
+    }
+    try {
+      const updatedUser = await this.userModel.findOneAndUpdate(
+        { emailId: editProfileDto.emailId },
+        { $set: { userName: editProfileDto.userName } },
+        { new: true },
+      ).lean();
+      //removing emailId and password before sending
+      const {emailId, password, ...filteredUser} = updatedUser;
+      return {...filteredUser};
+    } catch (error) {
+      this.logger.error(`[UserRepository]: ${error.message}`, [requestId]);
+      throw new HttpException(
+        { message: error.message, requestId: requestId },
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
+
+  async generateJwtToken(emailId: string, requestId: string ) {
+    const payload = { emailId: emailId };
     this.logger.info(
       '[UserRepository]: Api called to generate JWT token',
       [requestId],

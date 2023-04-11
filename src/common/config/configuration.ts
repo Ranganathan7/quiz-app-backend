@@ -33,6 +33,10 @@ export default () => ({
   jwt: {
     secret: process.env.JWT_SECRET || 'quiz-app-api_jwt-secret',
     expiresIn: process.env.JWT_EXPIRES_IN || '1d',
+  },
+  cookie: {
+    field: process.env.COOKIE_FIELD || 'quiz-app',
+    maxAge: parseInt(process.env.COOKIE_MAX_AGE) || 86400000,
   }
 });
 
@@ -68,6 +72,18 @@ export const CONSTANTS = {
         PATH: 'signup',
         TAG: 'signup',
       },
+      EDIT_PROFILE: {
+        PATH: 'edit-profile',
+        TAG: 'edit-profile edit-userName',
+      },
+      LOGOUT: {
+        PATH: 'logout',
+        TAG: 'logout'
+      },
+      ALREADY_LOGGEDIN: {
+        PATH: 'already-loggedin',
+        TAG: 'already-loggedin'
+      }
     },
   },
   LOG: {

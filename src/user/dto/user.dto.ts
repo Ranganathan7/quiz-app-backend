@@ -23,3 +23,19 @@ export class LoginDto {
   @IsNotEmpty()
   password: string;
 }
+
+export class EditProfileDto {
+  @IsString()
+  @IsNotEmpty()
+  emailId: string;
+
+  @IsString()
+  @IsNotEmpty()
+  userName: string;
+}
+
+export class AlreadyLoggedinDto {
+  @IsString()
+  @IsNotEmpty()
+  emailId: string;
+}

@@ -23,10 +23,10 @@ export class AuthGuard implements CanActivate {
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest();
-    const jwtConstants = this.configService.get('jwt');
-    const token = this.extractTokenFromHeader(request);
+    const jwtConstants = await this.configService.get('jwt');
+    const token = await this.extractTokenFromHeader(request);
     if (!token) {
-      this.logger.error(`[AuthGuard]: No access_token in header.`);
+      this.logger.error(`[AuthGuard]: No access token in header.`);
       throw new HttpException(
         {
           message: 'Unauthorized request made to API without a valid access token.',
@@ -38,10 +38,9 @@ export class AuthGuard implements CanActivate {
       const payload = await this.jwtService.verifyAsync(token, {
         secret: jwtConstants.secret,
       });
-      // 💡 We're assigning the payload to the request object here
+      // 💡 We're assigning the payload to the request body object here
       // so that we can access it in our route handlers
-      request['userName'] = payload.userName;
-      request['emailId'] = payload.emailId;
+      request.body['emailId'] = payload.emailId;
     } catch(error) {
       this.logger.error(`[AuthGuard]: ${error.message}`);
       throw new HttpException(
@@ -54,8 +53,9 @@ export class AuthGuard implements CanActivate {
     return true;
   }
 
-  private extractTokenFromHeader(request: Request): string | undefined {
-    const [type, token] = request.headers.authorization?.split(' ') ?? [];
-    return type === 'Bearer' ? token : undefined;
+  private async extractTokenFromHeader(request: Request): Promise<string | undefined> {
+    const cookie = await this.configService.get('cookie');
+    const token = request.cookies[cookie.field];
+    return token;
   }
 }
