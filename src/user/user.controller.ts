@@ -5,6 +5,7 @@ import {
   HttpCode,
   HttpStatus,
   Inject,
+  Patch,
   Post,
   Res,
   UseFilters,
@@ -127,7 +128,7 @@ export class UserController {
     }
   }
 
-  @Post(CONSTANTS.ROUTES.USER.EDIT_PROFILE.PATH)
+  @Patch(CONSTANTS.ROUTES.USER.EDIT_PROFILE.PATH)
   @HttpCode(HttpStatus.OK)
   @UseGuards(AuthGuard)
   @ApiOperation(operations.editProfile)

@@ -8,6 +8,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { UserModule } from './user/user.module';
 import { JwtModule } from '@nestjs/jwt';
 import { AuthGuard } from './common/auth/auth.guard';
+import { CreatedQuizModule } from './createdQuiz/createdQuiz.module';
 
 @Module({
   imports: [
@@ -32,6 +33,7 @@ import { AuthGuard } from './common/auth/auth.guard';
       inject: [ConfigService],
     }),
     UserModule,
+    CreatedQuizModule,
   ],
   controllers: [AppController],
   providers: [AppService],

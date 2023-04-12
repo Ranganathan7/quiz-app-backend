@@ -14,6 +14,7 @@ import { AppModule } from './app.module';
 import { CONSTANTS } from './common/config/configuration';
 import { UserModule } from './user/user.module';
 import fastifyCookie, { FastifyCookieOptions } from '@fastify/cookie';
+import { CreatedQuizModule } from './createdQuiz/createdQuiz.module';
 
 async function bootstrap() {
   // Create nestjs application with Fastify adapter
@@ -43,7 +44,7 @@ async function bootstrap() {
   // TODO: Add modules in include list for the modules which has controllers
   // that you want to be included in swagger documentation.
   const document = SwaggerModule.createDocument(app, config, {
-    include: [UserModule],
+    include: [UserModule, CreatedQuizModule],
   });
 
   const customOptions: SwaggerCustomOptions = {
@@ -65,6 +66,7 @@ async function bootstrap() {
     parseOptions: {
       httpOnly: true,
       maxAge: configService.get('cookie.maxAge'),
+      path: '/api'
     }, // options for parsing cookies
   } as FastifyCookieOptions);
 

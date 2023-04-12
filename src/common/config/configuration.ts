@@ -85,6 +85,22 @@ export const CONSTANTS = {
         TAG: 'already-loggedin'
       }
     },
+    CREATED_QUIZ: {
+      CONTROLLER: 'created-quiz',
+      TAG: 'created-quiz',
+      GET_ALL: {
+        PATH: 'get-all',
+        TAG: 'get-all-created-quizzes',
+      },
+    },
+    ATTENDED_QUIZ: {
+      CONTROLLER: 'attended-quiz',
+      TAG: 'attended-quiz',
+      EXAMPLE: {
+        PATH: 'example',
+        TAG: 'example',
+      },
+    },
   },
   LOG: {
     LABEL: 'quiz-app-api',
