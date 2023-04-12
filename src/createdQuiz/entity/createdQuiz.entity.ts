@@ -28,6 +28,9 @@ export class CreatedQuiz extends Document {
   createdBy: string
 
   @Prop({ required: true, default: false })
+  active: boolean
+
+  @Prop({ required: true, default: false })
   timed: boolean
 
   @Prop({ required: true, default: 0 })
