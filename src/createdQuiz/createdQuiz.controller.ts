@@ -5,7 +5,9 @@ import {
   HttpCode,
   HttpStatus,
   Inject,
+  Param,
   Post,
+  Query,
   UseFilters,
   UseGuards,
 } from '@nestjs/common';
@@ -103,6 +105,42 @@ export class CreatedQuizController {
     try {
       const response = await this.createdQuizService.create(
         createQuizDto,
+        requestId,
+      );
+      await session.commitTransaction();
+      return response;
+    } catch (error) {
+      await session.abortTransaction();
+      this.logger.error(`[CreatedQuizController]: ${error.message}`, [
+        requestId,
+      ]);
+      throw error;
+    } finally {
+      await session.endSession();
+    }
+  }
+
+  @Get(CONSTANTS.ROUTES.CREATED_QUIZ.GET_ONE_WITH_QUIZ_ID.PATH)
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation(operations.getQuizWithQuizId)
+  @ApiOkResponse(responses.apiOkResponse(sampleResponses.getQuizWithQuizId))
+  @ApiBadRequestResponse(responses.apiBadRequestResponse)
+  @ApiUnauthorizedResponse(responses.apiUnauthorizedResponse)
+  @ApiForbiddenResponse(responses.apiForbiddenResponse)
+  @ApiNotFoundResponse(responses.apiNotFoundResponse)
+  @ApiInternalServerErrorResponse(responses.apiInternalServerErrorResponse)
+  async getQuizWithQuizId(
+    @Query('quizId') quizId: string
+  ): Promise<CommonApiResponse> {
+    const requestId = randomUUID();
+    const session = await this.connection.startSession();
+    session.startTransaction();
+    this.logger.info('[CreatedQuizController]: Api called to create a quiz.', [
+      requestId,
+    ]);
+    try {
+      const response = await this.createdQuizService.getQuizWithQuizId(
+        quizId,
         requestId,
       );
       await session.commitTransaction();

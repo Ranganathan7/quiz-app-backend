@@ -166,6 +166,7 @@ export class UserController {
 
   @Get(CONSTANTS.ROUTES.USER.LOGOUT.PATH)
   @HttpCode(HttpStatus.OK)
+  @UseGuards(AuthGuard)
   @ApiOperation(operations.logout)
   @ApiOkResponse(responses.apiOkResponse(sampleResponses.logout))
   @ApiBadRequestResponse(responses.apiBadRequestResponse)

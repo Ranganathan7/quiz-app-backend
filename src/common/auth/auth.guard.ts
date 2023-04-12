@@ -40,7 +40,9 @@ export class AuthGuard implements CanActivate {
       });
       // 💡 We're assigning the payload to the request body object here
       // so that we can access it in our route handlers
-      request.body['emailId'] = payload.emailId;
+      if (request.method !== 'GET') {
+        request.body['emailId'] = payload.emailId;
+      }
     } catch (error) {
       this.logger.error(`[AuthGuard]: ${error.message}`);
       throw new HttpException(

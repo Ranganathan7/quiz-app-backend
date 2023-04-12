@@ -58,7 +58,8 @@ export class CreatedQuizService {
       requestId,
     );
     if (!user || user.userName !== createQuizDto.createdByUserName) {
-      const errorMessage = 'The createdByUserName provided in request body does not match with the user of provided email ID.';
+      const errorMessage =
+        'The createdByUserName provided in request body does not match with the user of provided email ID.';
       this.logger.error(`[CreatedQuizService]: ${errorMessage}`, [requestId]);
       throw new HttpException(
         { message: errorMessage, requestId: requestId },
@@ -68,16 +69,18 @@ export class CreatedQuizService {
     try {
       // generating unique quiz ID
       let quizId: string;
-      while(true) {
+      while (true) {
         quizId = this.generateRandomQuizId(
           7,
           createQuizDto.createdByUserName,
           requestId,
         );
-        const quiz = await this.createdQuizRepository.findQuizWithQuizId(quizId, requestId);
-        if(!quiz) break;
-      } 
-      
+        const quiz = await this.createdQuizRepository.findQuizWithQuizId(
+          quizId,
+          requestId,
+        );
+        if (!quiz) break;
+      }
       const createdQuiz = await this.createdQuizRepository.create(
         createQuizDto,
         quizId,
@@ -100,14 +103,54 @@ export class CreatedQuizService {
     }
   }
 
+  async getQuizWithQuizId(
+    quizId: string,
+    requestId: string,
+  ): Promise<CommonApiResponse> {
+    this.logger.info(
+      '[CreatedQuizService]: Api called to fetch quiz with quiz ID.',
+      [requestId],
+    );
+    try {
+      const quiz = await this.createdQuizRepository.findQuizWithQuizId(
+        quizId,
+        requestId,
+      );
+      if (!quiz) {
+        throw new HttpException(
+          {
+            message: 'No quiz found with given quiz ID.',
+            requestId: requestId,
+          },
+          HttpStatus.NOT_FOUND,
+        );
+      }
+      this.logger.info('[CreatedQuizService]: Fetched quiz successfully.', [
+        requestId,
+      ]);
+      const apiResult: CommonApiResponse<ApiSuccessResponse<any>> = {
+        statusCode: HttpStatus.OK,
+        timestamp: new Date().toISOString(),
+        requestId: requestId,
+        message: 'Quiz created successfully!',
+        data: quiz,
+      };
+      return apiResult;
+    } catch (error) {
+      this.logger.error(`[CreatedQuizService]: ${error.message}`, [requestId]);
+      throw error;
+    }
+  }
+
   private generateRandomQuizId(
     length: number,
     userName: string,
     requestId: string,
   ): string {
-    this.logger.info('[CreatedQuizService]: Api called to generate a quiz ID.', [
-      requestId,
-    ]);
+    this.logger.info(
+      '[CreatedQuizService]: Api called to generate a quiz ID.',
+      [requestId],
+    );
     //the generated ID has only uppercase, lowercase and numbers
     const chars =
       'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';

@@ -37,11 +37,14 @@ export class CreatedQuizRepository {
     }
   }
 
-  async create(createQuizDto: CreateQuizDto, quizId: string, requestId: string) {
-    this.logger.info(
-      '[CreatedQuizRepository]: Api called to create a quiz.',
-      [requestId],
-    );
+  async create(
+    createQuizDto: CreateQuizDto,
+    quizId: string,
+    requestId: string,
+  ) {
+    this.logger.info('[CreatedQuizRepository]: Api called to create a quiz.', [
+      requestId,
+    ]);
     //formatting createQuizDto to make it similar to create quiz entity
     const properCreateQuizDto: any = createQuizDto;
     const emailId = properCreateQuizDto.emailId;
@@ -69,9 +72,14 @@ export class CreatedQuizRepository {
       [requestId],
     );
     try {
-      return await this.createdQuizModel.findOne({ quizId: quizId }).lean();
+      return await this.createdQuizModel
+        .findOne({ quizId: quizId })
+        .select('-attendees -questions.answer')
+        .lean();
     } catch (error) {
-      this.logger.error(`[CreatedQuizRepository]: ${error.message}`, [requestId]);
+      this.logger.error(`[CreatedQuizRepository]: ${error.message}`, [
+        requestId,
+      ]);
       throw new HttpException(
         { message: error.message, requestId: requestId },
         HttpStatus.INTERNAL_SERVER_ERROR,

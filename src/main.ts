@@ -65,7 +65,7 @@ async function bootstrap() {
     secret: configService.get('cookie.field'), // for cookies signature
     parseOptions: {
       httpOnly: true,
-      maxAge: configService.get('cookie.maxAge'),
+      expires: new Date(Date.now() + configService.get('cookie.maxAge')),
       path: '/'
     }, // options for parsing cookies
   } as FastifyCookieOptions);
