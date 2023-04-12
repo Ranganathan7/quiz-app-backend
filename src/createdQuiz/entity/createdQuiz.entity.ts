@@ -24,17 +24,23 @@ export class CreatedQuiz extends Document {
   @Prop({ required: true, unique: true })
   quizId: string
 
-  @Prop({ required: true, unique: true })
-  createdBy: string
+  @Prop({ required: true })
+  createdByEmailId: string
+
+  @Prop({ required: true })
+  createdByUserName: string
 
   @Prop({ required: true, default: false })
   active: boolean
 
   @Prop({ required: true, default: false })
+  protected: boolean
+
+  @Prop({ required: true, default: false })
   timed: boolean
 
   @Prop({ required: true, default: 0 })
-  timeLimit: number
+  timeLimitSec: number
 
   @Prop({ required: true, default: false })
   negativeMarking: boolean

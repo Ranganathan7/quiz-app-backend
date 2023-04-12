@@ -1,5 +1,8 @@
 {
-  "getAll": {
+  "getAllQuiz": {
     
+  },
+  "createQuiz": {
+
   }
 }

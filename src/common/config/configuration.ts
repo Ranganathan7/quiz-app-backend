@@ -88,10 +88,14 @@ export const CONSTANTS = {
     CREATED_QUIZ: {
       CONTROLLER: 'created-quiz',
       TAG: 'created-quiz',
-      GET_ALL: {
+      GET_ALL_QUIZ: {
         PATH: 'get-all',
         TAG: 'get-all-created-quizzes',
       },
+      CREATE_QUIZ: {
+        PATH: 'create',
+        TAG: 'create-quiz'
+      }
     },
     ATTENDED_QUIZ: {
       CONTROLLER: 'attended-quiz',

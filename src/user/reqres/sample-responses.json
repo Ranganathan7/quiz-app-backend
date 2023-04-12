@@ -7,7 +7,7 @@
     "data": {
       "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbElkIjoiZXhhbXBsZTRAZ21haWwuY29tIiwiaWF0IjoxNjgxMjEyMDkzLCJleHAiOjE2ODEyOTg0OTN9.jVxmIs1c0BT2xaMAdslNoMLrQ1hQ92tITEHEm80hkvE",
       "_id": "643542bc0ad56ab97229c226",
-      "userName": "example4",
+      "userName": "example1",
       "createdAt": "2023-04-11T11:21:32.700Z",
       "updatedAt": "2023-04-11T11:21:32.700Z",
       "__v": 0
@@ -56,7 +56,7 @@
     "message": "User is already logged in!",
     "data": {
       "_id": "643542bc0ad56ab97229c226",
-      "userName": "example4",
+      "userName": "example1",
       "createdAt": "2023-04-11T11:21:32.700Z",
       "updatedAt": "2023-04-11T11:21:32.700Z",
       "__v": 0

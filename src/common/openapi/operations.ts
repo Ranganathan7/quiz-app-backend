@@ -34,9 +34,15 @@ const alreadyLoggedin: ApiOperationOptions = {
 };
 
 const getAllCreatedQuizzes: ApiOperationOptions = {
-  tags: [CONSTANTS.ROUTES.CREATED_QUIZ.GET_ALL.TAG],
+  tags: [CONSTANTS.ROUTES.CREATED_QUIZ.GET_ALL_QUIZ.TAG],
   description: 'This API is used get all the created quizzes of an user. The emailId in the request body comes from the cookie.',
   summary: 'This API returns all the created quizzes of the user.',
+};
+
+const createQuiz: ApiOperationOptions = {
+  tags: [CONSTANTS.ROUTES.CREATED_QUIZ.CREATE_QUIZ.TAG],
+  description: 'This API is used to create a new quiz. The emailId in the request body comes from the cookie.',
+  summary: 'This API creates a new quiz.',
 };
 
 export const operations = {
@@ -46,4 +52,5 @@ export const operations = {
   logout: logout,
   alreadyLoggedin: alreadyLoggedin,
   getAllCreatedQuizzes: getAllCreatedQuizzes,
+  createQuiz: createQuiz,
 };
