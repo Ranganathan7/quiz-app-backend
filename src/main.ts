@@ -66,7 +66,7 @@ async function bootstrap() {
     parseOptions: {
       httpOnly: true,
       maxAge: configService.get('cookie.maxAge'),
-      path: '/api'
+      path: '/'
     }, // options for parsing cookies
   } as FastifyCookieOptions);
 
