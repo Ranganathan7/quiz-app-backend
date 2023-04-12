@@ -104,7 +104,7 @@ export class UserService {
       [requestId],
     );
     try {
-      const user = await this.userRepository.isEmailIdUnique(
+      const user = await this.userRepository.findUserWithEmailId(
         emailId,
         requestId,
       );

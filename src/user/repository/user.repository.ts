@@ -21,7 +21,7 @@ export class UserRepository {
       requestId,
     ]);
     //checking if email ID is unique
-    const existingEmailId = await this.isEmailIdUnique(
+    const existingEmailId = await this.findUserWithEmailId(
       signupDto.emailId,
       requestId,
     );
@@ -35,7 +35,7 @@ export class UserRepository {
       );
     }
     //checking if username is unique
-    const existingUserName = await this.isUserNameUnique(
+    const existingUserName = await this.findUserWithUserName(
       signupDto.userName,
       requestId,
     );
@@ -54,8 +54,6 @@ export class UserRepository {
       const newUser = new this.userModel({
         ...signupDto,
         password: hashedPassword,
-        createdQuizzes: [],
-        attendedQuizzes: [],
       });
       //creating the user
       await newUser.save();
@@ -116,7 +114,7 @@ export class UserRepository {
     }
   }
 
-  async isUserNameUnique(userName: string, requestId: string) {
+  async findUserWithUserName(userName: string, requestId: string) {
     this.logger.info(
       '[UserRepository]: Api called to fetch user with user name',
       [requestId],
@@ -132,7 +130,7 @@ export class UserRepository {
     }
   }
 
-  async isEmailIdUnique(emailId: string, requestId: string) {
+  async findUserWithEmailId(emailId: string, requestId: string) {
     this.logger.info(
       '[UserRepository]: Api called to fetch user with email ID',
       [requestId],
@@ -154,7 +152,7 @@ export class UserRepository {
       [requestId],
     );
     //checking if new username is unique
-    const existingUserName = await this.isUserNameUnique(
+    const existingUserName = await this.findUserWithUserName(
       editProfileDto.userName,
       requestId,
     );

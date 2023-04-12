@@ -4,8 +4,15 @@
     "password": "aA1!1111"
   },
   "signup": {
-    "emailId": "example1@gmail.com",
-    "userName": "example1",
+    "emailId": "example4@gmail.com",
+    "userName": "example4",
     "password": "aA1!1111"
+  },
+  "editProfile": {
+    "emailId": "example1@gmail.com",
+    "userName": "example1 edited"
+  },
+  "alreadyLoggedIn": {
+    "emailId": "example1@gmail.com"
   }
 }
