@@ -66,7 +66,7 @@ export class CreatedQuizRepository {
     }
   }
 
-  async findQuizWithQuizId(quizId: string, requestId: string) {
+  async findQuizWithQuizIdForAttendingIt(quizId: string, requestId: string) {
     this.logger.info(
       '[CreatedQuizRepository]: Api called to fetch quiz with quiz ID.',
       [requestId],
@@ -76,6 +76,24 @@ export class CreatedQuizRepository {
         .findOne({ quizId: quizId })
         .select('-attendees -questions.answer')
         .lean();
+    } catch (error) {
+      this.logger.error(`[CreatedQuizRepository]: ${error.message}`, [
+        requestId,
+      ]);
+      throw new HttpException(
+        { message: error.message, requestId: requestId },
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
+
+  async findQuizWithQuizId(quizId: string, requestId: string) {
+    this.logger.info(
+      '[CreatedQuizRepository]: Api called to fetch quiz with quiz ID.',
+      [requestId],
+    );
+    try {
+      return await this.createdQuizModel.findOne({ quizId: quizId }).lean();
     } catch (error) {
       this.logger.error(`[CreatedQuizRepository]: ${error.message}`, [
         requestId,

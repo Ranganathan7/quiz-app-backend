@@ -75,10 +75,11 @@ export class CreatedQuizService {
           createQuizDto.createdByUserName,
           requestId,
         );
-        const quiz = await this.createdQuizRepository.findQuizWithQuizId(
-          quizId,
-          requestId,
-        );
+        const quiz =
+          await this.createdQuizRepository.findQuizWithQuizIdForAttendingIt(
+            quizId,
+            requestId,
+          );
         if (!quiz) break;
       }
       const createdQuiz = await this.createdQuizRepository.create(
@@ -112,10 +113,11 @@ export class CreatedQuizService {
       [requestId],
     );
     try {
-      const quiz = await this.createdQuizRepository.findQuizWithQuizId(
-        quizId,
-        requestId,
-      );
+      const quiz =
+        await this.createdQuizRepository.findQuizWithQuizIdForAttendingIt(
+          quizId,
+          requestId,
+        );
       if (!quiz) {
         throw new HttpException(
           {
