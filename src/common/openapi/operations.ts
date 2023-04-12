@@ -45,9 +45,9 @@ const createQuiz: ApiOperationOptions = {
   summary: 'This API creates a new quiz.',
 };
 
-const getQuizWithQuizId: ApiOperationOptions = {
-  tags: [CONSTANTS.ROUTES.CREATED_QUIZ.GET_ONE_WITH_QUIZ_ID.TAG],
-  description: 'This API is used fetch the quiz details with quiz ID.',
+const attendQuiz: ApiOperationOptions = {
+  tags: [CONSTANTS.ROUTES.CREATED_QUIZ.ATTEND_QUIZ.TAG],
+  description: 'This API is used fetch the quiz details with quiz ID for attending it.',
   summary: 'This API returns the quiz details of provided quizId.',
 };
 
@@ -59,5 +59,5 @@ export const operations = {
   alreadyLoggedin: alreadyLoggedin,
   getAllCreatedQuizzes: getAllCreatedQuizzes,
   createQuiz: createQuiz,
-  getQuizWithQuizId: getQuizWithQuizId,
+  attendQuiz: attendQuiz,
 };

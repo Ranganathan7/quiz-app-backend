@@ -66,23 +66,16 @@ export class QuestionsDto {
   questionType: QuestionTypeDto
 };
 
-export class AttendeesDto {
-  @IsEmail()
-  @IsNotEmpty()
-  @ApiProperty({ default: 'example2@gmail.com' })
-  emailId: string
-
-  @IsString()
-  @IsNotEmpty()
-  @ApiProperty({ default: 'example2' })
-  userName: string
-}
-
 export class CreateQuizDto {
   @IsString()
   @IsNotEmpty()
   @ApiProperty({ default: 'example1@gmail.com' })
   emailId: string
+
+  @IsString()
+  @IsNotEmpty()
+  @ApiProperty({ default: 'sample quiz 1' })
+  quizName: string
 
   @IsString()
   @IsNotEmpty()
@@ -113,6 +106,17 @@ export class CreateQuizDto {
   @IsBoolean()
   @IsOptional()
   @ApiProperty({ default: false })
+  multipleAttempts?: boolean
+
+  @IsNumber()
+  @IsOptional()
+  @Min(1)
+  @ApiProperty({ default: 1 })
+  maxAttempts?: number
+
+  @IsBoolean()
+  @IsOptional()
+  @ApiProperty({ default: false })
   negativeMarking?: boolean
 
   @IsBoolean()
@@ -130,10 +134,4 @@ export class CreateQuizDto {
   @ValidateNested({ each: true })
   @ApiProperty({ type: [QuestionsDto] })
   questions: QuestionsDto[]
-
-  // @IsArray({ message: 'attendees must be an array' })
-  // @Type(() => AttendeesDto)
-  // @ValidateNested({ each: true })
-  // @ApiProperty({ type: [AttendeesDto] })
-  // attendees: AttendeesDto[]
 }

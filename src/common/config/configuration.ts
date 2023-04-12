@@ -96,9 +96,9 @@ export const CONSTANTS = {
         PATH: 'create',
         TAG: 'create-quiz'
       },
-      GET_ONE_WITH_QUIZ_ID: {
-        PATH: 'get-one',
-        TAG: 'get-one ?quizId'
+      ATTEND_QUIZ: {
+        PATH: 'attend-quiz',
+        TAG: 'attend-quiz ?quizId'
       }
     },
     ATTENDED_QUIZ: {

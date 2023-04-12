@@ -120,26 +120,26 @@ export class CreatedQuizController {
     }
   }
 
-  @Get(CONSTANTS.ROUTES.CREATED_QUIZ.GET_ONE_WITH_QUIZ_ID.PATH)
+  @Get(CONSTANTS.ROUTES.CREATED_QUIZ.ATTEND_QUIZ.PATH)
   @HttpCode(HttpStatus.OK)
-  @ApiOperation(operations.getQuizWithQuizId)
-  @ApiOkResponse(responses.apiOkResponse(sampleResponses.getQuizWithQuizId))
+  @ApiOperation(operations.attendQuiz)
+  @ApiOkResponse(responses.apiOkResponse(sampleResponses.attendQuiz))
   @ApiBadRequestResponse(responses.apiBadRequestResponse)
   @ApiUnauthorizedResponse(responses.apiUnauthorizedResponse)
   @ApiForbiddenResponse(responses.apiForbiddenResponse)
   @ApiNotFoundResponse(responses.apiNotFoundResponse)
   @ApiInternalServerErrorResponse(responses.apiInternalServerErrorResponse)
-  async getQuizWithQuizId(
+  async attendQuiz(
     @Query('quizId') quizId: string
   ): Promise<CommonApiResponse> {
     const requestId = randomUUID();
     const session = await this.connection.startSession();
     session.startTransaction();
-    this.logger.info('[CreatedQuizController]: Api called to create a quiz.', [
+    this.logger.info('[CreatedQuizController]: Api called to attend the quiz with quiz ID.', [
       requestId,
     ]);
     try {
-      const response = await this.createdQuizService.getQuizWithQuizId(
+      const response = await this.createdQuizService.attendQuiz(
         quizId,
         requestId,
       );

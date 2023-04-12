@@ -14,15 +14,13 @@ export interface QuestionsInterface {
   questionType: QuestionTypeInterface
 };
 
-export interface AttendeesInterface {
-  emailId: string,
-  userName: string
-}
-
 @Schema({ collection: 'created_quizzes', timestamps: true })
 export class CreatedQuiz extends Document {
   @Prop({ required: true, unique: true })
   quizId: string
+
+  @Prop({ required: true })
+  quizName: string
 
   @Prop({ required: true })
   createdByEmailId: string
@@ -43,6 +41,12 @@ export class CreatedQuiz extends Document {
   timeLimitSec: number
 
   @Prop({ required: true, default: false })
+  multipleAttempts: boolean
+
+  @Prop({ required: true, default: 1 })
+  maxAttempts: number
+
+  @Prop({ required: true, default: false })
   negativeMarking: boolean
 
   @Prop({ required: true, default: false })
@@ -53,9 +57,6 @@ export class CreatedQuiz extends Document {
 
   @Prop({ required: true, type: [Object] })
   questions: QuestionsInterface[]
-
-  @Prop({ required: true, type: [Object] })
-  attendees: AttendeesInterface[]
 }
 
 export const CreatedQuizSchema = SchemaFactory.createForClass(CreatedQuiz);

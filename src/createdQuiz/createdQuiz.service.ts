@@ -104,12 +104,12 @@ export class CreatedQuizService {
     }
   }
 
-  async getQuizWithQuizId(
+  async attendQuiz(
     quizId: string,
     requestId: string,
   ): Promise<CommonApiResponse> {
     this.logger.info(
-      '[CreatedQuizService]: Api called to fetch quiz with quiz ID.',
+      '[CreatedQuizService]: Api called to fetch quiz for attending it with quiz ID.',
       [requestId],
     );
     try {
@@ -130,11 +130,34 @@ export class CreatedQuizService {
       this.logger.info('[CreatedQuizService]: Fetched quiz successfully.', [
         requestId,
       ]);
+      //checking if quiz is active
+      if (!quiz.active) {
+        throw new HttpException(
+          {
+            message: 'The quiz you are trying to attend is not active now.',
+            requestId: requestId,
+          },
+          HttpStatus.FORBIDDEN,
+        );
+      }
+      //checking if max attempts exhausted
+      // const attendedQuiz = await this.attendedQuizRepository.get(...)
+      // if(attendedQuiz){
+      //   if (attendQuiz.answers.length === quiz.maxAttempts) {
+      //     throw new HttpException(
+      //       {
+      //         message: 'Max number of attemps allowed for the quiz is reached.',
+      //         requestId: requestId,
+      //       },
+      //       HttpStatus.FORBIDDEN,
+      //     );
+      //   }
+      // }
       const apiResult: CommonApiResponse<ApiSuccessResponse<any>> = {
         statusCode: HttpStatus.OK,
         timestamp: new Date().toISOString(),
         requestId: requestId,
-        message: 'Quiz created successfully!',
+        message: 'Quiz details fetched successfully!',
         data: quiz,
       };
       return apiResult;
