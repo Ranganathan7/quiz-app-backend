@@ -155,10 +155,10 @@ export class CreatedQuizRepository {
           HttpStatus.NOT_FOUND,
         );
       }
-      //removing the emailId 
+      //removing the emailId
       const { emailId, ...filteredEditQuizDto } = editQuizDto;
       //updating the sent fields
-      const updatedQuiz =  await this.createdQuizModel.findOneAndUpdate(
+      const updatedQuiz = await this.createdQuizModel.findOneAndUpdate(
         { quizId: editQuizDto.quizId },
         { $set: filteredEditQuizDto },
         { strict: true, new: true },

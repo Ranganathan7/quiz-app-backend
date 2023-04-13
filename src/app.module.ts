@@ -9,6 +9,7 @@ import { UserModule } from './user/user.module';
 import { JwtModule } from '@nestjs/jwt';
 import { AuthGuard } from './common/auth/auth.guard';
 import { CreatedQuizModule } from './createdQuiz/createdQuiz.module';
+import { AttendedQuizModule } from './attendedQuiz/attendedQuiz.module';
 
 @Module({
   imports: [
@@ -34,6 +35,7 @@ import { CreatedQuizModule } from './createdQuiz/createdQuiz.module';
     }),
     UserModule,
     CreatedQuizModule,
+    AttendedQuizModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -15,6 +15,7 @@ import { CONSTANTS } from './common/config/configuration';
 import { UserModule } from './user/user.module';
 import fastifyCookie, { FastifyCookieOptions } from '@fastify/cookie';
 import { CreatedQuizModule } from './createdQuiz/createdQuiz.module';
+import { AttendedQuizModule } from './attendedQuiz/attendedQuiz.module';
 
 async function bootstrap() {
   // Create nestjs application with Fastify adapter
@@ -44,7 +45,7 @@ async function bootstrap() {
   // TODO: Add modules in include list for the modules which has controllers
   // that you want to be included in swagger documentation.
   const document = SwaggerModule.createDocument(app, config, {
-    include: [UserModule, CreatedQuizModule],
+    include: [UserModule, CreatedQuizModule, AttendedQuizModule],
   });
 
   const customOptions: SwaggerCustomOptions = {
