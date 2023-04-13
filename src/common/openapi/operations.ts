@@ -51,6 +51,12 @@ const attendQuiz: ApiOperationOptions = {
   summary: 'This API returns the quiz details of provided quizId.',
 };
 
+const deleteQuiz: ApiOperationOptions = {
+  tags: [CONSTANTS.ROUTES.CREATED_QUIZ.DELETE_QUIZ.TAG],
+  description: 'This API is used delete a quiz with its quiz ID.',
+  summary: 'This API deletes a quiz.',
+};
+
 export const operations = {
   singup: signup,
   login: login,
@@ -60,4 +66,5 @@ export const operations = {
   getAllCreatedQuizzes: getAllCreatedQuizzes,
   createQuiz: createQuiz,
   attendQuiz: attendQuiz,
+  deleteQuiz: deleteQuiz,
 };

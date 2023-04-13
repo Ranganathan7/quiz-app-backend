@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   HttpCode,
   HttpStatus,
@@ -140,6 +141,42 @@ export class CreatedQuizController {
     ]);
     try {
       const response = await this.createdQuizService.attendQuiz(
+        quizId,
+        requestId,
+      );
+      await session.commitTransaction();
+      return response;
+    } catch (error) {
+      await session.abortTransaction();
+      this.logger.error(`[CreatedQuizController]: ${error.message}`, [
+        requestId,
+      ]);
+      throw error;
+    } finally {
+      await session.endSession();
+    }
+  }
+
+  @Delete(CONSTANTS.ROUTES.CREATED_QUIZ.DELETE_QUIZ.PATH)
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation(operations.deleteQuiz)
+  @ApiOkResponse(responses.apiOkResponse(sampleResponses.deleteQuiz))
+  @ApiBadRequestResponse(responses.apiBadRequestResponse)
+  @ApiUnauthorizedResponse(responses.apiUnauthorizedResponse)
+  @ApiForbiddenResponse(responses.apiForbiddenResponse)
+  @ApiNotFoundResponse(responses.apiNotFoundResponse)
+  @ApiInternalServerErrorResponse(responses.apiInternalServerErrorResponse)
+  async deleteQuiz(
+    @Query('quizId') quizId: string
+  ): Promise<CommonApiResponse> {
+    const requestId = randomUUID();
+    const session = await this.connection.startSession();
+    session.startTransaction();
+    this.logger.info('[CreatedQuizController]: Api called delete the quiz with quiz ID.', [
+      requestId,
+    ]);
+    try {
+      const response = await this.createdQuizService.deleteQuiz(
         quizId,
         requestId,
       );

@@ -99,6 +99,10 @@ export const CONSTANTS = {
       ATTEND_QUIZ: {
         PATH: 'attend-quiz',
         TAG: 'attend-quiz ?quizId'
+      },
+      DELETE_QUIZ: {
+        PATH: 'delete-quiz',
+        TAG: 'delete-quiz ? quizId'
       }
     },
     ATTENDED_QUIZ: {

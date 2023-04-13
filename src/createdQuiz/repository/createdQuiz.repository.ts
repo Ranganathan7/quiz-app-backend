@@ -108,6 +108,24 @@ export class CreatedQuizRepository {
     }
   }
 
+  async deleteQuiz(quizId: string, requestId: string) {
+    this.logger.info(
+      '[CreatedQuizRepository]: Api called to delete the quiz with quiz ID.',
+      [requestId],
+    );
+    try {
+      return await this.createdQuizModel.deleteMany({ quizId: quizId }).exec();
+    } catch (error) {
+      this.logger.error(`[CreatedQuizRepository]: ${error.message}`, [
+        requestId,
+      ]);
+      throw new HttpException(
+        { message: error.message, requestId: requestId },
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
+
   // for unit testing
   public getModel(): Model<CreatedQuiz> {
     return this.createdQuizModel;

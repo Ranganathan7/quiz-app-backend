@@ -167,6 +167,43 @@ export class CreatedQuizService {
     }
   }
 
+  async deleteQuiz(
+    quizId: string,
+    requestId: string,
+  ): Promise<CommonApiResponse> {
+    this.logger.info(
+      '[CreatedQuizService]: Api called to delete the quiz with quiz ID.',
+      [requestId],
+    );
+    try {
+      await this.createdQuizRepository.deleteQuiz(
+        quizId,
+        requestId,
+      );
+      this.logger.info('[CreatedQuizService]: Deleted quiz successfully.', [
+        requestId,
+      ]);
+      //deleting all its respective attended quiz records
+      // await this.attendedQuizRepository.deleteQuiz(quizId);
+      // this.logger.info('[CreatedQuizService]: Deleted its corresponding attended quiz records successfully.', [
+      //   requestId,
+      // ]);
+      const apiResult: CommonApiResponse<ApiSuccessResponse<any>> = {
+        statusCode: HttpStatus.OK,
+        timestamp: new Date().toISOString(),
+        requestId: requestId,
+        message: 'Deleted quiz successfully!',
+        data: {
+          message: 'Deleted quiz and all its corresponding attendees records as well.'
+        },
+      };
+      return apiResult;
+    } catch (error) {
+      this.logger.error(`[CreatedQuizService]: ${error.message}`, [requestId]);
+      throw error;
+    }
+  }
+
   private generateRandomQuizId(
     length: number,
     userName: string,
