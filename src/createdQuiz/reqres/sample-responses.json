@@ -1,239 +1,6 @@
 {
-  "getAllQuiz": {
-    "statusCode": 200,
-    "timestamp": "2023-04-13T10:47:16.157Z",
-    "requestId": "4854a79a-8023-434a-9ec9-c5a60524e427",
-    "message": "Fetched all created quizzes successfully!",
-    "data": [
-      {
-        "_id": "6437ceee02330badf6462cdf",
-        "quizId": "example1-QfXq8Uj",
-        "quizName": "edited sample quiz 1",
-        "quizDescription": [
-          "This Quiz is created by: example1.",
-          "During the quiz, you will not be able to switch to another tab while taking the quiz as it will result in closing(submitting) the quiz, and the quiz interface will be displayed in full-screen mode.",
-          "The quiz has a time limit of 00:16:40[hh:mm:ss] for completion.",
-          "This quiz allows a maximum of 2 attempts.",
-          "The mark awarded for a correct answer will be shown alongside the respective question.",
-          "All the questions in this quiz are multiple choice questions.",
-          "The options for single correct answers will be displayed in radio buttons.",
-          "The options for multiple correct answers will be displayed in checkboxes."
-        ],
-        "createdByEmailId": "example1@gmail.com",
-        "createdByUserName": "example1",
-        "active": true,
-        "protected": true,
-        "showAnswer": false,
-        "timeLimitSec": 1000,
-        "maxAttempts": 2,
-        "negativeMarking": false,
-        "shuffleQuestions": false,
-        "shuffleOptions": true,
-        "questions": [
-          {
-            "question": "This is a question?",
-            "options": ["option1", "option2", "option3", "option4"],
-            "answer": ["option3"],
-            "questionType": {
-              "mark": 1,
-              "negativeMark": 0,
-              "multipleAnswer": false
-            }
-          }
-        ],
-        "maxScore": 1,
-        "createdAt": "2023-04-13T09:44:14.745Z",
-        "updatedAt": "2023-04-13T10:45:25.177Z",
-        "__v": 2
-      },
-      {
-        "_id": "6437d06bcee1ef10e53772c0",
-        "quizId": "example1-6K8HxRF",
-        "quizName": "sample quiz 1",
-        "quizDescription": [
-          "This Quiz is created by: example1.",
-          "The quiz has a time limit of 00:16:40[hh:mm:ss] for completion.",
-          "This quiz allows a maximum of 1 attempts.",
-          "The mark awarded for a correct answer will be shown alongside the respective question.",
-          "All the questions in this quiz are multiple choice questions.",
-          "The options for single correct answers will be displayed in radio buttons.",
-          "The options for multiple correct answers will be displayed in checkboxes."
-        ],
-        "createdByEmailId": "example1@gmail.com",
-        "createdByUserName": "example1",
-        "active": true,
-        "protected": false,
-        "showAnswer": false,
-        "timeLimitSec": 1000,
-        "maxAttempts": 1,
-        "negativeMarking": false,
-        "shuffleQuestions": false,
-        "shuffleOptions": false,
-        "questions": [
-          {
-            "question": "This is a question?",
-            "options": ["option1", "option2", "option3", "option4"],
-            "answer": ["option3"],
-            "questionType": {
-              "mark": 1,
-              "negativeMark": 0,
-              "multipleAnswer": false
-            }
-          }
-        ],
-        "maxScore": 1,
-        "createdAt": "2023-04-13T09:50:35.971Z",
-        "updatedAt": "2023-04-13T09:50:35.971Z",
-        "__v": 0
-      },
-      {
-        "_id": "6437ceec02330badf6462cdb",
-        "quizId": "example1-d9pmqfT",
-        "quizName": "sample quiz 1",
-        "quizDescription": [
-          "This Quiz is created by: example1.",
-          "The quiz has a time limit of 00:16:40[hh:mm:ss] for completion.",
-          "This quiz allows a maximum of 1 attempts.",
-          "The mark awarded for a correct answer will be shown alongside the respective question.",
-          "All the questions in this quiz are multiple choice questions.",
-          "The options for single correct answers will be displayed in radio buttons.",
-          "The options for multiple correct answers will be displayed in checkboxes."
-        ],
-        "createdByEmailId": "example1@gmail.com",
-        "createdByUserName": "example1",
-        "active": true,
-        "protected": false,
-        "showAnswer": false,
-        "timeLimitSec": 1000,
-        "maxAttempts": 1,
-        "negativeMarking": false,
-        "shuffleQuestions": false,
-        "shuffleOptions": false,
-        "questions": [
-          {
-            "question": "This is a question?",
-            "options": ["option1", "option2", "option3", "option4"],
-            "answer": ["option3"],
-            "questionType": {
-              "mark": 1,
-              "negativeMark": 0,
-              "multipleAnswer": false
-            }
-          }
-        ],
-        "maxScore": 1,
-        "createdAt": "2023-04-13T09:44:12.428Z",
-        "updatedAt": "2023-04-13T09:44:12.428Z",
-        "__v": 0
-      }
-    ]
-  },
-  "createQuiz": {
-    "statusCode": 200,
-    "timestamp": "2023-04-13T10:48:40.473Z",
-    "requestId": "7ac754f2-c3a3-4966-948c-c64d97247812",
-    "message": "Quiz created successfully!",
-    "data": {
-      "quizId": "example1-Do3MiuM",
-      "quizName": "sample quiz 1",
-      "quizDescription": [
-        "This Quiz is created by: example1.",
-        "This quiz doesn't have a time limit.",
-        "This quiz allows a maximum of 1 attempts.",
-        "The mark awarded for a correct answer will be shown alongside the respective question.",
-        "All the questions in this quiz are multiple choice questions.",
-        "The options for single correct answers will be displayed in radio buttons.",
-        "The options for multiple correct answers will be displayed in checkboxes."
-      ],
-      "createdByEmailId": "example1@gmail.com",
-      "createdByUserName": "example1",
-      "active": false,
-      "protected": false,
-      "showAnswer": false,
-      "timeLimitSec": 0,
-      "maxAttempts": 1,
-      "negativeMarking": false,
-      "shuffleQuestions": false,
-      "shuffleOptions": false,
-      "questions": [
-        {
-          "question": "This is a question?",
-          "options": ["option1", "option2", "option3", "option4"],
-          "answer": ["option3"],
-          "questionType": {
-            "mark": 1,
-            "negativeMark": 0,
-            "multipleAnswer": false
-          }
-        }
-      ],
-      "maxScore": 1,
-      "_id": "6437de08a46fcc6936d28143",
-      "createdAt": "2023-04-13T10:48:40.418Z",
-      "updatedAt": "2023-04-13T10:48:40.418Z",
-      "__v": 0
-    }
-  },
-  "attendQuiz": {
-    "statusCode": 200,
-    "timestamp": "2023-04-13T10:49:15.750Z",
-    "requestId": "a83dda69-bcee-4e26-8ce6-ce2ba0177116",
-    "message": "Quiz details fetched successfully!",
-    "data": {
-      "_id": "6437ceec02330badf6462cdb",
-      "quizId": "example1-d9pmqfT",
-      "quizName": "sample quiz 1",
-      "quizDescription": [
-        "This Quiz is created by: example1.",
-        "The quiz has a time limit of 00:16:40[hh:mm:ss] for completion.",
-        "This quiz allows a maximum of 1 attempts.",
-        "The mark awarded for a correct answer will be shown alongside the respective question.",
-        "All the questions in this quiz are multiple choice questions.",
-        "The options for single correct answers will be displayed in radio buttons.",
-        "The options for multiple correct answers will be displayed in checkboxes."
-      ],
-      "createdByEmailId": "example1@gmail.com",
-      "createdByUserName": "example1",
-      "active": true,
-      "protected": false,
-      "showAnswer": false,
-      "timeLimitSec": 1000,
-      "maxAttempts": 1,
-      "negativeMarking": false,
-      "shuffleQuestions": false,
-      "shuffleOptions": false,
-      "questions": [
-        {
-          "question": "This is a question?",
-          "options": ["option1", "option2", "option3", "option4"],
-          "questionType": {
-            "mark": 1,
-            "negativeMark": 0,
-            "multipleAnswer": false
-          }
-        }
-      ],
-      "maxScore": 1,
-      "createdAt": "2023-04-13T09:44:12.428Z",
-      "updatedAt": "2023-04-13T09:44:12.428Z",
-      "__v": 0
-    }
-  },
-  "deleteQuiz": {
-    "statusCode": 200,
-    "timestamp": "2023-04-13T06:02:14.557Z",
-    "requestId": "78bab9fb-21c8-4c84-82b8-c8a6b85424cf",
-    "message": "Deleted quiz successfully!",
-    "data": {
-      "message": "Deleted quiz and all its corresponding attendees records as well."
-    }
-  },
-  "editQuiz": {
-    "statusCode": 200,
-    "timestamp": "2023-04-13T10:45:25.231Z",
-    "requestId": "5a2b0b54-2e40-492b-a8fb-025eeee52754",
-    "message": "Edited quiz successfully!",
-    "data": {
+  "getAllQuiz": [
+    {
       "_id": "6437ceee02330badf6462cdf",
       "quizId": "example1-QfXq8Uj",
       "quizName": "edited sample quiz 1",
@@ -273,6 +40,209 @@
       "createdAt": "2023-04-13T09:44:14.745Z",
       "updatedAt": "2023-04-13T10:45:25.177Z",
       "__v": 2
+    },
+    {
+      "_id": "6437d06bcee1ef10e53772c0",
+      "quizId": "example1-6K8HxRF",
+      "quizName": "sample quiz 1",
+      "quizDescription": [
+        "This Quiz is created by: example1.",
+        "The quiz has a time limit of 00:16:40[hh:mm:ss] for completion.",
+        "This quiz allows a maximum of 1 attempts.",
+        "The mark awarded for a correct answer will be shown alongside the respective question.",
+        "All the questions in this quiz are multiple choice questions.",
+        "The options for single correct answers will be displayed in radio buttons.",
+        "The options for multiple correct answers will be displayed in checkboxes."
+      ],
+      "createdByEmailId": "example1@gmail.com",
+      "createdByUserName": "example1",
+      "active": true,
+      "protected": false,
+      "showAnswer": false,
+      "timeLimitSec": 1000,
+      "maxAttempts": 1,
+      "negativeMarking": false,
+      "shuffleQuestions": false,
+      "shuffleOptions": false,
+      "questions": [
+        {
+          "question": "This is a question?",
+          "options": ["option1", "option2", "option3", "option4"],
+          "answer": ["option3"],
+          "questionType": {
+            "mark": 1,
+            "negativeMark": 0,
+            "multipleAnswer": false
+          }
+        }
+      ],
+      "maxScore": 1,
+      "createdAt": "2023-04-13T09:50:35.971Z",
+      "updatedAt": "2023-04-13T09:50:35.971Z",
+      "__v": 0
+    },
+    {
+      "_id": "6437ceec02330badf6462cdb",
+      "quizId": "example1-d9pmqfT",
+      "quizName": "sample quiz 1",
+      "quizDescription": [
+        "This Quiz is created by: example1.",
+        "The quiz has a time limit of 00:16:40[hh:mm:ss] for completion.",
+        "This quiz allows a maximum of 1 attempts.",
+        "The mark awarded for a correct answer will be shown alongside the respective question.",
+        "All the questions in this quiz are multiple choice questions.",
+        "The options for single correct answers will be displayed in radio buttons.",
+        "The options for multiple correct answers will be displayed in checkboxes."
+      ],
+      "createdByEmailId": "example1@gmail.com",
+      "createdByUserName": "example1",
+      "active": true,
+      "protected": false,
+      "showAnswer": false,
+      "timeLimitSec": 1000,
+      "maxAttempts": 1,
+      "negativeMarking": false,
+      "shuffleQuestions": false,
+      "shuffleOptions": false,
+      "questions": [
+        {
+          "question": "This is a question?",
+          "options": ["option1", "option2", "option3", "option4"],
+          "answer": ["option3"],
+          "questionType": {
+            "mark": 1,
+            "negativeMark": 0,
+            "multipleAnswer": false
+          }
+        }
+      ],
+      "maxScore": 1,
+      "createdAt": "2023-04-13T09:44:12.428Z",
+      "updatedAt": "2023-04-13T09:44:12.428Z",
+      "__v": 0
     }
+  ],
+  "createQuiz": {
+    "quizId": "example1-Do3MiuM",
+    "quizName": "sample quiz 1",
+    "quizDescription": [
+      "This Quiz is created by: example1.",
+      "This quiz doesn't have a time limit.",
+      "This quiz allows a maximum of 1 attempts.",
+      "The mark awarded for a correct answer will be shown alongside the respective question.",
+      "All the questions in this quiz are multiple choice questions.",
+      "The options for single correct answers will be displayed in radio buttons.",
+      "The options for multiple correct answers will be displayed in checkboxes."
+    ],
+    "createdByEmailId": "example1@gmail.com",
+    "createdByUserName": "example1",
+    "active": false,
+    "protected": false,
+    "showAnswer": false,
+    "timeLimitSec": 0,
+    "maxAttempts": 1,
+    "negativeMarking": false,
+    "shuffleQuestions": false,
+    "shuffleOptions": false,
+    "questions": [
+      {
+        "question": "This is a question?",
+        "options": ["option1", "option2", "option3", "option4"],
+        "answer": ["option3"],
+        "questionType": {
+          "mark": 1,
+          "negativeMark": 0,
+          "multipleAnswer": false
+        }
+      }
+    ],
+    "maxScore": 1,
+    "_id": "6437de08a46fcc6936d28143",
+    "createdAt": "2023-04-13T10:48:40.418Z",
+    "updatedAt": "2023-04-13T10:48:40.418Z",
+    "__v": 0
+  },
+  "attendQuiz": {
+    "_id": "6437ceec02330badf6462cdb",
+    "quizId": "example1-d9pmqfT",
+    "quizName": "sample quiz 1",
+    "quizDescription": [
+      "This Quiz is created by: example1.",
+      "The quiz has a time limit of 00:16:40[hh:mm:ss] for completion.",
+      "This quiz allows a maximum of 1 attempts.",
+      "The mark awarded for a correct answer will be shown alongside the respective question.",
+      "All the questions in this quiz are multiple choice questions.",
+      "The options for single correct answers will be displayed in radio buttons.",
+      "The options for multiple correct answers will be displayed in checkboxes."
+    ],
+    "createdByEmailId": "example1@gmail.com",
+    "createdByUserName": "example1",
+    "active": true,
+    "protected": false,
+    "showAnswer": false,
+    "timeLimitSec": 1000,
+    "maxAttempts": 1,
+    "negativeMarking": false,
+    "shuffleQuestions": false,
+    "shuffleOptions": false,
+    "questions": [
+      {
+        "question": "This is a question?",
+        "options": ["option1", "option2", "option3", "option4"],
+        "questionType": {
+          "mark": 1,
+          "negativeMark": 0,
+          "multipleAnswer": false
+        }
+      }
+    ],
+    "maxScore": 1,
+    "createdAt": "2023-04-13T09:44:12.428Z",
+    "updatedAt": "2023-04-13T09:44:12.428Z",
+    "__v": 0
+  },
+  "deleteQuiz": {
+    "message": "Deleted quiz and all its corresponding attendees records as well."
+  },
+  "editQuiz": {
+    "_id": "6437ceee02330badf6462cdf",
+    "quizId": "example1-QfXq8Uj",
+    "quizName": "edited sample quiz 1",
+    "quizDescription": [
+      "This Quiz is created by: example1.",
+      "During the quiz, you will not be able to switch to another tab while taking the quiz as it will result in closing(submitting) the quiz, and the quiz interface will be displayed in full-screen mode.",
+      "The quiz has a time limit of 00:16:40[hh:mm:ss] for completion.",
+      "This quiz allows a maximum of 2 attempts.",
+      "The mark awarded for a correct answer will be shown alongside the respective question.",
+      "All the questions in this quiz are multiple choice questions.",
+      "The options for single correct answers will be displayed in radio buttons.",
+      "The options for multiple correct answers will be displayed in checkboxes."
+    ],
+    "createdByEmailId": "example1@gmail.com",
+    "createdByUserName": "example1",
+    "active": true,
+    "protected": true,
+    "showAnswer": false,
+    "timeLimitSec": 1000,
+    "maxAttempts": 2,
+    "negativeMarking": false,
+    "shuffleQuestions": false,
+    "shuffleOptions": true,
+    "questions": [
+      {
+        "question": "This is a question?",
+        "options": ["option1", "option2", "option3", "option4"],
+        "answer": ["option3"],
+        "questionType": {
+          "mark": 1,
+          "negativeMark": 0,
+          "multipleAnswer": false
+        }
+      }
+    ],
+    "maxScore": 1,
+    "createdAt": "2023-04-13T09:44:14.745Z",
+    "updatedAt": "2023-04-13T10:45:25.177Z",
+    "__v": 2
   }
 }
