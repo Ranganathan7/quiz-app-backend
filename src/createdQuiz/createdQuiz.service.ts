@@ -6,8 +6,9 @@ import {
   CommonApiResponse,
 } from 'src/common/models/api.models';
 import { CreatedQuizRepository } from './repository/createdQuiz.repository';
-import { CreateQuizDto } from './dto/createdQuiz.dto';
+import { CreateQuizDto, EditQuizDto } from './dto/createdQuiz.dto';
 import { UserRepository } from 'src/user/repository/user.repository';
+import { generateRandomQuizId } from '../common/utils/createdQuiz.helper';
 
 @Injectable()
 export class CreatedQuizService {
@@ -52,29 +53,25 @@ export class CreatedQuizService {
     this.logger.info('[CreatedQuizService]: Api called to create a quiz.', [
       requestId,
     ]);
-    //validating user request (comparing provided username and actual username from emailId)
-    const user = await this.userRepository.findUserWithEmailId(
-      createQuizDto.emailId,
-      requestId,
-    );
-    if (!user || user.userName !== createQuizDto.createdByUserName) {
-      const errorMessage =
-        'The createdByUserName provided in request body does not match with the user of provided email ID.';
-      this.logger.error(`[CreatedQuizService]: ${errorMessage}`, [requestId]);
-      throw new HttpException(
-        { message: errorMessage, requestId: requestId },
-        HttpStatus.CONFLICT,
-      );
-    }
     try {
+      //validating user request (comparing provided username and actual username from emailId)
+      const user = await this.userRepository.findUserWithEmailId(
+        createQuizDto.emailId,
+        requestId,
+      );
+      if (!user || user.userName !== createQuizDto.createdByUserName) {
+        const errorMessage =
+          'The createdByUserName provided in request body does not match with the user of provided email ID.';
+        this.logger.error(`[CreatedQuizService]: ${errorMessage}`, [requestId]);
+        throw new HttpException(
+          { message: errorMessage, requestId: requestId },
+          HttpStatus.CONFLICT,
+        );
+      }
       // generating unique quiz ID
       let quizId: string;
       while (true) {
-        quizId = this.generateRandomQuizId(
-          7,
-          createQuizDto.createdByUserName,
-          requestId,
-        );
+        quizId = generateRandomQuizId(7, createQuizDto.createdByUserName);
         const quiz =
           await this.createdQuizRepository.findQuizWithQuizIdForAttendingIt(
             quizId,
@@ -176,10 +173,7 @@ export class CreatedQuizService {
       [requestId],
     );
     try {
-      await this.createdQuizRepository.deleteQuiz(
-        quizId,
-        requestId,
-      );
+      await this.createdQuizRepository.deleteQuiz(quizId, requestId);
       this.logger.info('[CreatedQuizService]: Deleted quiz successfully.', [
         requestId,
       ]);
@@ -194,7 +188,8 @@ export class CreatedQuizService {
         requestId: requestId,
         message: 'Deleted quiz successfully!',
         data: {
-          message: 'Deleted quiz and all its corresponding attendees records as well.'
+          message:
+            'Deleted quiz and all its corresponding attendees records as well.',
         },
       };
       return apiResult;
@@ -204,25 +199,57 @@ export class CreatedQuizService {
     }
   }
 
-  private generateRandomQuizId(
-    length: number,
-    userName: string,
+  async editQuiz(
+    editQuizDto: EditQuizDto,
     requestId: string,
-  ): string {
-    this.logger.info(
-      '[CreatedQuizService]: Api called to generate a quiz ID.',
-      [requestId],
-    );
-    //the generated ID has only uppercase, lowercase and numbers
-    const chars =
-      'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    let id: string = userName + '-';
-    const maxLength: number = chars.length;
-    let randomIndex: number;
-    for (let i = 0; i < length; i++) {
-      randomIndex = Math.floor(Math.random() * maxLength);
-      id += chars[randomIndex];
+  ): Promise<CommonApiResponse> {
+    this.logger.info('[CreatedQuizService]: Api called to edit a quiz.', [
+      requestId,
+    ]);
+    // checking for empty object request 
+    if (Object.entries(editQuizDto).length === 2) {
+      this.logger.error(`[CreatedQuizService]: No fields to update are sent in the request body.`, [
+        requestId,
+      ]);
+      throw new HttpException(
+        { message: 'Add the fields to update in the request body.', requestId: requestId },
+        HttpStatus.BAD_REQUEST,
+      );
     }
-    return id;
+    // checking for uneditable fields in requestbody 
+    if ("createdByUserName" in editQuizDto || "createdByEmailId" in editQuizDto) {
+      this.logger.error(`[CreatedQuizService]: createdByEmailId and createdByUserName fields are not editable.`, [
+        requestId,
+      ]);
+      throw new HttpException(
+        { message: 'CreatedByEmailId and CreatedByUserName fields are not editable.', requestId: requestId },
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+    try {
+      const editedQuiz = await this.createdQuizRepository.editQuiz(
+        editQuizDto,
+        requestId,
+      );
+      this.logger.info('[CreatedQuizService]: Edited quiz successfully.', [
+        requestId,
+      ]);
+      //deleting all its respective attended quiz records as the quiz is edited
+      // await this.attendedQuizRepository.deleteQuiz(quizId);
+      // this.logger.info('[CreatedQuizService]: Deleted its corresponding attended quiz records successfully.', [
+      //   requestId,
+      // ]);
+      const apiResult: CommonApiResponse<ApiSuccessResponse<any>> = {
+        statusCode: HttpStatus.OK,
+        timestamp: new Date().toISOString(),
+        requestId: requestId,
+        message: 'Edited quiz successfully!',
+        data: editedQuiz,
+      };
+      return apiResult;
+    } catch (error) {
+      this.logger.error(`[CreatedQuizService]: ${error.message}`, [requestId]);
+      throw error;
+    }
   }
 }

@@ -57,6 +57,12 @@ const deleteQuiz: ApiOperationOptions = {
   summary: 'This API deletes a quiz.',
 };
 
+const editQuiz: ApiOperationOptions = {
+  tags: [CONSTANTS.ROUTES.CREATED_QUIZ.EDIT_QUIZ.TAG],
+  description: 'This API is used to edit the quiz. The emailId in the request body comes from the cookie. The fields to be edited comes along with the request body.',
+  summary: 'This API edits the quiz.',
+};
+
 export const operations = {
   singup: signup,
   login: login,
@@ -67,4 +73,5 @@ export const operations = {
   createQuiz: createQuiz,
   attendQuiz: attendQuiz,
   deleteQuiz: deleteQuiz,
+  editQuiz: editQuiz,
 };

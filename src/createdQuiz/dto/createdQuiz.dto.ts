@@ -26,107 +26,173 @@ export class QuestionTypeDto {
   @IsNotEmpty()
   @Min(1)
   @ApiProperty({ default: 1 })
-  mark: number
+  mark: number;
 
   @IsNumber()
   @IsNotEmpty()
   @Min(0)
   @ApiProperty()
-  negativeMark: number
+  negativeMark: number;
 
   @IsBoolean()
   @IsNotEmpty()
   @ApiProperty({ default: false })
-  multipleAnswer: boolean
+  multipleAnswer: boolean;
 }
 
 export class QuestionsDto {
   @IsString()
   @IsNotEmpty()
   @ApiProperty({ default: 'This is a question?' })
-  question: string
+  question: string;
 
   @IsArray()
   @IsString({ each: true })
   @IsNotEmpty()
   @ApiProperty({ default: ['option1', 'option2', 'option3', 'option4'] })
-  options: string[]
+  options: string[];
 
   @IsArray()
   @IsString({ each: true })
   @IsNotEmpty()
   @ApiProperty({ default: ['option3'] })
-  answer: string[]
+  answer: string[];
 
   @IsObject()
   @IsDefined()
   @Type(() => QuestionTypeDto)
   @ValidateNested()
   @ApiProperty({ type: QuestionTypeDto })
-  questionType: QuestionTypeDto
-};
+  questionType: QuestionTypeDto;
+}
 
 export class CreateQuizDto {
   @IsString()
   @IsNotEmpty()
   @ApiProperty({ default: 'example1@gmail.com' })
-  emailId: string
+  emailId: string;
 
   @IsString()
   @IsNotEmpty()
   @ApiProperty({ default: 'sample quiz 1' })
-  quizName: string
+  quizName: string;
 
   @IsString()
   @IsNotEmpty()
   @ApiProperty({ default: 'example1' })
-  createdByUserName: string
+  createdByUserName: string;
 
   @IsBoolean()
   @IsNotEmpty()
   @ApiProperty({ default: false })
-  active: boolean
+  active: boolean;
 
   @IsBoolean()
   @IsNotEmpty()
   @ApiProperty({ default: false })
-  protected: boolean
+  protected: boolean;
 
   @IsBoolean()
   @IsOptional()
   @ApiProperty({ default: false })
-  showAnswer?: boolean
+  showAnswer?: boolean;
 
   @IsNumber()
   @Min(0)
   @IsNotEmpty()
   @ApiProperty()
-  timeLimitSec: number
+  timeLimitSec: number;
 
   @IsNumber()
   @Min(1)
   @IsNotEmpty()
   @ApiProperty({ default: 1 })
-  maxAttempts: number
+  maxAttempts: number;
 
   @IsBoolean()
   @IsNotEmpty()
   @ApiProperty({ default: false })
-  negativeMarking: boolean
+  negativeMarking: boolean;
 
   @IsBoolean()
   @IsOptional()
   @ApiProperty({ default: false })
-  shuffleQuestions?: boolean
+  shuffleQuestions?: boolean;
 
   @IsBoolean()
   @IsOptional()
   @ApiProperty({ default: false })
-  shuffleOptions?: boolean
+  shuffleOptions?: boolean;
 
   @IsArray({ message: 'questions must be an array' })
   @Type(() => QuestionsDto)
   @ValidateNested({ each: true })
   @ApiProperty({ type: [QuestionsDto] })
-  questions: QuestionsDto[]
+  questions: QuestionsDto[];
+}
+
+export class EditQuizDto {
+  @IsString()
+  @IsNotEmpty()
+  @ApiProperty({ default: 'example1@gmail.com' })
+  emailId: string;
+
+  @IsString()
+  @IsNotEmpty()
+  @ApiProperty({ default: 'example1-Sm1NpOZ' })
+  quizId: string;
+
+  @IsString()
+  @IsOptional()
+  @ApiProperty({ default: 'edited sample quiz 1' })
+  quizName?: string;
+
+  @IsBoolean()
+  @IsOptional()
+  @ApiProperty({ default: false })
+  active?: boolean;
+
+  @IsBoolean()
+  @IsOptional()
+  @ApiProperty({ default: false })
+  protected?: boolean;
+
+  @IsBoolean()
+  @IsOptional()
+  @ApiProperty({ default: false })
+  showAnswer?: boolean;
+
+  @IsNumber()
+  @Min(0)
+  @IsOptional()
+  @ApiProperty()
+  timeLimitSec?: number;
+
+  @IsNumber()
+  @Min(1)
+  @IsOptional()
+  @ApiProperty({ default: 1 })
+  maxAttempts?: number;
+
+  @IsBoolean()
+  @IsOptional()
+  @ApiProperty({ default: false })
+  negativeMarking?: boolean;
+
+  @IsBoolean()
+  @IsOptional()
+  @ApiProperty({ default: false })
+  shuffleQuestions?: boolean;
+
+  @IsBoolean()
+  @IsOptional()
+  @ApiProperty({ default: false })
+  shuffleOptions?: boolean;
+
+  @IsArray({ message: 'questions must be an array' })
+  @Type(() => QuestionsDto)
+  @ValidateNested({ each: true })
+  @ApiProperty({ type: [QuestionsDto] })
+  @IsOptional()
+  questions?: QuestionsDto[];
 }

@@ -7,6 +7,7 @@ import {
   HttpStatus,
   Inject,
   Param,
+  Patch,
   Post,
   Query,
   UseFilters,
@@ -35,7 +36,7 @@ import { responses } from '../common/openapi/responses';
 import * as sampleResponses from './reqres/sample-responses.json';
 import { AuthGuard } from '../common/auth/auth.guard';
 import { CreatedQuizService } from './createdQuiz.service';
-import { CreateQuizDto, GetAllCreatedQuizDto } from './dto/createdQuiz.dto';
+import { CreateQuizDto, EditQuizDto, GetAllCreatedQuizDto } from './dto/createdQuiz.dto';
 
 @Controller(CONSTANTS.ROUTES.CREATED_QUIZ.CONTROLLER)
 @ApiTags(CONSTANTS.ROUTES.CREATED_QUIZ.TAG)
@@ -172,7 +173,7 @@ export class CreatedQuizController {
     const requestId = randomUUID();
     const session = await this.connection.startSession();
     session.startTransaction();
-    this.logger.info('[CreatedQuizController]: Api called delete the quiz with quiz ID.', [
+    this.logger.info('[CreatedQuizController]: Api called to delete the quiz with quiz ID.', [
       requestId,
     ]);
     try {
@@ -180,6 +181,39 @@ export class CreatedQuizController {
         quizId,
         requestId,
       );
+      await session.commitTransaction();
+      return response;
+    } catch (error) {
+      await session.abortTransaction();
+      this.logger.error(`[CreatedQuizController]: ${error.message}`, [
+        requestId,
+      ]);
+      throw error;
+    } finally {
+      await session.endSession();
+    }
+  }
+
+  @Patch(CONSTANTS.ROUTES.CREATED_QUIZ.EDIT_QUIZ.PATH)
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation(operations.editQuiz)
+  @ApiOkResponse(responses.apiOkResponse(sampleResponses.editQuiz))
+  @ApiBadRequestResponse(responses.apiBadRequestResponse)
+  @ApiUnauthorizedResponse(responses.apiUnauthorizedResponse)
+  @ApiForbiddenResponse(responses.apiForbiddenResponse)
+  @ApiNotFoundResponse(responses.apiNotFoundResponse)
+  @ApiInternalServerErrorResponse(responses.apiInternalServerErrorResponse)
+  async editQuiz(
+    @Body() editQuizDto: EditQuizDto
+  ): Promise<CommonApiResponse> {
+    const requestId = randomUUID();
+    const session = await this.connection.startSession();
+    session.startTransaction();
+    this.logger.info('[CreatedQuizController]: Api called to edit a quiz.', [
+      requestId,
+    ]);
+    try {
+      const response = await this.createdQuizService.editQuiz(editQuizDto, requestId);
       await session.commitTransaction();
       return response;
     } catch (error) {

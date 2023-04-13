@@ -4,8 +4,11 @@ import { Model } from 'mongoose';
 import { LOGGER } from '../../common/core.module';
 import { Logger } from 'winston';
 import { CreatedQuiz } from '../entity/createdQuiz.entity';
-import { CreateQuizDto } from '../dto/createdQuiz.dto';
-import { calculateMaxScore, createQuizDescription } from '../../common/utils/createdQuiz.helper';
+import { CreateQuizDto, EditQuizDto } from '../dto/createdQuiz.dto';
+import {
+  calculateMaxScore,
+  createQuizDescription,
+} from '../../common/utils/createdQuiz.helper';
 
 export class CreatedQuizRepository {
   constructor(
@@ -119,6 +122,54 @@ export class CreatedQuizRepository {
       this.logger.error(`[CreatedQuizRepository]: ${error.message}`, [
         requestId,
       ]);
+      throw new HttpException(
+        { message: error.message, requestId: requestId },
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
+
+  async editQuiz(editQuizDto: EditQuizDto, requestId: string) {
+    this.logger.info('[CreatedQuizRepository]: Api called to edit a quiz.', [
+      requestId,
+    ]);
+    try {
+      //checking if request made is valid by
+      this.logger.info(
+        '[CreatedQuizRepository]: Checking if the emailId of the user is same the createdByEmailId of the quiz.',
+        [requestId],
+      );
+      const existingQuiz = await this.findQuizWithQuizId(
+        editQuizDto.quizId,
+        requestId,
+      );
+      if (
+        !existingQuiz ||
+        existingQuiz.createdByEmailId !== editQuizDto.emailId
+      ) {
+        throw new HttpException(
+          {
+            message: 'No quiz created with the given quiz ID and emailId.',
+            requestId: requestId,
+          },
+          HttpStatus.NOT_FOUND,
+        );
+      }
+      //removing the emailId 
+      const { emailId, ...filteredEditQuizDto } = editQuizDto;
+      //updating the sent fields
+      return await this.createdQuizModel.findOneAndUpdate(
+        { quizId: editQuizDto.quizId },
+        { $set: filteredEditQuizDto },
+        { strict: true, new: true },
+      );
+    } catch (error) {
+      this.logger.error(`[CreatedQuizRepository]: ${error.message}`, [
+        requestId,
+      ]);
+      if (error instanceof HttpException) {
+        throw error;
+      }
       throw new HttpException(
         { message: error.message, requestId: requestId },
         HttpStatus.INTERNAL_SERVER_ERROR,

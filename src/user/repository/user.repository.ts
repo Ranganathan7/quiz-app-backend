@@ -20,35 +20,35 @@ export class UserRepository {
     this.logger.info('[UserRepository]: Api called to signup an user', [
       requestId,
     ]);
-    //checking if email ID is unique
-    const existingEmailId = await this.findUserWithEmailId(
-      signupDto.emailId,
-      requestId,
-    );
-    if (existingEmailId) {
-      throw new HttpException(
-        {
-          message: 'Provided email ID already exists.',
-          requestId: requestId,
-        },
-        HttpStatus.CONFLICT,
-      );
-    }
-    //checking if username is unique
-    const existingUserName = await this.findUserWithUserName(
-      signupDto.userName,
-      requestId,
-    );
-    if (existingUserName) {
-      throw new HttpException(
-        {
-          message: 'Provided user name already exists.',
-          requestId: requestId,
-        },
-        HttpStatus.CONFLICT,
-      );
-    }
     try {
+      //checking if email ID is unique
+      const existingEmailId = await this.findUserWithEmailId(
+        signupDto.emailId,
+        requestId,
+      );
+      if (existingEmailId) {
+        throw new HttpException(
+          {
+            message: 'Provided email ID already exists.',
+            requestId: requestId,
+          },
+          HttpStatus.CONFLICT,
+        );
+      }
+      //checking if username is unique
+      const existingUserName = await this.findUserWithUserName(
+        signupDto.userName,
+        requestId,
+      );
+      if (existingUserName) {
+        throw new HttpException(
+          {
+            message: 'Provided user name already exists.',
+            requestId: requestId,
+          },
+          HttpStatus.CONFLICT,
+        );
+      }
       //hashing the password
       const hashedPassword = await bcrypt.hash(signupDto.password, 12);
       const newUser = new this.userModel({
@@ -58,7 +58,10 @@ export class UserRepository {
       //creating the user
       await newUser.save();
       //logging in the user
-      return await this.getUser({ emailId: signupDto.emailId, password: signupDto.password }, requestId);
+      return await this.getUser(
+        { emailId: signupDto.emailId, password: signupDto.password },
+        requestId,
+      );
     } catch (error) {
       this.logger.error(`[UserRepository]: ${error.message}`, [requestId]);
       if (error instanceof HttpException) {
@@ -78,9 +81,11 @@ export class UserRepository {
       [requestId],
     );
     try {
-      const user = await this.userModel.findOne({
-        emailId: loginDto.emailId,
-      }).lean();
+      const user = await this.userModel
+        .findOne({
+          emailId: loginDto.emailId,
+        })
+        .lean();
       if (!user) {
         throw new HttpException(
           {
@@ -100,10 +105,10 @@ export class UserRepository {
         );
       }
       //generating a token using jwt
-      const token =  await this.generateJwtToken(user.emailId, requestId);
+      const token = await this.generateJwtToken(user.emailId, requestId);
       //removing emailId and password from response as token has it as payload
-      const {emailId, password, ...filteredUser} = user;
-      return {...token, ...filteredUser};
+      const { emailId, password, ...filteredUser } = user;
+      return { ...token, ...filteredUser };
     } catch (error) {
       this.logger.error(`[UserRepository]: ${error.message}`, [requestId]);
       if (error instanceof HttpException) throw error;
@@ -151,29 +156,31 @@ export class UserRepository {
       '[UserRepository]: Api called to edit profile of an user',
       [requestId],
     );
-    //checking if new username is unique
-    const existingUserName = await this.findUserWithUserName(
-      editProfileDto.userName,
-      requestId,
-    );
-    if (existingUserName) {
-      throw new HttpException(
-        {
-          message: 'Provided user name already exists.',
-          requestId: requestId,
-        },
-        HttpStatus.CONFLICT,
-      );
-    }
     try {
-      const updatedUser = await this.userModel.findOneAndUpdate(
-        { emailId: editProfileDto.emailId },
-        { $set: { userName: editProfileDto.userName } },
-        { new: true },
-      ).lean();
+      //checking if new username is unique
+      const existingUserName = await this.findUserWithUserName(
+        editProfileDto.userName,
+        requestId,
+      );
+      if (existingUserName) {
+        throw new HttpException(
+          {
+            message: 'Provided user name already exists.',
+            requestId: requestId,
+          },
+          HttpStatus.CONFLICT,
+        );
+      }
+      const updatedUser = await this.userModel
+        .findOneAndUpdate(
+          { emailId: editProfileDto.emailId },
+          { $set: { userName: editProfileDto.userName } },
+          { new: true },
+        )
+        .lean();
       //removing emailId and password before sending
-      const {emailId, password, ...filteredUser} = updatedUser;
-      return {...filteredUser};
+      const { emailId, password, ...filteredUser } = updatedUser;
+      return { ...filteredUser };
     } catch (error) {
       this.logger.error(`[UserRepository]: ${error.message}`, [requestId]);
       throw new HttpException(
@@ -183,12 +190,11 @@ export class UserRepository {
     }
   }
 
-  async generateJwtToken(emailId: string, requestId: string ) {
+  async generateJwtToken(emailId: string, requestId: string) {
     const payload = { emailId: emailId };
-    this.logger.info(
-      '[UserRepository]: Api called to generate JWT token',
-      [requestId],
-    );
+    this.logger.info('[UserRepository]: Api called to generate JWT token', [
+      requestId,
+    ]);
     return {
       access_token: await this.jwtService.signAsync(payload),
     };

@@ -3,6 +3,23 @@ import {
   QuestionsDto,
 } from '../../createdQuiz/dto/createdQuiz.dto';
 
+export const generateRandomQuizId = (
+  length: number,
+  userName: string,
+): string => {
+  //the generated ID has only uppercase, lowercase and numbers
+  const chars =
+    'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  let id: string = userName + '-';
+  const maxLength: number = chars.length;
+  let randomIndex: number;
+  for (let i = 0; i < length; i++) {
+    randomIndex = Math.floor(Math.random() * maxLength);
+    id += chars[randomIndex];
+  }
+  return id;
+};
+
 export const calculateMaxScore = (quiz: QuestionsDto[]): number => {
   let maxScore = 0;
   for (let i = 0; i < quiz.length; i++) {
