@@ -47,7 +47,7 @@ const createQuiz: ApiOperationOptions = {
 
 const attendQuiz: ApiOperationOptions = {
   tags: [CONSTANTS.ROUTES.CREATED_QUIZ.ATTEND_QUIZ.TAG],
-  description: 'This API is used fetch the quiz details with quiz ID for attending it.',
+  description: 'This API is used fetch the quiz details with quiz ID for attending it. The emailId in the request body comes from the cookie. The fields to be edited comes along with the request body.',
   summary: 'This API returns the quiz details of provided quizId.',
 };
 

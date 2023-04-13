@@ -117,7 +117,7 @@ export class CreatedQuizRepository {
       [requestId],
     );
     try {
-      return await this.createdQuizModel.deleteMany({ quizId: quizId }).exec();
+      await this.createdQuizModel.deleteMany({ quizId: quizId }).exec();
     } catch (error) {
       this.logger.error(`[CreatedQuizRepository]: ${error.message}`, [
         requestId,

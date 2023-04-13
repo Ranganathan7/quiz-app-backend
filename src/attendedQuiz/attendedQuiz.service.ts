@@ -22,7 +22,7 @@ export class AttendedQuizService {
       [requestId],
     );
     try {
-      const attendedQuizzes = await this.attendedQuizRepository.getAll(
+      const attendedQuizzes = await this.attendedQuizRepository.getAllWithEmailId(
         emailId,
         requestId,
       );

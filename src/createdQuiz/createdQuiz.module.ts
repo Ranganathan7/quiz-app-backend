@@ -8,12 +8,15 @@ import { JwtModule } from "@nestjs/jwt";
 import { ConfigService } from "@nestjs/config";
 import { User, UserSchema } from "../user/entity/user.entity";
 import { UserRepository } from "../user/repository/user.repository";
+import { AttendedQuizRepository } from "../attendedQuiz/repository/attendedQuiz.repository";
+import { AttendedQuiz, AttendedQuizSchema } from "../attendedQuiz/entity/attendedQuiz.entity";
 
 @Module({
   imports: [
     MongooseModule.forFeature([
       { name: CreatedQuiz.name, schema: CreatedQuizSchema, },
       { name: User.name, schema: UserSchema },
+      { name: AttendedQuiz.name, schema: AttendedQuizSchema, }
     ]),
     JwtModule.registerAsync({
       useFactory: async (configService: ConfigService) => ({
@@ -25,6 +28,6 @@ import { UserRepository } from "../user/repository/user.repository";
     }),
   ],
   controllers: [ CreatedQuizController ],
-  providers: [ CreatedQuizService, CreatedQuizRepository, UserRepository ]
+  providers: [ CreatedQuizService, CreatedQuizRepository, UserRepository, AttendedQuizRepository ]
 })
 export class CreatedQuizModule {}

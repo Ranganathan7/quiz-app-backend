@@ -9,6 +9,7 @@ import { CreatedQuizRepository } from './repository/createdQuiz.repository';
 import { CreateQuizDto, EditQuizDto } from './dto/createdQuiz.dto';
 import { UserRepository } from 'src/user/repository/user.repository';
 import { generateRandomQuizId } from '../common/utils/createdQuiz.helper';
+import { AttendedQuizRepository } from 'src/attendedQuiz/repository/attendedQuiz.repository';
 
 @Injectable()
 export class CreatedQuizService {
@@ -16,6 +17,7 @@ export class CreatedQuizService {
     @Inject(LOGGER) private readonly logger: Logger,
     private readonly userRepository: UserRepository,
     private readonly createdQuizRepository: CreatedQuizRepository,
+    private readonly attendedQuizRepository: AttendedQuizRepository,
   ) {}
 
   async getAll(emailId: string, requestId: string): Promise<CommonApiResponse> {
@@ -103,6 +105,7 @@ export class CreatedQuizService {
 
   async attendQuiz(
     quizId: string,
+    emailId: string,
     requestId: string,
   ): Promise<CommonApiResponse> {
     this.logger.info(
@@ -138,18 +141,23 @@ export class CreatedQuizService {
         );
       }
       //checking if max attempts exhausted
-      // const attendedQuiz = await this.attendedQuizRepository.get(...)
-      // if(attendedQuiz){
-      //   if (attendQuiz.attemptsLeft === 0) {
-      //     throw new HttpException(
-      //       {
-      //         message: 'Max number of attemps allowed for the quiz is reached.',
-      //         requestId: requestId,
-      //       },
-      //       HttpStatus.FORBIDDEN,
-      //     );
-      //   }
-      // }
+      const attendedQuiz =
+        await this.attendedQuizRepository.getOneWithQuizIdAndEmailId(
+          quizId,
+          emailId,
+          requestId,
+        );
+      if (attendedQuiz) {
+        if (attendedQuiz.attemptsLeft === 0) {
+          throw new HttpException(
+            {
+              message: 'Max number of attemps allowed for the quiz is reached.',
+              requestId: requestId,
+            },
+            HttpStatus.FORBIDDEN,
+          );
+        }
+      }
       const apiResult: CommonApiResponse<ApiSuccessResponse<any>> = {
         statusCode: HttpStatus.OK,
         timestamp: new Date().toISOString(),
@@ -178,10 +186,11 @@ export class CreatedQuizService {
         requestId,
       ]);
       //deleting all its respective attended quiz records
-      // await this.attendedQuizRepository.deleteQuiz(quizId);
-      // this.logger.info('[CreatedQuizService]: Deleted its corresponding attended quiz records successfully.', [
-      //   requestId,
-      // ]);
+      await this.attendedQuizRepository.deleteAllWithQuizId(quizId, requestId);
+      this.logger.info(
+        '[CreatedQuizService]: Deleted its corresponding attended quiz records successfully.',
+        [requestId],
+      );
       const apiResult: CommonApiResponse<ApiSuccessResponse<any>> = {
         statusCode: HttpStatus.OK,
         timestamp: new Date().toISOString(),
@@ -206,23 +215,35 @@ export class CreatedQuizService {
     this.logger.info('[CreatedQuizService]: Api called to edit a quiz.', [
       requestId,
     ]);
-    // checking for empty object request 
+    // checking for empty object request
     if (Object.entries(editQuizDto).length === 2) {
-      this.logger.error(`[CreatedQuizService]: No fields to update are sent in the request body.`, [
-        requestId,
-      ]);
+      this.logger.error(
+        `[CreatedQuizService]: No fields to update are sent in the request body.`,
+        [requestId],
+      );
       throw new HttpException(
-        { message: 'Add the fields to update in the request body.', requestId: requestId },
+        {
+          message: 'Add the fields to update in the request body.',
+          requestId: requestId,
+        },
         HttpStatus.BAD_REQUEST,
       );
     }
-    // checking for uneditable fields in requestbody 
-    if ("createdByUserName" in editQuizDto || "createdByEmailId" in editQuizDto) {
-      this.logger.error(`[CreatedQuizService]: createdByEmailId and createdByUserName fields are not editable.`, [
-        requestId,
-      ]);
+    // checking for uneditable fields in requestbody
+    if (
+      'createdByUserName' in editQuizDto ||
+      'createdByEmailId' in editQuizDto
+    ) {
+      this.logger.error(
+        `[CreatedQuizService]: createdByEmailId and createdByUserName fields are not editable.`,
+        [requestId],
+      );
       throw new HttpException(
-        { message: 'CreatedByEmailId and CreatedByUserName fields are not editable.', requestId: requestId },
+        {
+          message:
+            'CreatedByEmailId and CreatedByUserName fields are not editable.',
+          requestId: requestId,
+        },
         HttpStatus.BAD_REQUEST,
       );
     }
@@ -235,10 +256,14 @@ export class CreatedQuizService {
         requestId,
       ]);
       //deleting all its respective attended quiz records as the quiz is edited
-      // await this.attendedQuizRepository.deleteQuiz(quizId);
-      // this.logger.info('[CreatedQuizService]: Deleted its corresponding attended quiz records successfully.', [
-      //   requestId,
-      // ]);
+      await this.attendedQuizRepository.deleteAllWithQuizId(
+        editQuizDto.quizId,
+        requestId,
+      );
+      this.logger.info(
+        '[CreatedQuizService]: Deleted its corresponding attended quiz records successfully.',
+        [requestId],
+      );
       const apiResult: CommonApiResponse<ApiSuccessResponse<any>> = {
         statusCode: HttpStatus.OK,
         timestamp: new Date().toISOString(),

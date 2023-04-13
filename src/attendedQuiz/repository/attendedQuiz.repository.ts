@@ -12,7 +12,7 @@ export class AttendedQuizRepository {
     @Inject(LOGGER) private readonly logger: Logger,
   ) {}
 
-  async getAll(emailId: string, requestId: string) {
+  async getAllWithEmailId(emailId: string, requestId: string) {
     this.logger.info(
       '[AttendedQuizRepository]: Api called to get all attended quizzes of an user.',
       [requestId],
@@ -20,11 +20,56 @@ export class AttendedQuizRepository {
     try {
       const attendedQuizzes = await this.attendedQuizModel
         .find({
-          createdByEmailId: emailId,
+          attendedByEmailId: emailId,
         })
         .sort({ updatedAt: -1 })
         .lean();
       return attendedQuizzes;
+    } catch (error) {
+      this.logger.error(`[AttendedQuizRepository]: ${error.message}`, [
+        requestId,
+      ]);
+      throw new HttpException(
+        { message: error.message, requestId: requestId },
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
+
+  async getOneWithQuizIdAndEmailId(
+    quizId: string,
+    emailId: string,
+    requestId: string,
+  ) {
+    this.logger.info(
+      '[AttendedQuizRepository]: Api called to get one attend quiz with Quiz ID.',
+      [requestId],
+    );
+    try {
+      return await this.attendedQuizModel
+        .findOne({
+          quizId: quizId,
+          attendedByEmailId: emailId,
+        })
+        .lean();
+    } catch (error) {
+      this.logger.error(`[AttendedQuizRepository]: ${error.message}`, [
+        requestId,
+      ]);
+      throw new HttpException(
+        { message: error.message, requestId: requestId },
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
+
+  async deleteAllWithQuizId(quizId: string, requestId: string) {
+    this.logger.info(
+      '[AttendedQuizRepository]: Api called to delete all attended quizzes with quiz ID.',
+      [requestId],
+    );
+    try {
+      await this.attendedQuizModel.deleteMany({ quizId: quizId }).exec();
     } catch (error) {
       this.logger.error(`[AttendedQuizRepository]: ${error.message}`, [
         requestId,

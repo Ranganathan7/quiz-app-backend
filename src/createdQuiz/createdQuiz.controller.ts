@@ -122,7 +122,7 @@ export class CreatedQuizController {
     }
   }
 
-  @Get(CONSTANTS.ROUTES.CREATED_QUIZ.ATTEND_QUIZ.PATH)
+  @Post(CONSTANTS.ROUTES.CREATED_QUIZ.ATTEND_QUIZ.PATH)
   @HttpCode(HttpStatus.OK)
   @ApiOperation(operations.attendQuiz)
   @ApiOkResponse(responses.apiOkResponse(sampleResponses.attendQuiz))
@@ -132,7 +132,8 @@ export class CreatedQuizController {
   @ApiNotFoundResponse(responses.apiNotFoundResponse)
   @ApiInternalServerErrorResponse(responses.apiInternalServerErrorResponse)
   async attendQuiz(
-    @Query('quizId') quizId: string
+    @Query('quizId') quizId: string,
+    @Body('emailId') emailId: string,
   ): Promise<CommonApiResponse> {
     const requestId = randomUUID();
     const session = await this.connection.startSession();
@@ -143,6 +144,7 @@ export class CreatedQuizController {
     try {
       const response = await this.createdQuizService.attendQuiz(
         quizId,
+        emailId,
         requestId,
       );
       await session.commitTransaction();
