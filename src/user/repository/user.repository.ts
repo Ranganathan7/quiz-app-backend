@@ -175,7 +175,7 @@ export class UserRepository {
         .findOneAndUpdate(
           { emailId: editProfileDto.emailId },
           { $set: { userName: editProfileDto.userName } },
-          { new: true },
+          { strict: true, new: true },
         )
         .lean();
       //removing emailId and password before sending
