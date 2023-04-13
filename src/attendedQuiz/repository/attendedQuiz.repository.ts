@@ -36,6 +36,30 @@ export class AttendedQuizRepository {
     }
   }
 
+  async getAllWithQuizId(quizId: string, requestId: string) {
+    this.logger.info(
+      '[AttendedQuizRepository]: Api called to get all attended quizzes with quiz ID.',
+      [requestId],
+    );
+    try {
+      const attendedQuizzes = await this.attendedQuizModel
+        .find({
+          quizId: quizId,
+        })
+        .sort({ updatedAt: -1 })
+        .lean();
+      return attendedQuizzes;
+    } catch (error) {
+      this.logger.error(`[AttendedQuizRepository]: ${error.message}`, [
+        requestId,
+      ]);
+      throw new HttpException(
+        { message: error.message, requestId: requestId },
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
+
   async getOneWithQuizIdAndEmailId(
     quizId: string,
     emailId: string,
