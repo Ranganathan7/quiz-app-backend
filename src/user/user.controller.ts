@@ -128,41 +128,41 @@ export class UserController {
     }
   }
 
-  @Patch(CONSTANTS.ROUTES.USER.EDIT_PROFILE.PATH)
-  @HttpCode(HttpStatus.OK)
-  @UseGuards(AuthGuard)
-  @ApiOperation(operations.editProfile)
-  @ApiOkResponse(responses.apiOkResponse(sampleResponses.editProfile))
-  @ApiBadRequestResponse(responses.apiBadRequestResponse)
-  @ApiUnauthorizedResponse(responses.apiUnauthorizedResponse)
-  @ApiForbiddenResponse(responses.apiForbiddenResponse)
-  @ApiNotFoundResponse(responses.apiNotFoundResponse)
-  @ApiInternalServerErrorResponse(responses.apiInternalServerErrorResponse)
-  async editProfile(
-    @Body() editProfileDto: EditProfileDto,
-  ): Promise<CommonApiResponse> {
-    const requestId = randomUUID();
-    const session = await this.connection.startSession();
-    session.startTransaction();
-    this.logger.info(
-      '[UserController]: Api called to edit profile of an user',
-      [requestId],
-    );
-    try {
-      const user: CommonApiResponse = await this.userService.editProfile(
-        editProfileDto,
-        requestId,
-      );
-      await session.commitTransaction();
-      return user;
-    } catch (error) {
-      await session.abortTransaction();
-      this.logger.error(`[UserController]: ${error.message}`, [requestId]);
-      throw error;
-    } finally {
-      await session.endSession();
-    }
-  }
+  // @Patch(CONSTANTS.ROUTES.USER.EDIT_PROFILE.PATH)
+  // @HttpCode(HttpStatus.OK)
+  // @UseGuards(AuthGuard)
+  // @ApiOperation(operations.editProfile)
+  // @ApiOkResponse(responses.apiOkResponse(sampleResponses.editProfile))
+  // @ApiBadRequestResponse(responses.apiBadRequestResponse)
+  // @ApiUnauthorizedResponse(responses.apiUnauthorizedResponse)
+  // @ApiForbiddenResponse(responses.apiForbiddenResponse)
+  // @ApiNotFoundResponse(responses.apiNotFoundResponse)
+  // @ApiInternalServerErrorResponse(responses.apiInternalServerErrorResponse)
+  // async editProfile(
+  //   @Body() editProfileDto: EditProfileDto,
+  // ): Promise<CommonApiResponse> {
+  //   const requestId = randomUUID();
+  //   const session = await this.connection.startSession();
+  //   session.startTransaction();
+  //   this.logger.info(
+  //     '[UserController]: Api called to edit profile of an user',
+  //     [requestId],
+  //   );
+  //   try {
+  //     const user: CommonApiResponse = await this.userService.editProfile(
+  //       editProfileDto,
+  //       requestId,
+  //     );
+  //     await session.commitTransaction();
+  //     return user;
+  //   } catch (error) {
+  //     await session.abortTransaction();
+  //     this.logger.error(`[UserController]: ${error.message}`, [requestId]);
+  //     throw error;
+  //   } finally {
+  //     await session.endSession();
+  //   }
+  // }
 
   @Get(CONSTANTS.ROUTES.USER.LOGOUT.PATH)
   @HttpCode(HttpStatus.OK)

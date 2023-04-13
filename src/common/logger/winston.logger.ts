@@ -21,14 +21,7 @@ const lvl = Symbol.for('level') as unknown as string;
 const formatMetadata = format((info) => {
   info.label = `[${info.label}]`;
   info.level = `[${info.level}]`;
-  info.timestamp = new Date(info.timestamp).toLocaleString(undefined, {
-    year: 'numeric',
-    hour: 'numeric',
-    minute: 'numeric',
-    second: 'numeric',
-    day: '2-digit',
-    month: '2-digit',
-  });
+  info.timestamp = new Date(info.timestamp);
   return info;
 });
 
@@ -59,7 +52,14 @@ const logFormat = format.printf(
     //   .map((context: unknown) => JSON.stringify(context))
     //   .join(' ')}`
     const requestId = meta?.[splat]?.[0] ?? '';
-    return `${timestamp} ${label} ${level} ${requestId} ${message} ${ms}`;
+    return `${timestamp.toLocaleString(undefined, {
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+      day: '2-digit',
+      month: '2-digit',
+    })} ${label} ${level} ${requestId} ${message} ${ms}`;
   },
 );
 
