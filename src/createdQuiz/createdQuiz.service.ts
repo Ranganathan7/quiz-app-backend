@@ -143,7 +143,7 @@ export class CreatedQuizService {
       //checking if max attempts exhausted
       // const attendedQuiz = await this.attendedQuizRepository.get(...)
       // if(attendedQuiz){
-      //   if (attendQuiz.answers.length === quiz.maxAttempts) {
+      //   if (attendQuiz.attemptsLeft === 0) {
       //     throw new HttpException(
       //       {
       //         message: 'Max number of attemps allowed for the quiz is reached.',

@@ -83,41 +83,36 @@ export class CreateQuizDto {
   createdByUserName: string
 
   @IsBoolean()
-  @IsOptional()
+  @IsNotEmpty()
   @ApiProperty({ default: false })
-  active?: boolean
+  active: boolean
+
+  @IsBoolean()
+  @IsNotEmpty()
+  @ApiProperty({ default: false })
+  protected: boolean
 
   @IsBoolean()
   @IsOptional()
   @ApiProperty({ default: false })
-  protected?: boolean
-
-  @IsBoolean()
-  @IsOptional()
-  @ApiProperty({ default: false })
-  timed?: boolean
+  showAnswer?: boolean
 
   @IsNumber()
-  @IsOptional()
   @Min(0)
+  @IsNotEmpty()
   @ApiProperty()
-  timeLimitSec?: number
-
-  @IsBoolean()
-  @IsOptional()
-  @ApiProperty({ default: false })
-  multipleAttempts?: boolean
+  timeLimitSec: number
 
   @IsNumber()
-  @IsOptional()
   @Min(1)
+  @IsNotEmpty()
   @ApiProperty({ default: 1 })
-  maxAttempts?: number
+  maxAttempts: number
 
   @IsBoolean()
-  @IsOptional()
+  @IsNotEmpty()
   @ApiProperty({ default: false })
-  negativeMarking?: boolean
+  negativeMarking: boolean
 
   @IsBoolean()
   @IsOptional()

@@ -5,6 +5,7 @@ import { LOGGER } from '../../common/core.module';
 import { Logger } from 'winston';
 import { CreatedQuiz } from '../entity/createdQuiz.entity';
 import { CreateQuizDto } from '../dto/createdQuiz.dto';
+import { calculateMaxScore, createQuizDescription } from '../../common/utils/createdQuiz.helper';
 
 export class CreatedQuizRepository {
   constructor(
@@ -48,10 +49,12 @@ export class CreatedQuizRepository {
     //formatting createQuizDto to make it similar to create quiz entity
     const properCreateQuizDto: any = createQuizDto;
     const emailId = properCreateQuizDto.emailId;
-    delete properCreateQuizDto.emailId;
     properCreateQuizDto.createdByEmailId = emailId;
     properCreateQuizDto.quizId = quizId;
-    properCreateQuizDto.attendees = [];
+    properCreateQuizDto.maxScore = calculateMaxScore(createQuizDto.questions);
+    properCreateQuizDto.quizDescription = createQuizDescription(createQuizDto);
+    //removing the emailId which comes from the DTO
+    delete properCreateQuizDto.emailId;
     try {
       const createdQuiz = new this.createdQuizModel(properCreateQuizDto);
       return await createdQuiz.save();

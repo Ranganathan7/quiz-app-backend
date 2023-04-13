@@ -23,6 +23,9 @@ export class CreatedQuiz extends Document {
   quizName: string
 
   @Prop({ required: true })
+  quizDescription: string[]
+
+  @Prop({ required: true })
   createdByEmailId: string
 
   @Prop({ required: true })
@@ -35,13 +38,10 @@ export class CreatedQuiz extends Document {
   protected: boolean
 
   @Prop({ required: true, default: false })
-  timed: boolean
+  showAnswer: boolean
 
   @Prop({ required: true, default: 0 })
   timeLimitSec: number
-
-  @Prop({ required: true, default: false })
-  multipleAttempts: boolean
 
   @Prop({ required: true, default: 1 })
   maxAttempts: number
@@ -57,6 +57,9 @@ export class CreatedQuiz extends Document {
 
   @Prop({ required: true, type: [Object] })
   questions: QuestionsInterface[]
+
+  @Prop({ required: true })
+  maxScore: number
 }
 
 export const CreatedQuizSchema = SchemaFactory.createForClass(CreatedQuiz);

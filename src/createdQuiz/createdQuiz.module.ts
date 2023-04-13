@@ -19,7 +19,7 @@ import { UserRepository } from "../user/repository/user.repository";
       useFactory: async (configService: ConfigService) => ({
         global: true,
         secret: configService.get('jwt.secret'),
-        signOptions: { expiresIn: '1d' },
+        signOptions: { expiresIn: configService.get('jwt.expiresIn') },
       }),
       inject: [ConfigService],
     }),
