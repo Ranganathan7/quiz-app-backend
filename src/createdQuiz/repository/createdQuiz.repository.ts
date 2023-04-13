@@ -158,11 +158,14 @@ export class CreatedQuizRepository {
       //removing the emailId 
       const { emailId, ...filteredEditQuizDto } = editQuizDto;
       //updating the sent fields
-      return await this.createdQuizModel.findOneAndUpdate(
+      const updatedQuiz =  await this.createdQuizModel.findOneAndUpdate(
         { quizId: editQuizDto.quizId },
         { $set: filteredEditQuizDto },
         { strict: true, new: true },
       );
+      //updating quiz description
+      updatedQuiz.quizDescription = createQuizDescription(updatedQuiz);
+      return await updatedQuiz.save();
     } catch (error) {
       this.logger.error(`[CreatedQuizRepository]: ${error.message}`, [
         requestId,

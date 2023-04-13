@@ -112,9 +112,9 @@ export const CONSTANTS = {
     ATTENDED_QUIZ: {
       CONTROLLER: 'attended-quiz',
       TAG: 'attended-quiz',
-      EXAMPLE: {
-        PATH: 'example',
-        TAG: 'example',
+      GET_ALL_QUIZ: {
+        PATH: 'get-all',
+        TAG: 'get-all-attended-quiz',
       },
     },
   },

@@ -1,17 +1,57 @@
 {
   "getAllQuiz": {
-    
+    "emailId": "example1@gmail.com"
   },
   "createQuiz": {
-
+    "emailId": "example1@gmail.com",
+    "quizName": "sample quiz 1",
+    "createdByUserName": "example1",
+    "active": false,
+    "protected": false,
+    "showAnswer": false,
+    "timeLimitSec": 0,
+    "maxAttempts": 1,
+    "negativeMarking": false,
+    "shuffleQuestions": false,
+    "shuffleOptions": false,
+    "questions": [
+      {
+        "question": "This is a question?",
+        "options": ["option1", "option2", "option3", "option4"],
+        "answer": ["option3"],
+        "questionType": {
+          "mark": 1,
+          "negativeMark": 0,
+          "multipleAnswer": false
+        }
+      }
+    ]
   },
-  "attendQuiz" :{
-    
-  },
-  "deleteQuiz": {
-    
-  },
+  "attendQuiz": {},
+  "deleteQuiz": {},
   "editQuiz": {
-    
+    "emailId": "example1@gmail.com",
+    "quizId": "example1-QfXq8Uj",
+    "quizName": "edited sample quiz 1",
+    "active": true,
+    "protected": true,
+    "showAnswer": false,
+    "timeLimitSec": 1000,
+    "maxAttempts": 2,
+    "negativeMarking": false,
+    "shuffleQuestions": false,
+    "shuffleOptions": true,
+    "questions": [
+      {
+        "question": "This is a question?",
+        "options": ["option1", "option2", "option3", "option4"],
+        "answer": ["option3"],
+        "questionType": {
+          "mark": 1,
+          "negativeMark": 0,
+          "multipleAnswer": false
+        }
+      }
+    ]
   }
 }

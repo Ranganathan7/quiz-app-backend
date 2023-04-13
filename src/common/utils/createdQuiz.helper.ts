@@ -28,13 +28,20 @@ export const calculateMaxScore = (quiz: QuestionsDto[]): number => {
   return maxScore;
 };
 
-export const createQuizDescription = (quiz: CreateQuizDto): string[] => {
+interface QuizInterface {
+  createdByUserName: string,
+  protected: boolean,
+  timeLimitSec: number,
+  maxAttempts: number,
+  negativeMarking: boolean,
+}
+
+export const createQuizDescription = (quiz: QuizInterface): string[] => {
   const quizDescription: string[] = [];
   quizDescription.push(`This Quiz is created by: ${quiz.createdByUserName}.`);
   if (quiz.protected) {
     quizDescription.push(
-      `During the quiz, you will not be able to switch to another tab while taking the quiz as it will result in closing(submitting) the quiz,
-        and the quiz interface will be displayed in full-screen mode.`,
+      `During the quiz, you will not be able to switch to another tab while taking the quiz as it will result in closing(submitting) the quiz, and the quiz interface will be displayed in full-screen mode.`,
     );
   }
   if (quiz.timeLimitSec > 0) {

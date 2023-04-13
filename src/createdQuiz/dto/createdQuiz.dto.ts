@@ -139,7 +139,7 @@ export class EditQuizDto {
 
   @IsString()
   @IsNotEmpty()
-  @ApiProperty({ default: 'example1-Sm1NpOZ' })
+  @ApiProperty({ default: 'example1-QfXq8Uj' })
   quizId: string;
 
   @IsString()
@@ -149,12 +149,12 @@ export class EditQuizDto {
 
   @IsBoolean()
   @IsOptional()
-  @ApiProperty({ default: false })
+  @ApiProperty({ default: true })
   active?: boolean;
 
   @IsBoolean()
   @IsOptional()
-  @ApiProperty({ default: false })
+  @ApiProperty({ default: true })
   protected?: boolean;
 
   @IsBoolean()
@@ -165,13 +165,13 @@ export class EditQuizDto {
   @IsNumber()
   @Min(0)
   @IsOptional()
-  @ApiProperty()
+  @ApiProperty({ default: 1000 })
   timeLimitSec?: number;
 
   @IsNumber()
   @Min(1)
   @IsOptional()
-  @ApiProperty({ default: 1 })
+  @ApiProperty({ default: 2 })
   maxAttempts?: number;
 
   @IsBoolean()
@@ -186,7 +186,7 @@ export class EditQuizDto {
 
   @IsBoolean()
   @IsOptional()
-  @ApiProperty({ default: false })
+  @ApiProperty({ default: true })
   shuffleOptions?: boolean;
 
   @IsArray({ message: 'questions must be an array' })

@@ -87,30 +87,30 @@ export function createLoggerFactory(
       // - Write all logs with importance level of `error` or less to `error.log`
       // - Write all logs with importance level of `info` or less to `combined.log`
       //
-      new transports.DailyRotateFile({
-        filename:
-          `${config.app.directoryMount}/${config.app.subDirectory}/${config.app.errorFilePrefix}-%DATE%.log`.replace(
-            /([^:])(\/\/+)/g,
-            '$1/',
-          ),
-        datePattern: config.app.datePattern,
-        zippedArchive: config.app.zippedArchive,
-        maxSize: config.app.maxSize,
-        maxFiles: config.app.maxFile,
-        level: 'error',
-      }),
-      new transports.DailyRotateFile({
-        filename:
-          `${config.app.directoryMount}/${config.app.subDirectory}/${config.app.filePrefix}-%DATE%.log`.replace(
-            /([^:])(\/\/+)/g,
-            '$1/',
-          ),
-        datePattern: config.app.datePattern,
-        zippedArchive: config.app.zippedArchive,
-        maxSize: config.app.maxSize,
-        maxFiles: config.app.maxFile,
-        level: config.app.level,
-      }),
+      // new transports.DailyRotateFile({
+      //   filename:
+      //     `${config.app.directoryMount}/${config.app.subDirectory}/${config.app.errorFilePrefix}-%DATE%.log`.replace(
+      //       /([^:])(\/\/+)/g,
+      //       '$1/',
+      //     ),
+      //   datePattern: config.app.datePattern,
+      //   zippedArchive: config.app.zippedArchive,
+      //   maxSize: config.app.maxSize,
+      //   maxFiles: config.app.maxFile,
+      //   level: 'error',
+      // }),
+      // new transports.DailyRotateFile({
+      //   filename:
+      //     `${config.app.directoryMount}/${config.app.subDirectory}/${config.app.filePrefix}-%DATE%.log`.replace(
+      //       /([^:])(\/\/+)/g,
+      //       '$1/',
+      //     ),
+      //   datePattern: config.app.datePattern,
+      //   zippedArchive: config.app.zippedArchive,
+      //   maxSize: config.app.maxSize,
+      //   maxFiles: config.app.maxFile,
+      //   level: config.app.level,
+      // }),
       new transports.Console({
         format: format.combine(...formats, logFormat),
       }),
