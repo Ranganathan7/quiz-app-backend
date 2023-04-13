@@ -32,9 +32,9 @@ export class AnswersInterface {
   questionType: AnswerTypeInterface
 };
 
-@Schema({ collection: 'attended_quizzes' })
+@Schema({ collection: 'attended_quizzes', timestamps: true })
 export class AttendedQuiz extends Document {
-  @Prop({ required: true, type: String })
+  @Prop({ required: true, type: String, ref: 'created_quizzes', autopopulate: true })
   quizId: string
 
   @Prop({ required: true, type: String })

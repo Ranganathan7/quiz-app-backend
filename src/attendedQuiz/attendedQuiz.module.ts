@@ -6,6 +6,9 @@ import { User, UserSchema } from "../user/entity/user.entity";
 import { UserRepository } from "../user/repository/user.repository";
 import { CreatedQuiz, CreatedQuizSchema } from "../createdQuiz/entity/createdQuiz.entity";
 import { AttendedQuiz, AttendedQuizSchema } from "./entity/attendedQuiz.entity";
+import { AttendedQuizController } from "./attendedQuiz.controller";
+import { AttendedQuizService } from "./attendedQuiz.service";
+import { AttendedQuizRepository } from "./repository/attendedQuiz.repository";
 
 @Module({
   imports: [
@@ -23,7 +26,7 @@ import { AttendedQuiz, AttendedQuizSchema } from "./entity/attendedQuiz.entity";
       inject: [ConfigService],
     }),
   ],
-  controllers: [ ],
-  providers: [ UserRepository ]
+  controllers: [ AttendedQuizController ],
+  providers: [ AttendedQuizService, AttendedQuizRepository, UserRepository ]
 })
 export class AttendedQuizModule {}
