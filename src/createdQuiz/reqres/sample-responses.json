@@ -122,9 +122,81 @@
     "message": "Deleted quiz and all its corresponding attendees records as well."
   },
   "editQuizOptions": {
-    
+    "_id": "6439357336e033af3f1af004",
+    "quizId": "example1-JIMimBe",
+    "quizName": "edited sample quiz 1",
+    "quizDescription": [
+      "This Quiz is created by: example1.",
+      "The quiz has a time limit of 00:16:40[hh:mm:ss] for completion.",
+      "This quiz allows a maximum of 1 attempts.",
+      "The mark awarded for a correct answer will be shown alongside the respective question.",
+      "All the questions in this quiz are multiple choice questions.",
+      "The options for single correct answers will be displayed in radio buttons.",
+      "The options for multiple correct answers will be displayed in checkboxes."
+    ],
+    "createdByEmailId": "example1@gmail.com",
+    "createdByUserName": "example1",
+    "active": true,
+    "protected": false,
+    "showAnswer": false,
+    "timeLimitSec": 1000,
+    "maxAttempts": 1,
+    "negativeMarking": false,
+    "shuffleQuestions": false,
+    "shuffleOptions": true,
+    "questions": [
+      {
+        "question": "This is a question?",
+        "options": ["option1", "option2", "option3", "option4"],
+        "answer": ["option3"],
+        "mark": 1,
+        "negativeMark": 0,
+        "multipleAnswer": false,
+        "questionId": "example1-JIMimBe-6bHFJgV"
+      }
+    ],
+    "maxScore": 1,
+    "createdAt": "2023-04-14T11:13:55.137Z",
+    "updatedAt": "2023-04-14T11:23:56.941Z",
+    "__v": 1
   },
   "editQuizQuestions": {
-    
+    "_id": "6439357336e033af3f1af004",
+    "quizId": "example1-JIMimBe",
+    "quizName": "edited sample quiz 1",
+    "quizDescription": [
+      "This Quiz is created by: example1.",
+      "The quiz has a time limit of 00:16:40[hh:mm:ss] for completion.",
+      "This quiz allows a maximum of 2 attempts.",
+      "The mark awarded for a correct answer will be shown alongside the respective question.",
+      "All the questions in this quiz are multiple choice questions.",
+      "The options for single correct answers will be displayed in radio buttons.",
+      "The options for multiple correct answers will be displayed in checkboxes."
+    ],
+    "createdByEmailId": "example1@gmail.com",
+    "createdByUserName": "example1",
+    "active": true,
+    "protected": false,
+    "showAnswer": false,
+    "timeLimitSec": 1000,
+    "maxAttempts": 2,
+    "negativeMarking": false,
+    "shuffleQuestions": false,
+    "shuffleOptions": true,
+    "questions": [
+      {
+        "question": "This is a question?",
+        "options": ["option1", "option2", "option3", "option4"],
+        "answer": ["option3"],
+        "mark": 1,
+        "negativeMark": 0,
+        "multipleAnswer": false,
+        "questionId": "example1-JIMimBe-i8712yF"
+      }
+    ],
+    "maxScore": 1,
+    "createdAt": "2023-04-14T11:13:55.137Z",
+    "updatedAt": "2023-04-14T11:25:01.529Z",
+    "__v": 2
   }
 }
