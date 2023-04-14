@@ -29,18 +29,22 @@
   },
   "attendQuiz": {},
   "deleteQuiz": {},
-  "editQuiz": {
+  "editQuizOptions": {
     "emailId": "example1@gmail.com",
-    "quizId": "example1-QfXq8Uj",
+    "quizId": "example1-d9pmqfT",
     "quizName": "edited sample quiz 1",
     "active": true,
-    "protected": true,
+    "protected": false,
     "showAnswer": false,
     "timeLimitSec": 1000,
+    "shuffleQuestions": false,
+    "shuffleOptions": true
+  },
+  "editQuizQuestions": {
+    "emailId": "example1@gmail.com",
+    "quizId": "example1-QfXq8Uj",
     "maxAttempts": 2,
     "negativeMarking": false,
-    "shuffleQuestions": false,
-    "shuffleOptions": true,
     "questions": [
       {
         "question": "This is a question?",

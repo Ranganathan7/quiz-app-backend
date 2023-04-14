@@ -4,7 +4,6 @@ import {
   IsArray,
   IsBoolean,
   IsDefined,
-  IsEmail,
   IsNotEmpty,
   IsNumber,
   IsObject,
@@ -131,7 +130,7 @@ export class CreateQuizDto {
   questions: QuestionsDto[];
 }
 
-export class EditQuizDto {
+export class EditQuizOptionsDto {
   @IsString()
   @IsNotEmpty()
   @ApiProperty({ default: 'example1@gmail.com' })
@@ -168,17 +167,6 @@ export class EditQuizDto {
   @ApiProperty({ default: 1000 })
   timeLimitSec?: number;
 
-  @IsNumber()
-  @Min(1)
-  @IsOptional()
-  @ApiProperty({ default: 2 })
-  maxAttempts?: number;
-
-  @IsBoolean()
-  @IsOptional()
-  @ApiProperty({ default: false })
-  negativeMarking?: boolean;
-
   @IsBoolean()
   @IsOptional()
   @ApiProperty({ default: false })
@@ -188,6 +176,29 @@ export class EditQuizDto {
   @IsOptional()
   @ApiProperty({ default: true })
   shuffleOptions?: boolean;
+}
+
+export class EditQuizQuestionsDto {
+  @IsString()
+  @IsNotEmpty()
+  @ApiProperty({ default: 'example1@gmail.com' })
+  emailId: string;
+
+  @IsString()
+  @IsNotEmpty()
+  @ApiProperty({ default: 'example1-QfXq8Uj' })
+  quizId: string;
+
+  @IsNumber()
+  @Min(1)
+  @IsOptional()
+  @ApiProperty({ default: 2 })
+  maxAttempts?: number;
+  
+  @IsBoolean()
+  @IsOptional()
+  @ApiProperty({ default: false })
+  negativeMarking?: boolean;
 
   @IsArray({ message: 'questions must be an array' })
   @Type(() => QuestionsDto)

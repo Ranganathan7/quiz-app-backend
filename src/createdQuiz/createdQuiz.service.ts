@@ -6,7 +6,11 @@ import {
   CommonApiResponse,
 } from 'src/common/models/api.models';
 import { CreatedQuizRepository } from './repository/createdQuiz.repository';
-import { CreateQuizDto, EditQuizDto } from './dto/createdQuiz.dto';
+import {
+  CreateQuizDto,
+  EditQuizQuestionsDto,
+  EditQuizOptionsDto,
+} from './dto/createdQuiz.dto';
 import { UserRepository } from 'src/user/repository/user.repository';
 import { generateRandomQuizId } from '../common/utils/createdQuiz.helper';
 import { AttendedQuizRepository } from 'src/attendedQuiz/repository/attendedQuiz.repository';
@@ -209,7 +213,7 @@ export class CreatedQuizService {
   }
 
   async editQuiz(
-    editQuizDto: EditQuizDto,
+    editQuizDto: EditQuizQuestionsDto | EditQuizOptionsDto,
     requestId: string,
   ): Promise<CommonApiResponse> {
     this.logger.info('[CreatedQuizService]: Api called to edit a quiz.', [
@@ -229,24 +233,6 @@ export class CreatedQuizService {
         HttpStatus.BAD_REQUEST,
       );
     }
-    // checking for uneditable fields in requestbody
-    if (
-      'createdByUserName' in editQuizDto ||
-      'createdByEmailId' in editQuizDto
-    ) {
-      this.logger.error(
-        `[CreatedQuizService]: createdByEmailId and createdByUserName fields are not editable.`,
-        [requestId],
-      );
-      throw new HttpException(
-        {
-          message:
-            'CreatedByEmailId and CreatedByUserName fields are not editable.',
-          requestId: requestId,
-        },
-        HttpStatus.BAD_REQUEST,
-      );
-    }
     try {
       const editedQuiz = await this.createdQuizRepository.editQuiz(
         editQuizDto,
@@ -255,15 +241,21 @@ export class CreatedQuizService {
       this.logger.info('[CreatedQuizService]: Edited quiz successfully.', [
         requestId,
       ]);
-      //deleting all its respective attended quiz records as the quiz is edited
-      await this.attendedQuizRepository.deleteAllWithQuizId(
-        editQuizDto.quizId,
-        requestId,
-      );
-      this.logger.info(
-        '[CreatedQuizService]: Deleted its corresponding attended quiz records successfully.',
-        [requestId],
-      );
+      //deleting all its respective attended quiz records if the quiz questions are edited
+      if (
+        'questions' in editQuizDto ||
+        'negativeMarking' in editQuizDto ||
+        'maxAttempts' in editQuizDto
+      ) {
+        await this.attendedQuizRepository.deleteAllWithQuizId(
+          editQuizDto.quizId,
+          requestId,
+        );
+        this.logger.info(
+          '[CreatedQuizService]: Deleted its corresponding attended quiz records successfully.',
+          [requestId],
+        );
+      }
       const apiResult: CommonApiResponse<ApiSuccessResponse<any>> = {
         statusCode: HttpStatus.OK,
         timestamp: new Date().toISOString(),

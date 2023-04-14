@@ -12,6 +12,26 @@ export class AnswerTypeInterface {
   multipleAnswer: boolean
 }
 
+export class AnswerInterface {
+  @Prop({ required: true, type: String })
+  question: string
+
+  @Prop({ required: true, type: [String] })
+  options: string[]
+
+  @Prop({ required: true, type: [String] })
+  answer: string[]
+
+  @Prop({ required: true, type: [String] })
+  chosenAnswer: string[]
+
+  @Prop({ required: true, type: Boolean })
+  attempted: boolean
+
+  @Prop({ required: true, type: AnswerTypeInterface, strict: true })
+  questionType: AnswerTypeInterface
+};
+
 export class AnswersInterface {
   @Prop({ required: true, type: String })
   question: string

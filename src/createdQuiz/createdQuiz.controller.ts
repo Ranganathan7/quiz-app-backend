@@ -36,7 +36,7 @@ import { responses } from '../common/openapi/responses';
 import * as sampleResponses from './reqres/sample-responses.json';
 import { AuthGuard } from '../common/auth/auth.guard';
 import { CreatedQuizService } from './createdQuiz.service';
-import { CreateQuizDto, EditQuizDto, GetAllCreatedQuizDto } from './dto/createdQuiz.dto';
+import { CreateQuizDto, EditQuizOptionsDto, EditQuizQuestionsDto, GetAllCreatedQuizDto } from './dto/createdQuiz.dto';
 
 @Controller(CONSTANTS.ROUTES.CREATED_QUIZ.CONTROLLER)
 @ApiTags(CONSTANTS.ROUTES.CREATED_QUIZ.TAG)
@@ -196,26 +196,59 @@ export class CreatedQuizController {
     }
   }
 
-  @Patch(CONSTANTS.ROUTES.CREATED_QUIZ.EDIT_QUIZ.PATH)
+  @Patch(CONSTANTS.ROUTES.CREATED_QUIZ.EDIT_QUIZ_OPTIONS.PATH)
   @HttpCode(HttpStatus.OK)
-  @ApiOperation(operations.editQuiz)
-  @ApiOkResponse(responses.apiOkResponse(sampleResponses.editQuiz))
+  @ApiOperation(operations.editQuizOptions)
+  @ApiOkResponse(responses.apiOkResponse(sampleResponses.editQuizOptions))
   @ApiBadRequestResponse(responses.apiBadRequestResponse)
   @ApiUnauthorizedResponse(responses.apiUnauthorizedResponse)
   @ApiForbiddenResponse(responses.apiForbiddenResponse)
   @ApiNotFoundResponse(responses.apiNotFoundResponse)
   @ApiInternalServerErrorResponse(responses.apiInternalServerErrorResponse)
-  async editQuiz(
-    @Body() editQuizDto: EditQuizDto
+  async editQuizOptions(
+    @Body() editQuizOptionsDto: EditQuizOptionsDto
   ): Promise<CommonApiResponse> {
     const requestId = randomUUID();
     const session = await this.connection.startSession();
     session.startTransaction();
-    this.logger.info('[CreatedQuizController]: Api called to edit a quiz.', [
+    this.logger.info('[CreatedQuizController]: Api called to edit a quiz options.', [
       requestId,
     ]);
     try {
-      const response = await this.createdQuizService.editQuiz(editQuizDto, requestId);
+      const response = await this.createdQuizService.editQuiz(editQuizOptionsDto, requestId);
+      await session.commitTransaction();
+      return response;
+    } catch (error) {
+      await session.abortTransaction();
+      this.logger.error(`[CreatedQuizController]: ${error.message}`, [
+        requestId,
+      ]);
+      throw error;
+    } finally {
+      await session.endSession();
+    }
+  }
+
+  @Patch(CONSTANTS.ROUTES.CREATED_QUIZ.EDIT_QUIZ_QUESTIONS.PATH)
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation(operations.editQuizQuestions)
+  @ApiOkResponse(responses.apiOkResponse(sampleResponses.editQuizQuestions))
+  @ApiBadRequestResponse(responses.apiBadRequestResponse)
+  @ApiUnauthorizedResponse(responses.apiUnauthorizedResponse)
+  @ApiForbiddenResponse(responses.apiForbiddenResponse)
+  @ApiNotFoundResponse(responses.apiNotFoundResponse)
+  @ApiInternalServerErrorResponse(responses.apiInternalServerErrorResponse)
+  async editQuizQuestions(
+    @Body() editQuizQuestionsDto: EditQuizQuestionsDto
+  ): Promise<CommonApiResponse> {
+    const requestId = randomUUID();
+    const session = await this.connection.startSession();
+    session.startTransaction();
+    this.logger.info('[CreatedQuizController]: Api called to edit a quiz questions.', [
+      requestId,
+    ]);
+    try {
+      const response = await this.createdQuizService.editQuiz(editQuizQuestionsDto, requestId);
       await session.commitTransaction();
       return response;
     } catch (error) {

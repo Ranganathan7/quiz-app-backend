@@ -104,9 +104,13 @@ export const CONSTANTS = {
         PATH: 'delete-quiz',
         TAG: 'delete-quiz ? quizId'
       },
-      EDIT_QUIZ: {
-        PATH: 'edit-quiz',
-        TAG: 'edit-quiz'
+      EDIT_QUIZ_OPTIONS: {
+        PATH: 'edit-quiz-options',
+        TAG: 'edit-quiz-options'
+      },
+      EDIT_QUIZ_QUESTIONS: {
+        PATH: 'edit-quiz-questions',
+        TAG: 'edit-quiz-questions'
       }
     },
     ATTENDED_QUIZ: {

@@ -204,15 +204,14 @@
   "deleteQuiz": {
     "message": "Deleted quiz and all its corresponding attendees records as well."
   },
-  "editQuiz": {
-    "_id": "6437ceee02330badf6462cdf",
-    "quizId": "example1-QfXq8Uj",
+  "editQuizOptions": {
+    "_id": "6437ceec02330badf6462cdb",
+    "quizId": "example1-d9pmqfT",
     "quizName": "edited sample quiz 1",
     "quizDescription": [
       "This Quiz is created by: example1.",
-      "During the quiz, you will not be able to switch to another tab while taking the quiz as it will result in closing(submitting) the quiz, and the quiz interface will be displayed in full-screen mode.",
       "The quiz has a time limit of 00:16:40[hh:mm:ss] for completion.",
-      "This quiz allows a maximum of 2 attempts.",
+      "This quiz allows a maximum of 1 attempts.",
       "The mark awarded for a correct answer will be shown alongside the respective question.",
       "All the questions in this quiz are multiple choice questions.",
       "The options for single correct answers will be displayed in radio buttons.",
@@ -221,10 +220,10 @@
     "createdByEmailId": "example1@gmail.com",
     "createdByUserName": "example1",
     "active": true,
-    "protected": true,
+    "protected": false,
     "showAnswer": false,
     "timeLimitSec": 1000,
-    "maxAttempts": 2,
+    "maxAttempts": 1,
     "negativeMarking": false,
     "shuffleQuestions": false,
     "shuffleOptions": true,
@@ -241,8 +240,51 @@
       }
     ],
     "maxScore": 1,
-    "createdAt": "2023-04-13T09:44:14.745Z",
-    "updatedAt": "2023-04-13T10:45:25.177Z",
+    "createdAt": "2023-04-13T09:44:12.428Z",
+    "updatedAt": "2023-04-14T08:41:03.320Z",
     "__v": 2
+  },
+  "editQuizQuestions": {
+    "_id": "6437ceee02330badf6462cdf",
+    "quizId": "example1-QfXq8Uj",
+    "quizName": "edited sample quiz 1",
+    "quizDescription": [
+      "This Quiz is created by: example1.",
+      "During the quiz, you will not be able to switch to another tab while taking the quiz as it will result in closing(submitting) the quiz, and the quiz interface will be displayed in full-screen mode.",
+      "The quiz has a time limit of 00:16:40[hh:mm:ss] for completion.",
+      "This quiz allows a maximum of 2 attempts.",
+      "The mark awarded for a correct answer will be shown alongside the respective question.",
+      "The quiz has negative marking for wrong answers.",
+      "The negative mark obtained for a wrong answer will be shown alongside the respective question.",
+      "All the questions in this quiz are multiple choice questions.",
+      "The options for single correct answers will be displayed in radio buttons.",
+      "The options for multiple correct answers will be displayed in checkboxes."
+    ],
+    "createdByEmailId": "example1@gmail.com",
+    "createdByUserName": "example1",
+    "active": true,
+    "protected": true,
+    "showAnswer": false,
+    "timeLimitSec": 1000,
+    "maxAttempts": 2,
+    "negativeMarking": true,
+    "shuffleQuestions": false,
+    "shuffleOptions": true,
+    "questions": [
+      {
+        "question": "This is a question?",
+        "options": ["option1", "option2", "option3", "option4"],
+        "answer": ["option3"],
+        "questionType": {
+          "mark": 5,
+          "negativeMark": 2,
+          "multipleAnswer": false
+        }
+      }
+    ],
+    "maxScore": 5,
+    "createdAt": "2023-04-13T09:44:14.745Z",
+    "updatedAt": "2023-04-14T09:02:29.015Z",
+    "__v": 5
   }
 }

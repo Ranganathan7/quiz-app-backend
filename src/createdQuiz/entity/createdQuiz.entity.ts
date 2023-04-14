@@ -12,7 +12,7 @@ export class QuestionTypeInterface {
   multipleAnswer: boolean
 }
 
-export class QuestionsInterface {
+export class QuestionInterface {
   @Prop({ required: true, type: String })
   question: string
 
@@ -67,8 +67,8 @@ export class CreatedQuiz extends Document {
   @Prop({ required: true, default: false, type: Boolean })
   shuffleOptions: boolean
 
-  @Prop({ required: true })
-  questions: QuestionsInterface[]
+  @Prop({ required: true, type: Array<QuestionInterface> })
+  questions: QuestionInterface[]
 
   @Prop({ required: true, type: Number })
   maxScore: number

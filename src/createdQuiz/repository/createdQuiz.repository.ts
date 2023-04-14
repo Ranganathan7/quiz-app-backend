@@ -4,10 +4,16 @@ import { Model } from 'mongoose';
 import { LOGGER } from '../../common/core.module';
 import { Logger } from 'winston';
 import { CreatedQuiz } from '../entity/createdQuiz.entity';
-import { CreateQuizDto, EditQuizDto } from '../dto/createdQuiz.dto';
+import {
+  CreateQuizDto,
+  EditQuizQuestionsDto,
+  EditQuizOptionsDto,
+} from '../dto/createdQuiz.dto';
 import {
   calculateMaxScore,
   createQuizDescription,
+  setNegativeMarksTo0,
+  shuffleQuestionsAndOptions,
 } from '../../common/utils/createdQuiz.helper';
 
 export class CreatedQuizRepository {
@@ -49,16 +55,27 @@ export class CreatedQuizRepository {
     this.logger.info('[CreatedQuizRepository]: Api called to create a quiz.', [
       requestId,
     ]);
-    //formatting createQuizDto to make it similar to create quiz entity
-    const properCreateQuizDto: any = createQuizDto;
-    const emailId = properCreateQuizDto.emailId;
-    properCreateQuizDto.createdByEmailId = emailId;
-    properCreateQuizDto.quizId = quizId;
-    properCreateQuizDto.maxScore = calculateMaxScore(createQuizDto.questions);
-    properCreateQuizDto.quizDescription = createQuizDescription(createQuizDto);
-    //removing the emailId which comes from the DTO
-    delete properCreateQuizDto.emailId;
     try {
+      //formatting createQuizDto to make it similar to create quiz entity
+      const properCreateQuizDto: any = createQuizDto;
+      const emailId = properCreateQuizDto.emailId;
+      properCreateQuizDto.createdByEmailId = emailId;
+      properCreateQuizDto.quizId = quizId;
+      properCreateQuizDto.maxScore = calculateMaxScore(createQuizDto.questions);
+      properCreateQuizDto.quizDescription =
+        createQuizDescription(createQuizDto);
+      //removing the emailId which comes from the DTO
+      delete properCreateQuizDto.emailId;
+      //setting negative marks to 0 for all questions if negativeMarking is false
+      if (!properCreateQuizDto.negativeMarking) {
+        properCreateQuizDto.questions = setNegativeMarksTo0(
+          properCreateQuizDto.questions,
+        );
+        this.logger.info(
+          '[CreatedQuizRepository]: updated questions (set negative mark to 0) of the quiz.',
+          [requestId],
+        );
+      }
       const createdQuiz = new this.createdQuizModel(properCreateQuizDto);
       return await createdQuiz.save();
     } catch (error) {
@@ -78,10 +95,17 @@ export class CreatedQuizRepository {
       [requestId],
     );
     try {
-      return await this.createdQuizModel
+      const quiz = await this.createdQuizModel
         .findOne({ quizId: quizId })
         .select('-questions.answer')
         .lean();
+      //shuffling questions and options if those are true
+      quiz.questions = shuffleQuestionsAndOptions(
+        quiz.questions,
+        quiz.shuffleQuestions,
+        quiz.shuffleOptions,
+      );
+      return quiz;
     } catch (error) {
       this.logger.error(`[CreatedQuizRepository]: ${error.message}`, [
         requestId,
@@ -129,14 +153,17 @@ export class CreatedQuizRepository {
     }
   }
 
-  async editQuiz(editQuizDto: EditQuizDto, requestId: string) {
+  async editQuiz(
+    editQuizDto: EditQuizQuestionsDto | EditQuizOptionsDto,
+    requestId: string,
+  ) {
     this.logger.info('[CreatedQuizRepository]: Api called to edit a quiz.', [
       requestId,
     ]);
     try {
       //checking if request made is valid by
       this.logger.info(
-        '[CreatedQuizRepository]: Checking if the emailId of the user is same the createdByEmailId of the quiz.',
+        '[CreatedQuizRepository]: Checking if the emailId of the user is same as the createdByEmailId of the quiz.',
         [requestId],
       );
       const existingQuiz = await this.findQuizWithQuizId(
@@ -163,8 +190,32 @@ export class CreatedQuizRepository {
         { $set: filteredEditQuizDto },
         { strict: true, new: true },
       );
+      this.logger.info(
+        '[CreatedQuizRepository]: updated the quiz with sent fields.',
+        [requestId],
+      );
       //updating quiz description
       updatedQuiz.quizDescription = createQuizDescription(updatedQuiz);
+      //updating quiz score if editQuestionsDto is sent
+      if ('questions' in editQuizDto) {
+        updatedQuiz.maxScore = calculateMaxScore(updatedQuiz.questions);
+        this.logger.info(
+          '[CreatedQuizRepository]: updated maxScore of the quiz.',
+          [requestId],
+        );
+      }
+      //setting negative marks to 0 for all questions if negativeMarking is false
+      if (
+        'questions' in editQuizDto &&
+        'negativeMarking' in editQuizDto &&
+        !editQuizDto.negativeMarking
+      ) {
+        updatedQuiz.questions = setNegativeMarksTo0(updatedQuiz.questions);
+        this.logger.info(
+          '[CreatedQuizRepository]: updated questions (set negative mark to 0) of the quiz.',
+          [requestId],
+        );
+      }
       return await updatedQuiz.save();
     } catch (error) {
       this.logger.error(`[CreatedQuizRepository]: ${error.message}`, [

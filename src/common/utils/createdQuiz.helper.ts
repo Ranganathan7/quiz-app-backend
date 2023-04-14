@@ -1,7 +1,5 @@
-import {
-  CreateQuizDto,
-  QuestionsDto,
-} from '../../createdQuiz/dto/createdQuiz.dto';
+import { QuestionInterface } from '../../createdQuiz/entity/createdQuiz.entity';
+import { QuestionsDto } from '../../createdQuiz/dto/createdQuiz.dto';
 
 export const generateRandomQuizId = (
   length: number,
@@ -94,3 +92,30 @@ export const formatTime = (totalTimeInSeconds: number): string => {
     '0',
   )}:${String(seconds).padStart(2, '0')}[hh:mm:ss]`;
 };
+
+const shuffleArray = (array: Array<any>): Array<any> => {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
+}
+
+export const shuffleQuestionsAndOptions = (questions: Array<QuestionInterface>, shuffleQuestions: boolean, shuffleOptions: boolean): Array<QuestionInterface> => {
+  if(shuffleQuestions) {
+    questions = shuffleArray(questions);
+  }
+  if(shuffleOptions) {
+    for (let i = 0; i < questions.length; i++) {
+      questions[i].options = shuffleArray(questions[i].options);
+    } 
+  }
+  return questions;
+}
+
+export const setNegativeMarksTo0 = (questions: Array<QuestionInterface>): Array<QuestionInterface> => {
+  for (let i = 0; i < questions.length; i++) {
+    questions[i].questionType.negativeMark = 0;
+  }
+  return questions;
+}

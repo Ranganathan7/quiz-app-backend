@@ -48,7 +48,7 @@ const createQuiz: ApiOperationOptions = {
 const attendQuiz: ApiOperationOptions = {
   tags: [CONSTANTS.ROUTES.CREATED_QUIZ.ATTEND_QUIZ.TAG],
   description: 'This API is used fetch the quiz details with quiz ID for attending it. The emailId in the request body comes from the cookie. The fields to be edited comes along with the request body.',
-  summary: 'This API returns the quiz details of provided quizId.',
+  summary: 'This API returns the quiz details of provided quizId for attending it.',
 };
 
 const deleteQuiz: ApiOperationOptions = {
@@ -57,10 +57,16 @@ const deleteQuiz: ApiOperationOptions = {
   summary: 'This API deletes a quiz.',
 };
 
-const editQuiz: ApiOperationOptions = {
-  tags: [CONSTANTS.ROUTES.CREATED_QUIZ.EDIT_QUIZ.TAG],
-  description: 'This API is used to edit the quiz. The emailId in the request body comes from the cookie. The fields to be edited comes along with the request body.',
-  summary: 'This API edits the quiz.',
+const editQuizOptions: ApiOperationOptions = {
+  tags: [CONSTANTS.ROUTES.CREATED_QUIZ.EDIT_QUIZ_OPTIONS.TAG],
+  description: 'This API is used to edit the quiz options. The emailId in the request body comes from the cookie. The fields to be edited comes along with the request body.',
+  summary: 'This API edits the quiz options.',
+};
+
+const editQuizQuestions: ApiOperationOptions = {
+  tags: [CONSTANTS.ROUTES.CREATED_QUIZ.EDIT_QUIZ_OPTIONS.TAG],
+  description: 'This API is used to edit the quiz questions. The emailId in the request body comes from the cookie. The fields to be edited comes along with the request body. Editing a quiz with this option deletes its respective attended quiz details as well.',
+  summary: 'This API edits the quiz questions.',
 };
 
 const getAllattendedQuizzes: ApiOperationOptions = {
@@ -79,6 +85,7 @@ export const operations = {
   createQuiz: createQuiz,
   attendQuiz: attendQuiz,
   deleteQuiz: deleteQuiz,
-  editQuiz: editQuiz,
+  editQuizOptions: editQuizOptions,
+  editQuizQuestions: editQuizQuestions,
   getAllAttendedQuizzes: getAllattendedQuizzes
 };
