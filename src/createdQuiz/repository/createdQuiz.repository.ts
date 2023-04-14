@@ -12,8 +12,8 @@ import {
 import {
   calculateMaxScore,
   createQuizDescription,
+  generateQuestionIdsForQuestions,
   setNegativeMarksTo0,
-  shuffleQuestionsAndOptions,
 } from '../../common/utils/createdQuiz.helper';
 
 export class CreatedQuizRepository {
@@ -76,6 +76,15 @@ export class CreatedQuizRepository {
           [requestId],
         );
       }
+      //creating questionIds for all the questions
+      properCreateQuizDto.questions = generateQuestionIdsForQuestions(
+        properCreateQuizDto.questions,
+        quizId,
+      );
+      this.logger.info(
+        '[CreatedQuizRepository]: generated quizIds for all questions.',
+        [requestId],
+      );
       const createdQuiz = new this.createdQuizModel(properCreateQuizDto);
       return await createdQuiz.save();
     } catch (error) {
@@ -95,17 +104,10 @@ export class CreatedQuizRepository {
       [requestId],
     );
     try {
-      const quiz = await this.createdQuizModel
+      return await this.createdQuizModel
         .findOne({ quizId: quizId })
         .select('-questions.answer')
         .lean();
-      //shuffling questions and options if those are true
-      quiz.questions = shuffleQuestionsAndOptions(
-        quiz.questions,
-        quiz.shuffleQuestions,
-        quiz.shuffleOptions,
-      );
-      return quiz;
     } catch (error) {
       this.logger.error(`[CreatedQuizRepository]: ${error.message}`, [
         requestId,
@@ -201,6 +203,15 @@ export class CreatedQuizRepository {
         updatedQuiz.maxScore = calculateMaxScore(updatedQuiz.questions);
         this.logger.info(
           '[CreatedQuizRepository]: updated maxScore of the quiz.',
+          [requestId],
+        );
+        //creating questionIds for all the questions
+        updatedQuiz.questions = generateQuestionIdsForQuestions(
+          updatedQuiz.questions,
+          updatedQuiz.quizId,
+        );
+        this.logger.info(
+          '[CreatedQuizRepository]: generated quizIds for all questions.',
           [requestId],
         );
       }

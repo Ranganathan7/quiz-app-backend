@@ -75,6 +75,12 @@ const getAllattendedQuizzes: ApiOperationOptions = {
   summary: 'This API returns all the attended quizzes of the user.',
 };
 
+const submitQuiz: ApiOperationOptions = {
+  tags: [CONSTANTS.ROUTES.ATTENDED_QUIZ.SUBMIT_QUIZ.TAG],
+  description: 'This API is used to submit an attended quiz. The emailId in the request body comes from the cookie.',
+  summary: 'This API submits an attended quiz.',
+};
+
 export const operations = {
   singup: signup,
   login: login,
@@ -87,5 +93,6 @@ export const operations = {
   deleteQuiz: deleteQuiz,
   editQuizOptions: editQuizOptions,
   editQuizQuestions: editQuizQuestions,
-  getAllAttendedQuizzes: getAllattendedQuizzes
+  getAllAttendedQuizzes: getAllattendedQuizzes,
+  submitQuiz: submitQuiz,
 };

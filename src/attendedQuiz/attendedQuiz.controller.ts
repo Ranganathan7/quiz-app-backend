@@ -34,7 +34,7 @@ import { operations } from '../common/openapi/operations';
 import { responses } from '../common/openapi/responses';
 import * as sampleResponses from './reqres/sample-responses.json';
 import { AuthGuard } from '../common/auth/auth.guard';
-import { GetAllAttendedQuizDto } from './dto/attendedQuiz.dto';
+import { GetAllAttendedQuizDto, SubmitQuizDto } from './dto/attendedQuiz.dto';
 import { AttendedQuizService } from './attendedQuiz.service';
 
 @Controller(CONSTANTS.ROUTES.ATTENDED_QUIZ.CONTROLLER)
@@ -70,6 +70,43 @@ export class AttendedQuizController {
     try {
       const response = await this.attendedQuizService.getAll(
         getAllattendedQuizDto.emailId,
+        requestId,
+      );
+      await session.commitTransaction();
+      return response;
+    } catch (error) {
+      await session.abortTransaction();
+      this.logger.error(`[AttendedQuizController]: ${error.message}`, [
+        requestId,
+      ]);
+      throw error;
+    } finally {
+      await session.endSession();
+    }
+  }
+
+  @Post(CONSTANTS.ROUTES.ATTENDED_QUIZ.SUBMIT_QUIZ.PATH)
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation(operations.submitQuiz)
+  @ApiOkResponse(responses.apiOkResponse(sampleResponses.submitQuiz))
+  @ApiBadRequestResponse(responses.apiBadRequestResponse)
+  @ApiUnauthorizedResponse(responses.apiUnauthorizedResponse)
+  @ApiForbiddenResponse(responses.apiForbiddenResponse)
+  @ApiNotFoundResponse(responses.apiNotFoundResponse)
+  @ApiInternalServerErrorResponse(responses.apiInternalServerErrorResponse)
+  async submitQuiz(
+    @Body() submitQuizDto: SubmitQuizDto,
+  ): Promise<CommonApiResponse> {
+    const requestId = randomUUID();
+    const session = await this.connection.startSession();
+    session.startTransaction();
+    this.logger.info(
+      '[AttendedQuizController]: Api called to submit a quiz.',
+      [requestId],
+    );
+    try {
+      const response = await this.attendedQuizService.submitQuiz(
+        submitQuizDto,
         requestId,
       );
       await session.commitTransaction();

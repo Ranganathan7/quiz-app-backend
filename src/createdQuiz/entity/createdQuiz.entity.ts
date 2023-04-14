@@ -1,7 +1,18 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { Document } from "mongoose";
 
-export class QuestionTypeInterface {
+export class QuestionInterface {
+  @Prop({ required: true, type: String })
+  question: string
+
+  @Prop({ required: true, type: String, unique: true })
+  questionId: string
+
+  @Prop({ required: true, type: [String] })
+  options: string[]
+
+  @Prop({ required: true, type: [String] })
+  answer: string[]
   @Prop({ required: true, type: Number })
   mark: number
 
@@ -10,25 +21,11 @@ export class QuestionTypeInterface {
 
   @Prop({ required: true, type: Boolean })
   multipleAnswer: boolean
-}
-
-export class QuestionInterface {
-  @Prop({ required: true, type: String })
-  question: string
-
-  @Prop({ required: true, type: [String] })
-  options: string[]
-
-  @Prop({ required: true, type: [String] })
-  answer: string[]
-
-  @Prop({ required: true, type: QuestionTypeInterface, strict: true })
-  questionType: QuestionTypeInterface
 };
 
 @Schema({ collection: 'created_quizzes', timestamps: true })
 export class CreatedQuiz extends Document {
-  @Prop({ required: true, unique: true, type: String })
+  @Prop({ required: true, unique: true, type: String, default: String(Math.random()*Math.random()) })
   quizId: string
 
   @Prop({ required: true, type: String })

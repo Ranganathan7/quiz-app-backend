@@ -120,6 +120,10 @@ export const CONSTANTS = {
         PATH: 'get-all',
         TAG: 'get-all-attended-quiz',
       },
+      SUBMIT_QUIZ: {
+        PATH: 'submit-quiz',
+        TAG: 'submit-quiz',
+      }
     },
   },
   LOG: {

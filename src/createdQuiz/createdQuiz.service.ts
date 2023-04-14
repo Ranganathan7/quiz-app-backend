@@ -12,7 +12,10 @@ import {
   EditQuizOptionsDto,
 } from './dto/createdQuiz.dto';
 import { UserRepository } from 'src/user/repository/user.repository';
-import { generateRandomQuizId } from '../common/utils/createdQuiz.helper';
+import {
+  generateRandomQuizId,
+  shuffleQuestionsAndOptions,
+} from '../common/utils/createdQuiz.helper';
 import { AttendedQuizRepository } from 'src/attendedQuiz/repository/attendedQuiz.repository';
 
 @Injectable()
@@ -78,11 +81,10 @@ export class CreatedQuizService {
       let quizId: string;
       while (true) {
         quizId = generateRandomQuizId(7, createQuizDto.createdByUserName);
-        const quiz =
-          await this.createdQuizRepository.findQuizWithQuizIdForAttendingIt(
-            quizId,
-            requestId,
-          );
+        const quiz = await this.createdQuizRepository.findQuizWithQuizId(
+          quizId,
+          requestId,
+        );
         if (!quiz) break;
       }
       const createdQuiz = await this.createdQuizRepository.create(
@@ -162,6 +164,12 @@ export class CreatedQuizService {
           );
         }
       }
+      //shuffling questions and options if those are true
+      quiz.questions = shuffleQuestionsAndOptions(
+        quiz.questions,
+        quiz.shuffleQuestions,
+        quiz.shuffleOptions,
+      );
       const apiResult: CommonApiResponse<ApiSuccessResponse<any>> = {
         statusCode: HttpStatus.OK,
         timestamp: new Date().toISOString(),

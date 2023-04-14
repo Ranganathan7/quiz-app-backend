@@ -4,6 +4,7 @@ import { Model } from 'mongoose';
 import { LOGGER } from '../../common/core.module';
 import { Logger } from 'winston';
 import { AttendedQuiz } from '../entity/attendedQuiz.entity';
+import { SubmitQuizDto } from '../dto/attendedQuiz.dto';
 
 export class AttendedQuizRepository {
   constructor(
@@ -94,6 +95,24 @@ export class AttendedQuizRepository {
     );
     try {
       await this.attendedQuizModel.deleteMany({ quizId: quizId }).exec();
+    } catch (error) {
+      this.logger.error(`[AttendedQuizRepository]: ${error.message}`, [
+        requestId,
+      ]);
+      throw new HttpException(
+        { message: error.message, requestId: requestId },
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
+
+  async submitQuiz(submitQuizDto: SubmitQuizDto, requestId: string) {
+    this.logger.info(
+      '[AttendedQuizRepository]: Api called to submit a quiz.',
+      [requestId],
+    );
+    try {
+      //write all the logic
     } catch (error) {
       this.logger.error(`[AttendedQuizRepository]: ${error.message}`, [
         requestId,

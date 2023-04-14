@@ -20,26 +20,8 @@ export class GetAllCreatedQuizDto {
   emailId: string;
 }
 
-export class QuestionTypeDto {
-  @IsNumber()
-  @IsNotEmpty()
-  @Min(1)
-  @ApiProperty({ default: 1 })
-  mark: number;
 
-  @IsNumber()
-  @IsNotEmpty()
-  @Min(0)
-  @ApiProperty()
-  negativeMark: number;
-
-  @IsBoolean()
-  @IsNotEmpty()
-  @ApiProperty({ default: false })
-  multipleAnswer: boolean;
-}
-
-export class QuestionsDto {
+export class QuestionDto {
   @IsString()
   @IsNotEmpty()
   @ApiProperty({ default: 'This is a question?' })
@@ -57,12 +39,22 @@ export class QuestionsDto {
   @ApiProperty({ default: ['option3'] })
   answer: string[];
 
-  @IsObject()
-  @IsDefined()
-  @Type(() => QuestionTypeDto)
-  @ValidateNested()
-  @ApiProperty({ type: QuestionTypeDto })
-  questionType: QuestionTypeDto;
+  @IsNumber()
+  @IsNotEmpty()
+  @Min(1)
+  @ApiProperty({ default: 1 })
+  mark: number;
+
+  @IsNumber()
+  @IsNotEmpty()
+  @Min(0)
+  @ApiProperty()
+  negativeMark: number;
+
+  @IsBoolean()
+  @IsNotEmpty()
+  @ApiProperty({ default: false })
+  multipleAnswer: boolean;
 }
 
 export class CreateQuizDto {
@@ -124,10 +116,10 @@ export class CreateQuizDto {
   shuffleOptions?: boolean;
 
   @IsArray({ message: 'questions must be an array' })
-  @Type(() => QuestionsDto)
+  @Type(() => QuestionDto)
   @ValidateNested({ each: true })
-  @ApiProperty({ type: [QuestionsDto] })
-  questions: QuestionsDto[];
+  @ApiProperty({ type: [QuestionDto] })
+  questions: QuestionDto[];
 }
 
 export class EditQuizOptionsDto {
@@ -201,9 +193,9 @@ export class EditQuizQuestionsDto {
   negativeMarking?: boolean;
 
   @IsArray({ message: 'questions must be an array' })
-  @Type(() => QuestionsDto)
+  @Type(() => QuestionDto)
   @ValidateNested({ each: true })
-  @ApiProperty({ type: [QuestionsDto] })
+  @ApiProperty({ type: [QuestionDto] })
   @IsOptional()
-  questions?: QuestionsDto[];
+  questions?: QuestionDto[];
 }

@@ -1,14 +1,11 @@
 import { QuestionInterface } from '../../createdQuiz/entity/createdQuiz.entity';
-import { QuestionsDto } from '../../createdQuiz/dto/createdQuiz.dto';
+import { QuestionDto } from '../../createdQuiz/dto/createdQuiz.dto';
 
-export const generateRandomQuizId = (
-  length: number,
-  userName: string,
-): string => {
+const generateRandomId = (length: number): string => {
   //the generated ID has only uppercase, lowercase and numbers
+  let id: string = '';
   const chars =
     'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-  let id: string = userName + '-';
   const maxLength: number = chars.length;
   let randomIndex: number;
   for (let i = 0; i < length; i++) {
@@ -18,20 +15,41 @@ export const generateRandomQuizId = (
   return id;
 };
 
-export const calculateMaxScore = (quiz: QuestionsDto[]): number => {
+export const generateRandomQuizId = (
+  length: number,
+  userName: string,
+): string => {
+  return userName + '-' + generateRandomId(length);
+};
+
+const generateRandomQuestionId = (length: number, quizId: string): string => {
+  return quizId + '-' + generateRandomId(length);
+};
+
+export const generateQuestionIdsForQuestions = (
+  questions: Array<QuestionInterface>,
+  quizId: string,
+): Array<QuestionInterface> => {
+  for (let i = 0; i < questions.length; i++) {
+    questions[i].questionId = generateRandomQuestionId(7, quizId);
+  }
+  return questions;
+};
+
+export const calculateMaxScore = (quiz: QuestionDto[]): number => {
   let maxScore = 0;
   for (let i = 0; i < quiz.length; i++) {
-    maxScore = maxScore + quiz[i].questionType.mark;
+    maxScore = maxScore + quiz[i].mark;
   }
   return maxScore;
 };
 
 interface QuizInterface {
-  createdByUserName: string,
-  protected: boolean,
-  timeLimitSec: number,
-  maxAttempts: number,
-  negativeMarking: boolean,
+  createdByUserName: string;
+  protected: boolean;
+  timeLimitSec: number;
+  maxAttempts: number;
+  negativeMarking: boolean;
 }
 
 export const createQuizDescription = (quiz: QuizInterface): string[] => {
@@ -99,23 +117,29 @@ const shuffleArray = (array: Array<any>): Array<any> => {
     [array[i], array[j]] = [array[j], array[i]];
   }
   return array;
-}
+};
 
-export const shuffleQuestionsAndOptions = (questions: Array<QuestionInterface>, shuffleQuestions: boolean, shuffleOptions: boolean): Array<QuestionInterface> => {
-  if(shuffleQuestions) {
+export const shuffleQuestionsAndOptions = (
+  questions: Array<QuestionInterface>,
+  shuffleQuestions: boolean,
+  shuffleOptions: boolean,
+): Array<QuestionInterface> => {
+  if (shuffleQuestions) {
     questions = shuffleArray(questions);
   }
-  if(shuffleOptions) {
+  if (shuffleOptions) {
     for (let i = 0; i < questions.length; i++) {
       questions[i].options = shuffleArray(questions[i].options);
-    } 
+    }
   }
   return questions;
-}
+};
 
-export const setNegativeMarksTo0 = (questions: Array<QuestionInterface>): Array<QuestionInterface> => {
+export const setNegativeMarksTo0 = (
+  questions: Array<QuestionInterface>,
+): Array<QuestionInterface> => {
   for (let i = 0; i < questions.length; i++) {
-    questions[i].questionType.negativeMark = 0;
+    questions[i].negativeMark = 0;
   }
   return questions;
-}
+};
