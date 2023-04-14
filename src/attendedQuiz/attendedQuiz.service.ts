@@ -23,10 +23,8 @@ export class AttendedQuizService {
       [requestId],
     );
     try {
-      const attendedQuizzes = await this.attendedQuizRepository.getAllWithEmailId(
-        emailId,
-        requestId,
-      );
+      const attendedQuizzes =
+        await this.attendedQuizRepository.getAllWithEmailId(emailId, requestId);
       this.logger.info(
         '[AttendedQuizService]: Fetched all attended Quizzes successfully.',
         [requestId],
@@ -45,20 +43,39 @@ export class AttendedQuizService {
     }
   }
 
-  async submitQuiz(submitQuizDto: SubmitQuizDto, requestId: string): Promise<CommonApiResponse> {
-    this.logger.info(
-      '[AttendedQuizService]: Api called to submit a quiz.',
-      [requestId],
-    );
+  async submitQuiz(
+    submitQuizDto: SubmitQuizDto,
+    requestId: string,
+  ): Promise<CommonApiResponse> {
+    this.logger.info('[AttendedQuizService]: Api called to submit a quiz.', [
+      requestId,
+    ]);
     try {
+      //validating user request (comparing provided username and actual username from emailId)
+      const user = await this.userRepository.findUserWithEmailId(
+        submitQuizDto.emailId,
+        requestId,
+      );
+      if (!user || user.userName !== submitQuizDto.attemptedByUserName) {
+        const errorMessage =
+          'The attemptedByUserName provided in request body does not match with the user of provided email ID.';
+        this.logger.error(`[AttendedQuizService]: ${errorMessage}`, [
+          requestId,
+        ]);
+        throw new HttpException(
+          { message: errorMessage, requestId: requestId },
+          HttpStatus.CONFLICT,
+        );
+      }
       const submittedQuiz = await this.attendedQuizRepository.submitQuiz(
         submitQuizDto,
         requestId,
       );
-      this.logger.info(
-        '[AttendedQuizService]: Submitted quiz successfully!.',
-        [requestId],
-      );
+      this.logger.info('[AttendedQuizService]: Submitted quiz successfully!.', [
+        requestId,
+      ]);
+      //write the logic for hiding answer here
+      
       const apiResult: CommonApiResponse<ApiSuccessResponse<any>> = {
         statusCode: HttpStatus.OK,
         timestamp: new Date().toISOString(),

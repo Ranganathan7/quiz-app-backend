@@ -112,7 +112,13 @@ export class AttendedQuizRepository {
       [requestId],
     );
     try {
+      //removing the emailId
+      const { emailId, ...filteredSubmitQuizDto } = submitQuizDto;
+      const submitQuiz = { ...filteredSubmitQuizDto, attemptedByEmailId: emailId}
       //write all the logic
+      
+      const submitQuizModel = new this.attendedQuizModel(submitQuiz);
+      return submitQuizModel.save();
     } catch (error) {
       this.logger.error(`[AttendedQuizRepository]: ${error.message}`, [
         requestId,

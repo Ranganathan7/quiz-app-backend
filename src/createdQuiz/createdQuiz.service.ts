@@ -165,11 +165,11 @@ export class CreatedQuizService {
         }
       }
       //shuffling questions and options if those are true
-      // quiz.questions = shuffleQuestionsAndOptions(
-      //   quiz.questions,
-      //   quiz.shuffleQuestions,
-      //   quiz.shuffleOptions,
-      // );
+      quiz.questions = shuffleQuestionsAndOptions(
+        quiz.questions,
+        quiz.shuffleQuestions,
+        quiz.shuffleOptions,
+      );
       const apiResult: CommonApiResponse<ApiSuccessResponse<any>> = {
         statusCode: HttpStatus.OK,
         timestamp: new Date().toISOString(),

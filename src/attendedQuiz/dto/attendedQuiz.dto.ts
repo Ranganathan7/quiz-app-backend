@@ -28,6 +28,11 @@ export class AnswerDto {
   @ApiProperty({ default: 'This is a question?' })
   question: string;
 
+  @IsString()
+  @IsNotEmpty()
+  @ApiProperty({ default: 'example1-QfXq8Uj-i8712yF' })
+  questionId: string;
+
   @IsArray()
   @IsString({ each: true })
   @IsNotEmpty()
