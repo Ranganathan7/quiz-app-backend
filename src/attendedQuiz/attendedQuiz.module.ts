@@ -9,6 +9,7 @@ import { AttendedQuiz, AttendedQuizSchema } from "./entity/attendedQuiz.entity";
 import { AttendedQuizController } from "./attendedQuiz.controller";
 import { AttendedQuizService } from "./attendedQuiz.service";
 import { AttendedQuizRepository } from "./repository/attendedQuiz.repository";
+import { CreatedQuizRepository } from "../createdQuiz/repository/createdQuiz.repository";
 
 @Module({
   imports: [
@@ -27,6 +28,6 @@ import { AttendedQuizRepository } from "./repository/attendedQuiz.repository";
     }),
   ],
   controllers: [ AttendedQuizController ],
-  providers: [ AttendedQuizService, AttendedQuizRepository, UserRepository ]
+  providers: [ AttendedQuizService, AttendedQuizRepository, UserRepository, CreatedQuizRepository ]
 })
 export class AttendedQuizModule {}

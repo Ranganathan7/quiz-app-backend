@@ -8,6 +8,7 @@ import {
 import { UserRepository } from 'src/user/repository/user.repository';
 import { AttendedQuizRepository } from './repository/attendedQuiz.repository';
 import { SubmitQuizDto } from './dto/attendedQuiz.dto';
+import { CreatedQuizRepository } from '../createdQuiz/repository/createdQuiz.repository';
 
 @Injectable()
 export class AttendedQuizService {
@@ -15,6 +16,7 @@ export class AttendedQuizService {
     @Inject(LOGGER) private readonly logger: Logger,
     private readonly userRepository: UserRepository,
     private readonly attendedQuizRepository: AttendedQuizRepository,
+    private readonly createdQuizRepository: CreatedQuizRepository,
   ) {}
 
   async getAll(emailId: string, requestId: string): Promise<CommonApiResponse> {
@@ -67,6 +69,21 @@ export class AttendedQuizService {
           HttpStatus.CONFLICT,
         );
       }
+      //checking if valid quiz Id is sent
+      const existingQuiz = await this.createdQuizRepository.findQuizWithQuizId(
+        submitQuizDto.quizId,
+        requestId,
+      );
+      if (!existingQuiz) {
+        const errorMessage = 'The quizId provided does not exist.';
+        this.logger.error(`[AttendedQuizService]: ${errorMessage}`, [
+          requestId,
+        ]);
+        throw new HttpException(
+          { message: errorMessage, requestId: requestId },
+          HttpStatus.CONFLICT,
+        );
+      }
       const submittedQuiz = await this.attendedQuizRepository.submitQuiz(
         submitQuizDto,
         requestId,
@@ -75,7 +92,7 @@ export class AttendedQuizService {
         requestId,
       ]);
       //write the logic for hiding answer here
-      
+
       const apiResult: CommonApiResponse<ApiSuccessResponse<any>> = {
         statusCode: HttpStatus.OK,
         timestamp: new Date().toISOString(),
