@@ -8,7 +8,6 @@
     "createdByUserName": "example1",
     "active": false,
     "protected": false,
-    "showAnswer": false,
     "timeLimitSec": 0,
     "maxAttempts": 1,
     "negativeMarking": false,
@@ -19,11 +18,9 @@
         "question": "This is a question?",
         "options": ["option1", "option2", "option3", "option4"],
         "answer": ["option3"],
-        "questionType": {
-          "mark": 1,
-          "negativeMark": 0,
-          "multipleAnswer": false
-        }
+        "mark": 1,
+        "negativeMark": 0,
+        "multipleAnswer": false
       }
     ]
   },
@@ -42,7 +39,7 @@
   },
   "editQuizQuestions": {
     "emailId": "example1@gmail.com",
-    "quizId": "example1-QfXq8Uj",
+    "quizId": "example1-Xvdb7UY",
     "maxAttempts": 2,
     "negativeMarking": false,
     "questions": [
@@ -50,11 +47,9 @@
         "question": "This is a question?",
         "options": ["option1", "option2", "option3", "option4"],
         "answer": ["option3"],
-        "questionType": {
-          "mark": 1,
-          "negativeMark": 0,
-          "multipleAnswer": false
-        }
+        "mark": 1,
+        "negativeMark": 0,
+        "multipleAnswer": false
       }
     ]
   }

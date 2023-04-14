@@ -5,7 +5,7 @@ export class QuestionInterface {
   @Prop({ required: true, type: String })
   question: string
 
-  @Prop({ required: true, type: String, unique: true })
+  @Prop({ required: true, type: String, unique: true, default: String(Math.random()*Math.random()) })
   questionId: string
 
   @Prop({ required: true, type: [String] })
@@ -25,7 +25,7 @@ export class QuestionInterface {
 
 @Schema({ collection: 'created_quizzes', timestamps: true })
 export class CreatedQuiz extends Document {
-  @Prop({ required: true, unique: true, type: String, default: String(Math.random()*Math.random()) })
+  @Prop({ required: true, unique: true, type: String })
   quizId: string
 
   @Prop({ required: true, type: String })

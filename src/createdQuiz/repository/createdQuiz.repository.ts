@@ -186,6 +186,18 @@ export class CreatedQuizRepository {
       }
       //removing the emailId
       const { emailId, ...filteredEditQuizDto } = editQuizDto;
+      //creating questionIds for all the questions
+      if ('questions' in filteredEditQuizDto) {
+        const questions: any = filteredEditQuizDto.questions;
+        filteredEditQuizDto.questions = generateQuestionIdsForQuestions(
+          questions,
+          filteredEditQuizDto.quizId,
+        );
+        this.logger.info(
+          '[CreatedQuizRepository]: generated quizIds for all questions.',
+          [requestId],
+        );
+      }
       //updating the sent fields
       const updatedQuiz = await this.createdQuizModel.findOneAndUpdate(
         { quizId: editQuizDto.quizId },
@@ -203,15 +215,6 @@ export class CreatedQuizRepository {
         updatedQuiz.maxScore = calculateMaxScore(updatedQuiz.questions);
         this.logger.info(
           '[CreatedQuizRepository]: updated maxScore of the quiz.',
-          [requestId],
-        );
-        //creating questionIds for all the questions
-        updatedQuiz.questions = generateQuestionIdsForQuestions(
-          updatedQuiz.questions,
-          updatedQuiz.quizId,
-        );
-        this.logger.info(
-          '[CreatedQuizRepository]: generated quizIds for all questions.',
           [requestId],
         );
       }

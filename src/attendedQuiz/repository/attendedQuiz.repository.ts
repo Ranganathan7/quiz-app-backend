@@ -67,7 +67,7 @@ export class AttendedQuizRepository {
     requestId: string,
   ) {
     this.logger.info(
-      '[AttendedQuizRepository]: Api called to get one attend quiz with Quiz ID.',
+      '[AttendedQuizRepository]: Api called to get one attended quiz with Quiz ID and email ID.',
       [requestId],
     );
     try {
