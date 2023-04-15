@@ -11,7 +11,6 @@ import {
   Max,
   MaxLength,
   Min,
-  MinLength,
   Validate,
   ValidateNested,
 } from 'class-validator';
@@ -49,7 +48,6 @@ export class AnswerDto {
 
   @IsArray()
   @IsString({ each: true })
-  @IsNotEmpty()
   @ArrayMinSize(0)
   @ArrayMaxSize(10)
   @Validate(MaxLengthArrayConstraint, [200])
