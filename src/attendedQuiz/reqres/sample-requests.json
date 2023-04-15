@@ -1,8 +1,16 @@
 {
   "getAllQuiz": {
-
+    "emailId": "example1@gmail.com"
   },
   "submitQuiz": {
-    
+    "emailId": "example1@gmail.com",
+    "quizId": "example1-meVtrj0",
+    "attendedByUserName": "example1",
+    "answers": [
+      {
+        "questionId": "example1-meVtrj0-Y5pImGf",
+        "chosenAnswer": ["option3"]
+      }
+    ]
   }
 }

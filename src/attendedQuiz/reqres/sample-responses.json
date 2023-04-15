@@ -1,8 +1,158 @@
 {
-  "getAllQuiz": {
-
-  },
+  "getAllQuiz": [
+    {
+      "_id": "643abe59bcc44a4c84892022",
+      "quizId": "example1-mBIH5sB",
+      "quizName": "sample quiz 1",
+      "quizDescription": [
+        "This Quiz is created by: example1.",
+        "This quiz doesn't have a time limit.",
+        "This quiz allows a maximum of 1 attempts.",
+        "The mark awarded for a correct answer will be shown alongside the respective question.",
+        "All the questions in this quiz are multiple choice questions.",
+        "The options for single correct answers will be displayed in radio buttons.",
+        "The options for multiple correct answers will be displayed in checkboxes."
+      ],
+      "createdByEmailId": "example1@gmail.com",
+      "createdByUserName": "example1",
+      "showAnswer": false,
+      "timeLimitSec": 0,
+      "attendedByEmailId": "example1@gmail.com",
+      "attendedByUserName": "example1",
+      "attemptsLeft": 0,
+      "attempts": [
+        {
+          "answers": [
+            {
+              "question": "This is a question?",
+              "questionId": "example1-mBIH5sB-YiXm9FA",
+              "options": ["option1", "option2", "option3", "option4"],
+              "chosenAnswer": ["option3"],
+              "mark": 1,
+              "negativeMark": 0,
+              "multipleAnswer": false,
+              "attempted": true,
+              "correct": true
+            }
+          ],
+          "score": 1,
+          "attemptedAt": "2023-04-15T15:10:17.176Z"
+        }
+      ],
+      "maxScore": 1,
+      "createdAt": "2023-04-15T15:10:17.180Z",
+      "updatedAt": "2023-04-15T15:10:17.180Z",
+      "__v": 0
+    },
+    {
+      "_id": "643abdb4bcc44a4c84892019",
+      "quizId": "example1-meVtrj0",
+      "quizName": "sample quiz 1",
+      "quizDescription": [
+        "This Quiz is created by: example1.",
+        "During the quiz, you will not be able to switch to another tab while taking the quiz as it will result in closing(submitting) the quiz, and the quiz interface will be displayed in full-screen mode.",
+        "The quiz has a time limit of 00:01:40[hh:mm:ss] for completion.",
+        "This quiz allows a maximum of 3 attempts.",
+        "The mark awarded for a correct answer will be shown alongside the respective question.",
+        "All the questions in this quiz are multiple choice questions.",
+        "The options for single correct answers will be displayed in radio buttons.",
+        "The options for multiple correct answers will be displayed in checkboxes."
+      ],
+      "createdByEmailId": "example1@gmail.com",
+      "createdByUserName": "example1",
+      "showAnswer": true,
+      "timeLimitSec": 100,
+      "attendedByEmailId": "example1@gmail.com",
+      "attendedByUserName": "example1",
+      "attemptsLeft": 1,
+      "attempts": [
+        {
+          "answers": [
+            {
+              "question": "This is a question?",
+              "questionId": "example1-meVtrj0-Y5pImGf",
+              "options": ["option1", "option2", "option3", "option4"],
+              "answer": ["option3"],
+              "chosenAnswer": ["option1"],
+              "mark": 1,
+              "negativeMark": 0,
+              "multipleAnswer": false,
+              "attempted": true,
+              "correct": false
+            }
+          ],
+          "score": 0,
+          "attemptedAt": "2023-04-15T15:07:32.498Z"
+        },
+        {
+          "answers": [
+            {
+              "question": "This is a question?",
+              "questionId": "example1-meVtrj0-Y5pImGf",
+              "options": ["option1", "option2", "option3", "option4"],
+              "answer": ["option3"],
+              "chosenAnswer": ["option3"],
+              "mark": 1,
+              "negativeMark": 0,
+              "multipleAnswer": false,
+              "attempted": true,
+              "correct": true
+            }
+          ],
+          "score": 1,
+          "attemptedAt": "2023-04-15T15:09:03.681Z"
+        }
+      ],
+      "maxScore": 1,
+      "createdAt": "2023-04-15T15:07:32.523Z",
+      "updatedAt": "2023-04-15T15:09:03.683Z",
+      "__v": 0
+    }
+  ],
   "submitQuiz": {
-    
+    "quizId": "example1-meVtrj0",
+    "quizName": "sample quiz 1",
+    "quizDescription": [
+      "This Quiz is created by: example1.",
+      "During the quiz, you will not be able to switch to another tab while taking the quiz as it will result in closing(submitting) the quiz, and the quiz interface will be displayed in full-screen mode.",
+      "The quiz has a time limit of 00:01:40[hh:mm:ss] for completion.",
+      "This quiz allows a maximum of 3 attempts.",
+      "The mark awarded for a correct answer will be shown alongside the respective question.",
+      "All the questions in this quiz are multiple choice questions.",
+      "The options for single correct answers will be displayed in radio buttons.",
+      "The options for multiple correct answers will be displayed in checkboxes."
+    ],
+    "createdByEmailId": "example1@gmail.com",
+    "createdByUserName": "example1",
+    "showAnswer": true,
+    "timeLimitSec": 100,
+    "attendedByEmailId": "example1@gmail.com",
+    "attendedByUserName": "example1",
+    "attemptsLeft": 2,
+    "attempts": [
+      {
+        "answers": [
+          {
+            "question": "This is a question?",
+            "questionId": "example1-meVtrj0-Y5pImGf",
+            "options": ["option1", "option2", "option3", "option4"],
+            "answer": ["option3"],
+            "chosenAnswer": ["option3", "option4"],
+            "mark": 1,
+            "negativeMark": 0,
+            "multipleAnswer": false,
+            "attempted": true,
+            "correct": false
+          }
+        ],
+        "score": 0,
+        "attemptedAt": "2023-04-15T15:07:32.498Z"
+      }
+    ],
+    "maxScore": 1,
+    "_id": "643abdb4bcc44a4c84892019",
+    "createdAt": "2023-04-15T15:07:32.523Z",
+    "updatedAt": "2023-04-15T15:07:32.523Z",
+    "__v": 0
   }
 }
