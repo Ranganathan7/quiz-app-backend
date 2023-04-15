@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "types": ["node", "mongoose"],
+    "types": ["node", "bson"],
     "esModuleInterop": true,
     "module": "commonjs",
     "declaration": true,
