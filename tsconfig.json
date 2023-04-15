@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     "types": ["node", "mongoose"],
+    "esModuleInterop": true,
     "module": "commonjs",
     "declaration": true,
     "removeComments": true,
