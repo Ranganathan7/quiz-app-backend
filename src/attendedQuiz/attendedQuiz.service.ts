@@ -100,11 +100,12 @@ export class AttendedQuizService {
           requestId,
         );
       } else {
-        // submittedQuiz = await this.attendedQuizRepository.reSubmitQuiz(
-        //   submitQuizDto,
-        //   existingQuiz,
-        //   requestId,
-        // );
+        submittedQuiz = await this.attendedQuizRepository.reSubmitQuiz(
+          submitQuizDto,
+          existingQuiz,
+          alreadySubmittedQuiz.attemptsLeft,
+          requestId,
+        );
       }
       this.logger.info('[AttendedQuizService]: Submitted quiz successfully!.', [
         requestId,

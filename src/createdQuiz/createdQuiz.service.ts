@@ -263,6 +263,13 @@ export class CreatedQuizService {
           '[CreatedQuizService]: Deleted its corresponding attended quiz records successfully.',
           [requestId],
         );
+      } else {
+        //editing all its respective atteneded quiz records if the quiz options are edited
+        await this.attendedQuizRepository.editAllWithQuizId(editQuizDto.quizId, editedQuiz, requestId);
+        this.logger.info(
+          '[CreatedQuizService]: Edited its corresponding attended quiz records successfully.',
+          [requestId],
+        );
       }
       const apiResult: CommonApiResponse<ApiSuccessResponse<any>> = {
         statusCode: HttpStatus.OK,

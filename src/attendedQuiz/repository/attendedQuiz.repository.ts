@@ -7,6 +7,7 @@ import { AttendedQuiz } from '../entity/attendedQuiz.entity';
 import { SubmitQuizDto } from '../dto/attendedQuiz.dto';
 import { CreatedQuiz } from '../../createdQuiz/entity/createdQuiz.entity';
 import { calculateScore } from '../../common/utils/attendedQuiz.helper';
+import { EditQuizOptionsDto } from 'src/createdQuiz/dto/createdQuiz.dto';
 
 export class AttendedQuizRepository {
   constructor(
@@ -149,11 +150,19 @@ export class AttendedQuizRepository {
       submitQuiz.attempts = [
         calculateScore(existingQuiz.questions, submitQuiz.answers, requestId),
       ];
+      //adding the missing fields
+      submitQuiz.quizName = existingQuiz.quizName;
+      submitQuiz.quizDescription = existingQuiz.quizDescription;
+      submitQuiz.createdByEmailId = existingQuiz.createdByEmailId;
+      submitQuiz.createdByUserName = existingQuiz.createdByUserName;
+      submitQuiz.showAnswer = existingQuiz.showAnswer;
+      submitQuiz.timeLimitSec = existingQuiz.timeLimitSec;
+      submitQuiz.maxScore = existingQuiz.maxScore;
       //removing the answers array as it is added into attemps array
       delete submitQuiz.answers;
       const propersubmitQuiz: AttendedQuiz = { ...submitQuiz };
       const submitQuizModel = new this.attendedQuizModel(propersubmitQuiz);
-      return submitQuizModel.save();
+      return await submitQuizModel.save();
     } catch (error) {
       this.logger.error(`[AttendedQuizRepository]: ${error.message}`, [
         requestId,
@@ -169,47 +178,101 @@ export class AttendedQuizRepository {
   async reSubmitQuiz(
     submitQuizDto: SubmitQuizDto,
     existingQuiz: CreatedQuiz,
+    attemptsLeft: number,
     requestId: string,
   ) {
     this.logger.info(
       '[AttendedQuizRepository]: Api called to re-submit a quiz.',
       [requestId],
     );
-    // try {
-    //   //removing the emailId
-    //   const { emailId, ...filteredSubmitQuizDto } = submitQuizDto;
-    //   const submitQuiz: any = {
-    //     ...filteredSubmitQuizDto,
-    //     attendedByEmailId: emailId,
-    //   };
-    //   //checking if all answers are sent for all the questions in quiz
-    //   if (existingQuiz.questions.length !== submitQuiz.answer.length) {
-    //     throw new HttpException(
-    //       {
-    //         message:
-    //           'The answers array should contain all the questions including attended/not-attended [OR] the quiz you are trying to submit has been edited.',
-    //         requestId: requestId,
-    //       },
-    //       HttpStatus.INTERNAL_SERVER_ERROR,
-    //     );
-    //   }
-    //   //calculating the score
-    //   submitQuiz.answers = calculateScore(
-    //     existingQuiz.questions,
-    //     submitQuiz.answers,
-    //   );
-    //   const submitQuizModel = new this.attendedQuizModel(submitQuiz);
-    //   return submitQuizModel.save();
-    // } catch (error) {
-    //   this.logger.error(`[AttendedQuizRepository]: ${error.message}`, [
-    //     requestId,
-    //   ]);
-    //   if (error instanceof HttpException) throw error;
-    //   throw new HttpException(
-    //     { message: error.message, requestId: requestId },
-    //     HttpStatus.INTERNAL_SERVER_ERROR,
-    //   );
-    // }
+    try {
+      //calculating attempts left
+      const updatedAttemptsLeft: number = attemptsLeft - 1;
+      if (updatedAttemptsLeft < 0) {
+        throw new HttpException(
+          {
+            message: 'Max number of attemps allowed for the quiz is reached.',
+            requestId: requestId,
+          },
+          HttpStatus.FORBIDDEN,
+        );
+      }
+      //checking if all answers are sent for all the questions in quiz
+      if (existingQuiz.questions.length !== submitQuizDto.answers.length) {
+        throw new HttpException(
+          {
+            message:
+              'The answers array should contain all the questions including attended/not-attended [OR] the quiz you are trying to submit has been edited.',
+            requestId: requestId,
+          },
+          HttpStatus.INTERNAL_SERVER_ERROR,
+        );
+      }
+      //calculating the score
+      const answers = calculateScore(
+        existingQuiz.questions,
+        submitQuizDto.answers,
+        requestId,
+      );
+      //updating existing field
+      const filter = {
+        quizId: submitQuizDto.quizId,
+        attendedByEmailId: submitQuizDto.emailId,
+      };
+      const update = {
+        $push: { attempts: answers },
+        $set: { attemptsLeft: updatedAttemptsLeft },
+      };
+      const options = { new: true };
+      return await this.attendedQuizModel.findOneAndUpdate(
+        filter,
+        update,
+        options,
+      );
+    } catch (error) {
+      this.logger.error(`[AttendedQuizRepository]: ${error.message}`, [
+        requestId,
+      ]);
+      if (error instanceof HttpException) throw error;
+      throw new HttpException(
+        { message: error.message, requestId: requestId },
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
+
+  async editAllWithQuizId(
+    quizId: string,
+    editedQuiz: CreatedQuiz,
+    requestId: string,
+  ) {
+    this.logger.info(
+      '[AttendedQuizRepository]: Api called to edit an attended quiz.',
+      [requestId],
+    );
+    try {
+      // criteria for selecting documents to update
+      const filter = { quizId: quizId };
+      // fields to update
+      const update = {
+        $set: {
+          quizName: editedQuiz.quizName,
+          quizDescription: editedQuiz.quizDescription,
+          showAnswer: editedQuiz.showAnswer,
+          timeLimitSec: editedQuiz.timeLimitSec,
+        },
+      };
+      await this.attendedQuizModel.updateMany(filter, update);
+    } catch (error) {
+      this.logger.error(`[AttendedQuizRepository]: ${error.message}`, [
+        requestId,
+      ]);
+      if (error instanceof HttpException) throw error;
+      throw new HttpException(
+        { message: error.message, requestId: requestId },
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
   }
 
   // for unit testing

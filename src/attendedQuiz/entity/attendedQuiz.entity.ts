@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
-import { Document } from "mongoose";
+import mongoose, { Document } from "mongoose";
+import { CreatedQuizSchema } from "../../createdQuiz/entity/createdQuiz.entity";
 
 
 export class AnswerInterface {
@@ -47,8 +48,26 @@ export class AnswersInterface {
 
 @Schema({ collection: 'attended_quizzes', timestamps: true })
 export class AttendedQuiz extends Document {
-  @Prop({ required: true, type: String, ref: 'created_quizzes', autopopulate: true })
+  @Prop({ required: true, type: String })
   quizId: string
+
+  @Prop({ required: true, type: String })
+  quizName: string
+
+  @Prop({ required: true, type: [String] })
+  quizDescription: string[]
+
+  @Prop({ required: true, type: String })
+  createdByEmailId: string
+
+  @Prop({ required: true, type: String })
+  createdByUserName: string
+
+  @Prop({ required: true, default: false, type: Boolean })
+  showAnswer: boolean
+
+  @Prop({ required: true, default: 0, type: Number })
+  timeLimitSec: number
 
   @Prop({ required: true, type: String })
   attendedByEmailId: string
@@ -61,6 +80,9 @@ export class AttendedQuiz extends Document {
 
   @Prop({ required: true, type: Array<AnswersInterface> })
   attempts: AnswersInterface[]
+
+  @Prop({ required: true, type: Number })
+  maxScore: number
 }
 
 export const AttendedQuizSchema = SchemaFactory.createForClass(AttendedQuiz);
