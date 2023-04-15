@@ -5,6 +5,8 @@ import { LOGGER } from '../../common/core.module';
 import { Logger } from 'winston';
 import { AttendedQuiz } from '../entity/attendedQuiz.entity';
 import { SubmitQuizDto } from '../dto/attendedQuiz.dto';
+import { CreatedQuiz } from '../../createdQuiz/entity/createdQuiz.entity';
+import { calculateScore } from '../../common/utils/attendedQuiz.helper';
 
 export class AttendedQuizRepository {
   constructor(
@@ -106,28 +108,108 @@ export class AttendedQuizRepository {
     }
   }
 
-  async submitQuiz(submitQuizDto: SubmitQuizDto, requestId: string) {
-    this.logger.info(
-      '[AttendedQuizRepository]: Api called to submit a quiz.',
-      [requestId],
-    );
+  async submitQuiz(
+    submitQuizDto: SubmitQuizDto,
+    existingQuiz: CreatedQuiz,
+    requestId: string,
+  ) {
+    this.logger.info('[AttendedQuizRepository]: Api called to submit a quiz.', [
+      requestId,
+    ]);
     try {
       //removing the emailId
       const { emailId, ...filteredSubmitQuizDto } = submitQuizDto;
-      const submitQuiz = { ...filteredSubmitQuizDto, attemptedByEmailId: emailId}
-      //write all the logic
-
-      const submitQuizModel = new this.attendedQuizModel(submitQuiz);
+      const submitQuiz: any = {
+        ...filteredSubmitQuizDto,
+        attendedByEmailId: emailId,
+      };
+      //calculating attempts left
+      submitQuiz.attemptsLeft = existingQuiz.maxAttempts - 1;
+      if (submitQuiz.attemptsLeft < 0) {
+        throw new HttpException(
+          {
+            message: 'Max number of attemps allowed for the quiz is reached.',
+            requestId: requestId,
+          },
+          HttpStatus.FORBIDDEN,
+        );
+      }
+      //checking if all answers are sent for all the questions in quiz
+      if (existingQuiz.questions.length !== submitQuiz.answers.length) {
+        throw new HttpException(
+          {
+            message:
+              'The answers array should contain all the questions including attended/not-attended [OR] the quiz you are trying to submit has been edited.',
+            requestId: requestId,
+          },
+          HttpStatus.CONFLICT,
+        );
+      }
+      //calculating the score
+      submitQuiz.attempts = [
+        calculateScore(existingQuiz.questions, submitQuiz.answers, requestId),
+      ];
+      //removing the answers array as it is added into attemps array
+      delete submitQuiz.answers;
+      const propersubmitQuiz: AttendedQuiz = { ...submitQuiz };
+      const submitQuizModel = new this.attendedQuizModel(propersubmitQuiz);
       return submitQuizModel.save();
     } catch (error) {
       this.logger.error(`[AttendedQuizRepository]: ${error.message}`, [
         requestId,
       ]);
+      if (error instanceof HttpException) throw error;
       throw new HttpException(
         { message: error.message, requestId: requestId },
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }
+  }
+
+  async reSubmitQuiz(
+    submitQuizDto: SubmitQuizDto,
+    existingQuiz: CreatedQuiz,
+    requestId: string,
+  ) {
+    this.logger.info(
+      '[AttendedQuizRepository]: Api called to re-submit a quiz.',
+      [requestId],
+    );
+    // try {
+    //   //removing the emailId
+    //   const { emailId, ...filteredSubmitQuizDto } = submitQuizDto;
+    //   const submitQuiz: any = {
+    //     ...filteredSubmitQuizDto,
+    //     attendedByEmailId: emailId,
+    //   };
+    //   //checking if all answers are sent for all the questions in quiz
+    //   if (existingQuiz.questions.length !== submitQuiz.answer.length) {
+    //     throw new HttpException(
+    //       {
+    //         message:
+    //           'The answers array should contain all the questions including attended/not-attended [OR] the quiz you are trying to submit has been edited.',
+    //         requestId: requestId,
+    //       },
+    //       HttpStatus.INTERNAL_SERVER_ERROR,
+    //     );
+    //   }
+    //   //calculating the score
+    //   submitQuiz.answers = calculateScore(
+    //     existingQuiz.questions,
+    //     submitQuiz.answers,
+    //   );
+    //   const submitQuizModel = new this.attendedQuizModel(submitQuiz);
+    //   return submitQuizModel.save();
+    // } catch (error) {
+    //   this.logger.error(`[AttendedQuizRepository]: ${error.message}`, [
+    //     requestId,
+    //   ]);
+    //   if (error instanceof HttpException) throw error;
+    //   throw new HttpException(
+    //     { message: error.message, requestId: requestId },
+    //     HttpStatus.INTERNAL_SERVER_ERROR,
+    //   );
+    // }
   }
 
   // for unit testing

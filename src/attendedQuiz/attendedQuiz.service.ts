@@ -9,6 +9,7 @@ import { UserRepository } from 'src/user/repository/user.repository';
 import { AttendedQuizRepository } from './repository/attendedQuiz.repository';
 import { SubmitQuizDto } from './dto/attendedQuiz.dto';
 import { CreatedQuizRepository } from '../createdQuiz/repository/createdQuiz.repository';
+import { AttendedQuiz } from './entity/attendedQuiz.entity';
 
 @Injectable()
 export class AttendedQuizService {
@@ -58,9 +59,9 @@ export class AttendedQuizService {
         submitQuizDto.emailId,
         requestId,
       );
-      if (!user || user.userName !== submitQuizDto.attemptedByUserName) {
+      if (!user || user.userName !== submitQuizDto.attendedByUserName) {
         const errorMessage =
-          'The attemptedByUserName provided in request body does not match with the user of provided email ID.';
+          'The attendedByUserName provided in request body does not match with the user of provided email ID.';
         this.logger.error(`[AttendedQuizService]: ${errorMessage}`, [
           requestId,
         ]);
@@ -84,10 +85,27 @@ export class AttendedQuizService {
           HttpStatus.CONFLICT,
         );
       }
-      const submittedQuiz = await this.attendedQuizRepository.submitQuiz(
-        submitQuizDto,
-        requestId,
-      );
+      //checking if this is the first time the user submitting the quiz
+      const alreadySubmittedQuiz =
+        await this.attendedQuizRepository.getOneWithQuizIdAndEmailId(
+          submitQuizDto.quizId,
+          submitQuizDto.emailId,
+          requestId,
+        );
+      let submittedQuiz: AttendedQuiz;
+      if (!alreadySubmittedQuiz) {
+        submittedQuiz = await this.attendedQuizRepository.submitQuiz(
+          submitQuizDto,
+          existingQuiz,
+          requestId,
+        );
+      } else {
+        // submittedQuiz = await this.attendedQuizRepository.reSubmitQuiz(
+        //   submitQuizDto,
+        //   existingQuiz,
+        //   requestId,
+        // );
+      }
       this.logger.info('[AttendedQuizService]: Submitted quiz successfully!.', [
         requestId,
       ]);

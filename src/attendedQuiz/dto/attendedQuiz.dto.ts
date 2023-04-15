@@ -27,24 +27,9 @@ export class GetAllAttendedQuizDto {
 export class AnswerDto {
   @IsString()
   @IsNotEmpty()
-  @MaxLength(200)
-  @ApiProperty({ default: 'This is a question?' })
-  question: string;
-
-  @IsString()
-  @IsNotEmpty()
   @MaxLength(40)
   @ApiProperty({ default: 'example1-QfXq8Uj-i8712yF' })
   questionId: string;
-
-  @IsArray()
-  @IsString({ each: true })
-  @IsNotEmpty()
-  @ArrayMinSize(2)
-  @ArrayMaxSize(10)
-  @Validate(MaxLengthArrayConstraint, [200])
-  @ApiProperty({ default: ['option1', 'option2', 'option3', 'option4'] })
-  options: string[];
 
   @IsArray()
   @IsString({ each: true })
@@ -53,25 +38,6 @@ export class AnswerDto {
   @Validate(MaxLengthArrayConstraint, [200])
   @ApiProperty({ default: ['option3'] })
   chosenAnswer: string[];
-
-  @IsNumber()
-  @IsNotEmpty()
-  @Min(1)
-  @Max(10)
-  @ApiProperty({ default: 1 })
-  mark: number;
-
-  @IsNumber()
-  @IsNotEmpty()
-  @Min(0)
-  @Max(10)
-  @ApiProperty()
-  negativeMark: number;
-
-  @IsBoolean()
-  @IsNotEmpty()
-  @ApiProperty({ default: false })
-  multipleAnswer: boolean;
 }
 
 export class SubmitQuizDto {
@@ -91,7 +57,7 @@ export class SubmitQuizDto {
   @IsNotEmpty()
   @MaxLength(20)
   @ApiProperty({ default: 'example1' })
-  attemptedByUserName: string;
+  attendedByUserName: string;
 
   @IsArray({ message: 'answers must be an array' })
   @ArrayMinSize(0)

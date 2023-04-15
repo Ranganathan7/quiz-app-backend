@@ -38,6 +38,9 @@ export class AnswersInterface {
   @Prop({ required:true, type: Array<AnswerInterface> })
   answers: AnswerInterface[]
 
+  @Prop({ required: true,  type: Number })
+  score: Number
+
   @Prop({ required:true, type: Date, default: new Date().toISOString() })
   attemptedAt: Date
 };
