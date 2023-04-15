@@ -23,7 +23,12 @@ import {
   ApiTags,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
-import { AlreadyLoggedinDto, EditProfileDto, LoginDto, SignupDto } from './dto/user.dto';
+import {
+  AlreadyLoggedinDto,
+  EditProfileDto,
+  LoginDto,
+  SignupDto,
+} from './dto/user.dto';
 import {
   ApiSuccessResponse,
   CommonApiResponse,
@@ -77,8 +82,13 @@ export class UserController {
         signupDto,
         requestId,
       );
+      //generating a token using jwt
+      const token = await this.userService.generateJwtToken(
+        response.data.emailId,
+        requestId,
+      );
       //setting the cookie
-      res.setCookie(cookie.field, response.data.access_token);
+      res.setCookie(cookie.field, token);
       await session.commitTransaction();
       return response;
     } catch (error) {
@@ -115,8 +125,13 @@ export class UserController {
         loginDto,
         requestId,
       );
+      //generating a token using jwt
+      const token = await this.userService.generateJwtToken(
+        response.data.emailId,
+        requestId,
+      );
       //setting the cookie
-      res.setCookie(cookie.field, response.data.access_token);
+      res.setCookie(cookie.field, token);
       await session.commitTransaction();
       return response;
     } catch (error) {
@@ -216,7 +231,7 @@ export class UserController {
   @ApiNotFoundResponse(responses.apiNotFoundResponse)
   @ApiInternalServerErrorResponse(responses.apiInternalServerErrorResponse)
   async isAlreadyLoggedIn(
-    @Body() alreadyLoggedinDto: AlreadyLoggedinDto
+    @Body() alreadyLoggedinDto: AlreadyLoggedinDto,
   ): Promise<CommonApiResponse> {
     const requestId = randomUUID();
     const session = await this.connection.startSession();
