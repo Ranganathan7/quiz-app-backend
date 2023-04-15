@@ -7,7 +7,6 @@ import { AttendedQuiz } from '../entity/attendedQuiz.entity';
 import { SubmitQuizDto } from '../dto/attendedQuiz.dto';
 import { CreatedQuiz } from '../../createdQuiz/entity/createdQuiz.entity';
 import { calculateScore } from '../../common/utils/attendedQuiz.helper';
-import { EditQuizOptionsDto } from 'src/createdQuiz/dto/createdQuiz.dto';
 
 export class AttendedQuizRepository {
   constructor(

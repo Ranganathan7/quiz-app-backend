@@ -9,7 +9,7 @@ import { UserRepository } from 'src/user/repository/user.repository';
 import { AttendedQuizRepository } from './repository/attendedQuiz.repository';
 import { SubmitQuizDto } from './dto/attendedQuiz.dto';
 import { CreatedQuizRepository } from '../createdQuiz/repository/createdQuiz.repository';
-import { AttendedQuiz } from './entity/attendedQuiz.entity';
+import { AnswersInterface, AttendedQuiz } from './entity/attendedQuiz.entity';
 
 @Injectable()
 export class AttendedQuizService {
@@ -32,6 +32,20 @@ export class AttendedQuizService {
         '[AttendedQuizService]: Fetched all attended Quizzes successfully.',
         [requestId],
       );
+      // removing answer if showAnswer is false
+      for (let i = 0; i < attendedQuizzes.length; i++) {
+        if (!attendedQuizzes[i].showAnswer) {
+          for (let j = 0; j < attendedQuizzes[i].attempts.length; j++) {
+            for (
+              let k = 0;
+              k < attendedQuizzes[i].attempts[j].answers.length;
+              k++
+            ) {
+              delete attendedQuizzes[i].attempts[j].answers[k].answer;
+            }
+          }
+        }
+      }
       const apiResult: CommonApiResponse<ApiSuccessResponse<any>> = {
         statusCode: HttpStatus.OK,
         timestamp: new Date().toISOString(),
@@ -110,8 +124,14 @@ export class AttendedQuizService {
       this.logger.info('[AttendedQuizService]: Submitted quiz successfully!.', [
         requestId,
       ]);
-      //write the logic for hiding answer here
-
+      //removing answer if showAnswer if false
+      if (!submittedQuiz.showAnswer) {
+        for (let j = 0; j < submittedQuiz.attempts.length; j++) {
+          for (let k = 0; k < submittedQuiz.attempts[j].answers.length; k++) {
+            delete submittedQuiz.attempts[j].answers[k].answer;
+          }
+        }
+      }
       const apiResult: CommonApiResponse<ApiSuccessResponse<any>> = {
         statusCode: HttpStatus.OK,
         timestamp: new Date().toISOString(),
