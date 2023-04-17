@@ -16,13 +16,16 @@ import { UserModule } from './user/user.module';
 import fastifyCookie, { FastifyCookieOptions } from '@fastify/cookie';
 import { CreatedQuizModule } from './createdQuiz/createdQuiz.module';
 import { AttendedQuizModule } from './attendedQuiz/attendedQuiz.module';
+import cookieParser from 'cookie-parser';
 
 async function bootstrap() {
-  // Create nestjs application with Fastify adapter
-  const app = await NestFactory.create<NestFastifyApplication>(
-    AppModule,
-    new FastifyAdapter(),
-  );
+  // // Create nestjs application with Fastify adapter
+  // const app = await NestFactory.create<NestFastifyApplication>(
+  //   AppModule,
+  //   new FastifyAdapter(),
+  // );
+
+  const app = await NestFactory.create(AppModule);
 
   // Create congig service instance for all the configs.
   const configService = app.get<ConfigService>(ConfigService);
@@ -61,15 +64,18 @@ async function bootstrap() {
   // Starts listening for shutdown hooks
   app.enableShutdownHooks();
 
+  // //enabling cookies for fastify app
+  // await app.register(fastifyCookie, {
+  //   secret: configService.get('cookie.field'), // for cookies signature
+  //   parseOptions: {
+  //     httpOnly: true,
+  //     expires: new Date(Date.now() + configService.get('cookie.maxAge')),
+  //     path: '/'
+  //   }, // options for parsing cookies
+  // } as FastifyCookieOptions);
+
   //enabling cookies
-  await app.register(fastifyCookie, {
-    secret: configService.get('cookie.field'), // for cookies signature
-    parseOptions: {
-      httpOnly: true,
-      expires: new Date(Date.now() + configService.get('cookie.maxAge')),
-      path: '/'
-    }, // options for parsing cookies
-  } as FastifyCookieOptions);
+  app.use(cookieParser());
 
   console.log(
     `App listening on port: ${configService.get(CONSTANTS.CONFIG.PORT)}`,

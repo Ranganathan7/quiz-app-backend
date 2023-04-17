@@ -45,6 +45,7 @@ import { responses } from '../common/openapi/responses';
 import * as sampleResponses from './reqres/sample-responses.json';
 import { AuthGuard } from '../common/auth/auth.guard';
 import { ConfigService } from '@nestjs/config';
+import { Response } from 'express';
 
 @Controller(CONSTANTS.ROUTES.USER.CONTROLLER)
 @ApiTags(CONSTANTS.ROUTES.USER.TAG)
@@ -68,7 +69,7 @@ export class UserController {
   @ApiInternalServerErrorResponse(responses.apiInternalServerErrorResponse)
   async signup(
     @Body() signupDto: SignupDto,
-    @Res({ passthrough: true }) res: FastifyReply,
+    @Res({ passthrough: true }) res: Response,
   ): Promise<CommonApiResponse> {
     const requestId = randomUUID();
     const session = await this.connection.startSession();
@@ -87,8 +88,10 @@ export class UserController {
         response.data.emailId,
         requestId,
       );
+      // //setting the cookie for fastify app
+      // res.setCookie(cookie.field, token);
       //setting the cookie
-      res.setCookie(cookie.field, token);
+      res.cookie(cookie.field, token);
       await session.commitTransaction();
       //removing the emailId and password before sending the response
       delete response.data.emailId;
@@ -114,7 +117,7 @@ export class UserController {
   @ApiInternalServerErrorResponse(responses.apiInternalServerErrorResponse)
   async login(
     @Body() loginDto: LoginDto,
-    @Res({ passthrough: true }) res: FastifyReply,
+    @Res({ passthrough: true }) res: Response,
   ): Promise<CommonApiResponse> {
     const requestId = randomUUID();
     const session = await this.connection.startSession();
@@ -133,8 +136,10 @@ export class UserController {
         response.data.emailId,
         requestId,
       );
+      // //setting the cookie for fastify app
+      // res.setCookie(cookie.field, token);
       //setting the cookie
-      res.setCookie(cookie.field, token);
+      res.cookie(cookie.field, token);
       await session.commitTransaction();
       //removing the emailId and password before sending the response
       delete response.data.emailId;
@@ -196,7 +201,7 @@ export class UserController {
   @ApiNotFoundResponse(responses.apiNotFoundResponse)
   @ApiInternalServerErrorResponse(responses.apiInternalServerErrorResponse)
   async logout(
-    @Res({ passthrough: true }) res: FastifyReply,
+    @Res({ passthrough: true }) res: Response,
   ): Promise<CommonApiResponse> {
     const requestId = randomUUID();
     const cookie = await this.configService.get('cookie');
@@ -216,9 +221,12 @@ export class UserController {
       //clearing the cookie
       // res.clearCookie(cookie.field);
       const expiredDate = new Date(0);
-      res.setCookie(cookie.field, null, {
-        expires: expiredDate,
-      });
+      // //setting the cookie for fastify app
+      // res.setCookie(cookie.field, null, {
+      //   expires: expiredDate,
+      // });
+      //setting the cookie
+      res.cookie(cookie.field, null, { expires: expiredDate });
       return response;
     } catch (error) {
       this.logger.error(`[UserController]: ${error.message}`, [requestId]);
