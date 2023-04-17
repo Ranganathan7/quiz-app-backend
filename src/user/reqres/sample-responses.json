@@ -1,6 +1,5 @@
 {
   "signup": {
-    "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbElkIjoiZXhhbXBsZTRAZ21haWwuY29tIiwiaWF0IjoxNjgxMjEyMDkzLCJleHAiOjE2ODEyOTg0OTN9.jVxmIs1c0BT2xaMAdslNoMLrQ1hQ92tITEHEm80hkvE",
     "_id": "643542bc0ad56ab97229c226",
     "userName": "example1",
     "createdAt": "2023-04-11T11:21:32.700Z",
@@ -8,7 +7,6 @@
     "__v": 0
   },
   "login": {
-    "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbElkIjoiZXhhbXBsZTFAZ21haWwuY29tIiwiaWF0IjoxNjgxMjExNjg2LCJleHAiOjE2ODEyOTgwODZ9.Gat1icKPzeenNI4IjjF7lZOzyg4aSMfY8zKJ5mY74ag",
     "_id": "6433ee1e500433f7b7bfdf64",
     "userName": "example1",
     "createdAt": "2023-04-10T11:08:14.858Z",
