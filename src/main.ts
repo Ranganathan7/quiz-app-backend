@@ -27,6 +27,13 @@ async function bootstrap() {
 
   const app = await NestFactory.create(AppModule);
 
+  //enabling cors
+  app.enableCors({
+    credentials: true,
+    origin: true,
+    methods: 'GET, HEAD, PUT, PATCH, POST, DELETE, OPTIONS',
+  });
+
   // Create congig service instance for all the configs.
   const configService = app.get<ConfigService>(ConfigService);
 
@@ -77,12 +84,12 @@ async function bootstrap() {
   //enabling cookies
   app.use(cookieParser());
 
-  console.log(
-    `App listening on port: ${configService.get(CONSTANTS.CONFIG.PORT)}`,
-  );
-  await app.listen(
-    configService.get(CONSTANTS.CONFIG.PORT),
-    configService.get(CONSTANTS.CONFIG.HOST),
-  );
+  const port = configService.get<number>('app.port');
+  console.log(`App listening on port: ${port}`);
+  // await app.listen(
+  //   configService.get(CONSTANTS.CONFIG.PORT),
+  //   configService.get(CONSTANTS.CONFIG.HOST),
+  // );
+  await app.listen(port);
 }
 bootstrap();

@@ -51,9 +51,6 @@ export const CONSTANTS = {
   MESSAGE: 'message',
   REQUEST_ID: 'requestId',
   CONFIG: {
-    APP: 'app',
-    HOST: 'app.host',
-    PORT: 'app.port',
     DATABASE: 'database',
     LOG: 'log',
   },

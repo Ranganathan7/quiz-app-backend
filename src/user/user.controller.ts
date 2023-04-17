@@ -219,14 +219,12 @@ export class UserController {
         },
       };
       //clearing the cookie
-      // res.clearCookie(cookie.field);
-      const expiredDate = new Date(0);
+      res.clearCookie(cookie.field);
+      // const expiredDate = new Date(0);
       // //setting the cookie for fastify app
       // res.setCookie(cookie.field, null, {
       //   expires: expiredDate,
       // });
-      //setting the cookie
-      res.cookie(cookie.field, null, { expires: expiredDate });
       return response;
     } catch (error) {
       this.logger.error(`[UserController]: ${error.message}`, [requestId]);
