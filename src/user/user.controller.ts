@@ -90,6 +90,9 @@ export class UserController {
       //setting the cookie
       res.setCookie(cookie.field, token);
       await session.commitTransaction();
+      //removing the emailId and password before sending the response
+      delete response.data.emailId;
+      delete response.data.password;
       return response;
     } catch (error) {
       await session.abortTransaction();
@@ -133,6 +136,9 @@ export class UserController {
       //setting the cookie
       res.setCookie(cookie.field, token);
       await session.commitTransaction();
+      //removing the emailId and password before sending the response
+      delete response.data.emailId;
+      delete response.data.password;
       return response;
     } catch (error) {
       await session.abortTransaction();

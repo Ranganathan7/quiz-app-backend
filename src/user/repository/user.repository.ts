@@ -83,7 +83,6 @@ export class UserRepository {
         .findOne({
           emailId: loginDto.emailId,
         })
-        .select('-password')
         .lean();
       if (!user) {
         throw new HttpException(
@@ -94,6 +93,9 @@ export class UserRepository {
           HttpStatus.NOT_FOUND,
         );
       }
+      this.logger.info('[UserRepository]: Checking if password is matching.', [
+        requestId,
+      ]);
       if (!(await bcrypt.compare(loginDto.password, user.password))) {
         throw new HttpException(
           {
@@ -120,7 +122,9 @@ export class UserRepository {
       [requestId],
     );
     try {
-      return await this.userModel.findOne({ userName: userName }).lean();
+      return await this.userModel.findOne({ userName: userName })
+        .select('-password')
+        .lean();
     } catch (error) {
       this.logger.error(`[UserRepository]: ${error.message}`, [requestId]);
       throw new HttpException(
@@ -136,7 +140,9 @@ export class UserRepository {
       [requestId],
     );
     try {
-      return await this.userModel.findOne({ emailId: emailId }).lean();
+      return await this.userModel.findOne({ emailId: emailId })
+        .select('-password')
+        .lean();
     } catch (error) {
       this.logger.error(`[UserRepository]: ${error.message}`, [requestId]);
       throw new HttpException(
@@ -172,7 +178,7 @@ export class UserRepository {
           { $set: { userName: editProfileDto.userName } },
           { strict: true, new: true },
         )
-        .select('-password')
+        .select('-password emailId')
         .lean();
       return updatedUser;
     } catch (error) {
