@@ -16,13 +16,23 @@ import { UserModule } from './user/user.module';
 import fastifyCookie, { FastifyCookieOptions } from '@fastify/cookie';
 import { CreatedQuizModule } from './createdQuiz/createdQuiz.module';
 import { AttendedQuizModule } from './attendedQuiz/attendedQuiz.module';
+import cookieParser from 'cookie-parser';
 
 async function bootstrap() {
-  // Create nestjs application with Fastify adapter
-  const app = await NestFactory.create<NestFastifyApplication>(
-    AppModule,
-    new FastifyAdapter(),
-  );
+  // // Create nestjs application with Fastify adapter
+  // const app = await NestFactory.create<NestFastifyApplication>(
+  //   AppModule,
+  //   new FastifyAdapter(),
+  // );
+
+  const app = await NestFactory.create(AppModule);
+
+  //enabling cors
+  app.enableCors({
+    credentials: true,
+    origin: true,
+    methods: 'GET, HEAD, PUT, PATCH, POST, DELETE, OPTIONS',
+  });
 
   // Create congig service instance for all the configs.
   const configService = app.get<ConfigService>(ConfigService);
@@ -61,22 +71,25 @@ async function bootstrap() {
   // Starts listening for shutdown hooks
   app.enableShutdownHooks();
 
-  //enabling cookies
-  await app.register(fastifyCookie, {
-    secret: configService.get('cookie.field'), // for cookies signature
-    parseOptions: {
-      httpOnly: true,
-      expires: new Date(Date.now() + configService.get('cookie.maxAge')),
-      path: '/'
-    }, // options for parsing cookies
-  } as FastifyCookieOptions);
+  // //enabling cookies for fastify app
+  // await app.register(fastifyCookie, {
+  //   secret: configService.get('cookie.field'), // for cookies signature
+  //   parseOptions: {
+  //     httpOnly: true,
+  //     expires: new Date(Date.now() + configService.get('cookie.maxAge')),
+  //     path: '/'
+  //   }, // options for parsing cookies
+  // } as FastifyCookieOptions);
 
-  console.log(
-    `App listening on port: ${configService.get(CONSTANTS.CONFIG.PORT)}`,
-  );
-  await app.listen(
-    configService.get(CONSTANTS.CONFIG.PORT),
-    configService.get(CONSTANTS.CONFIG.HOST),
-  );
+  //enabling cookies
+  app.use(cookieParser());
+
+  const port = configService.get<number>('app.port');
+  console.log(`App listening on port: ${port}`);
+  // await app.listen(
+  //   configService.get(CONSTANTS.CONFIG.PORT),
+  //   configService.get(CONSTANTS.CONFIG.HOST),
+  // );
+  await app.listen(port);
 }
 bootstrap();

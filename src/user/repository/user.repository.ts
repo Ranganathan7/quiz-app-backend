@@ -5,14 +5,12 @@ import { User } from '../entity/user.entity';
 import { Model } from 'mongoose';
 import { LOGGER } from '../../common/core.module';
 import { Logger } from 'winston';
-import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 
 export class UserRepository {
   constructor(
     @InjectModel(User.name)
     private readonly userModel: Model<User>,
-    private jwtService: JwtService,
     @Inject(LOGGER) private readonly logger: Logger,
   ) {}
 
@@ -95,6 +93,9 @@ export class UserRepository {
           HttpStatus.NOT_FOUND,
         );
       }
+      this.logger.info('[UserRepository]: Checking if password is matching.', [
+        requestId,
+      ]);
       if (!(await bcrypt.compare(loginDto.password, user.password))) {
         throw new HttpException(
           {
@@ -104,11 +105,7 @@ export class UserRepository {
           HttpStatus.NOT_FOUND,
         );
       }
-      //generating a token using jwt
-      const token = await this.generateJwtToken(user.emailId, requestId);
-      //removing emailId and password from response as token has it as payload
-      const { emailId, password, ...filteredUser } = user;
-      return { ...token, ...filteredUser };
+      return user;
     } catch (error) {
       this.logger.error(`[UserRepository]: ${error.message}`, [requestId]);
       if (error instanceof HttpException) throw error;
@@ -125,7 +122,9 @@ export class UserRepository {
       [requestId],
     );
     try {
-      return await this.userModel.findOne({ userName: userName }).lean();
+      return await this.userModel.findOne({ userName: userName })
+        .select('-password')
+        .lean();
     } catch (error) {
       this.logger.error(`[UserRepository]: ${error.message}`, [requestId]);
       throw new HttpException(
@@ -141,7 +140,9 @@ export class UserRepository {
       [requestId],
     );
     try {
-      return await this.userModel.findOne({ emailId: emailId }).lean();
+      return await this.userModel.findOne({ emailId: emailId })
+        .select('-password')
+        .lean();
     } catch (error) {
       this.logger.error(`[UserRepository]: ${error.message}`, [requestId]);
       throw new HttpException(
@@ -177,10 +178,9 @@ export class UserRepository {
           { $set: { userName: editProfileDto.userName } },
           { strict: true, new: true },
         )
+        .select('-password emailId')
         .lean();
-      //removing emailId and password before sending
-      const { emailId, password, ...filteredUser } = updatedUser;
-      return { ...filteredUser };
+      return updatedUser;
     } catch (error) {
       this.logger.error(`[UserRepository]: ${error.message}`, [requestId]);
       throw new HttpException(
@@ -188,16 +188,6 @@ export class UserRepository {
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }
-  }
-
-  async generateJwtToken(emailId: string, requestId: string) {
-    const payload = { emailId: emailId };
-    this.logger.info('[UserRepository]: Api called to generate JWT token', [
-      requestId,
-    ]);
-    return {
-      access_token: await this.jwtService.signAsync(payload),
-    };
   }
 
   // for unit testing

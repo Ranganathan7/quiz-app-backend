@@ -7,11 +7,13 @@ import {
 } from 'src/common/models/api.models';
 import { EditProfileDto, LoginDto, SignupDto } from './dto/user.dto';
 import { UserRepository } from './repository/user.repository';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class UserService {
   constructor(
     @Inject(LOGGER) private readonly logger: Logger,
+    private jwtService: JwtService,
     private readonly userRepository: UserRepository,
   ) {}
 
@@ -27,6 +29,7 @@ export class UserService {
         signupDto,
         requestId,
       );
+
       this.logger.info('[UserService]: Signup successful', [requestId]);
       const apiResult: CommonApiResponse<ApiSuccessResponse<any>> = {
         statusCode: HttpStatus.OK,
@@ -134,5 +137,13 @@ export class UserService {
       this.logger.error(`[UserService]: ${error.message}`, [requestId]);
       throw error;
     }
+  }
+
+  async generateJwtToken(emailId: string, requestId: string): Promise<string> {
+    const payload = { emailId: emailId };
+    this.logger.info('[UserService]: Api called to generate JWT token', [
+      requestId,
+    ]);
+    return await this.jwtService.signAsync(payload)
   }
 }

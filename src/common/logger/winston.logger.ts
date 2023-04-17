@@ -1,4 +1,4 @@
-import * as colors from 'colors/safe';
+import colors from 'colors';
 import { createLogger, format, transports } from 'winston';
 import { ConfigService } from '@nestjs/config';
 import 'winston-daily-rotate-file';

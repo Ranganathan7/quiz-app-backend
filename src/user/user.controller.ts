@@ -23,7 +23,12 @@ import {
   ApiTags,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
-import { AlreadyLoggedinDto, EditProfileDto, LoginDto, SignupDto } from './dto/user.dto';
+import {
+  AlreadyLoggedinDto,
+  EditProfileDto,
+  LoginDto,
+  SignupDto,
+} from './dto/user.dto';
 import {
   ApiSuccessResponse,
   CommonApiResponse,
@@ -40,6 +45,7 @@ import { responses } from '../common/openapi/responses';
 import * as sampleResponses from './reqres/sample-responses.json';
 import { AuthGuard } from '../common/auth/auth.guard';
 import { ConfigService } from '@nestjs/config';
+import { Response } from 'express';
 
 @Controller(CONSTANTS.ROUTES.USER.CONTROLLER)
 @ApiTags(CONSTANTS.ROUTES.USER.TAG)
@@ -63,7 +69,7 @@ export class UserController {
   @ApiInternalServerErrorResponse(responses.apiInternalServerErrorResponse)
   async signup(
     @Body() signupDto: SignupDto,
-    @Res({ passthrough: true }) res: FastifyReply,
+    @Res({ passthrough: true }) res: Response,
   ): Promise<CommonApiResponse> {
     const requestId = randomUUID();
     const session = await this.connection.startSession();
@@ -77,9 +83,19 @@ export class UserController {
         signupDto,
         requestId,
       );
+      //generating a token using jwt
+      const token = await this.userService.generateJwtToken(
+        response.data.emailId,
+        requestId,
+      );
+      // //setting the cookie for fastify app
+      // res.setCookie(cookie.field, token);
       //setting the cookie
-      res.setCookie(cookie.field, response.data.access_token);
+      res.cookie(cookie.field, token);
       await session.commitTransaction();
+      //removing the emailId and password before sending the response
+      delete response.data.emailId;
+      delete response.data.password;
       return response;
     } catch (error) {
       await session.abortTransaction();
@@ -101,7 +117,7 @@ export class UserController {
   @ApiInternalServerErrorResponse(responses.apiInternalServerErrorResponse)
   async login(
     @Body() loginDto: LoginDto,
-    @Res({ passthrough: true }) res: FastifyReply,
+    @Res({ passthrough: true }) res: Response,
   ): Promise<CommonApiResponse> {
     const requestId = randomUUID();
     const session = await this.connection.startSession();
@@ -115,9 +131,19 @@ export class UserController {
         loginDto,
         requestId,
       );
+      //generating a token using jwt
+      const token = await this.userService.generateJwtToken(
+        response.data.emailId,
+        requestId,
+      );
+      // //setting the cookie for fastify app
+      // res.setCookie(cookie.field, token);
       //setting the cookie
-      res.setCookie(cookie.field, response.data.access_token);
+      res.cookie(cookie.field, token);
       await session.commitTransaction();
+      //removing the emailId and password before sending the response
+      delete response.data.emailId;
+      delete response.data.password;
       return response;
     } catch (error) {
       await session.abortTransaction();
@@ -175,7 +201,7 @@ export class UserController {
   @ApiNotFoundResponse(responses.apiNotFoundResponse)
   @ApiInternalServerErrorResponse(responses.apiInternalServerErrorResponse)
   async logout(
-    @Res({ passthrough: true }) res: FastifyReply,
+    @Res({ passthrough: true }) res: Response,
   ): Promise<CommonApiResponse> {
     const requestId = randomUUID();
     const cookie = await this.configService.get('cookie');
@@ -193,11 +219,12 @@ export class UserController {
         },
       };
       //clearing the cookie
-      // res.clearCookie(cookie.field);
-      const expiredDate = new Date(0);
-      res.setCookie(cookie.field, null, {
-        expires: expiredDate,
-      });
+      res.clearCookie(cookie.field);
+      // const expiredDate = new Date(0);
+      // //setting the cookie for fastify app
+      // res.setCookie(cookie.field, null, {
+      //   expires: expiredDate,
+      // });
       return response;
     } catch (error) {
       this.logger.error(`[UserController]: ${error.message}`, [requestId]);
@@ -216,7 +243,7 @@ export class UserController {
   @ApiNotFoundResponse(responses.apiNotFoundResponse)
   @ApiInternalServerErrorResponse(responses.apiInternalServerErrorResponse)
   async isAlreadyLoggedIn(
-    @Body() alreadyLoggedinDto: AlreadyLoggedinDto
+    @Body() alreadyLoggedinDto: AlreadyLoggedinDto,
   ): Promise<CommonApiResponse> {
     const requestId = randomUUID();
     const session = await this.connection.startSession();
