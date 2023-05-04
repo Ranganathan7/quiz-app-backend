@@ -115,7 +115,7 @@ export class RedisModule {
         {
           provide: 'RETRY_MS',
           useFactory: async (...args) => {
-            const { retryMs } = await useFactory(options);
+            const { retryMs } = await useFactory(...args);
             return retryMs;
           },
           inject: inject,
