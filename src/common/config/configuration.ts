@@ -28,7 +28,7 @@ export default () => ({
       maxSize: process.env.LOG_MAX_SIZE || '100m',
       maxFile: process.env.LOG_MAX_FILE || '30d',
       zippedArchive: process.env.LOG_ZIPPED_ARCHIVE === 'true' || true,
-    }
+    },
   },
   jwt: {
     secret: process.env.JWT_SECRET || 'quiz-app-api_jwt-secret',
@@ -37,7 +37,17 @@ export default () => ({
   cookie: {
     field: process.env.COOKIE_FIELD || 'quiz-app',
     maxAge: parseInt(process.env.COOKIE_MAX_AGE) || 86400000,
-  }
+  },
+  redis: {
+    url: process.env.REDIS_URL || 'redis://localhost:6379',
+    ttl: parseInt(process.env.REDIS_TTL) || 60,
+    max: parseInt(process.env.REDIS_MAX) || 100,
+    retryMs: process.env.REDIS_RETRY_MS || 2000,
+  },
+  kafka: {
+    brokers: process.env.KAFKA_BROKERS.split(',') || ['localhost:9092'],
+    retryMs: process.env.KAFKA_RETRY_MS || 2000,
+  },
 });
 
 export const config = {
@@ -75,12 +85,12 @@ export const CONSTANTS = {
       },
       LOGOUT: {
         PATH: 'logout',
-        TAG: 'logout'
+        TAG: 'logout',
       },
       ALREADY_LOGGEDIN: {
         PATH: 'already-loggedin',
-        TAG: 'already-loggedin'
-      }
+        TAG: 'already-loggedin',
+      },
     },
     CREATED_QUIZ: {
       CONTROLLER: 'created-quiz',
@@ -91,24 +101,24 @@ export const CONSTANTS = {
       },
       CREATE_QUIZ: {
         PATH: 'create',
-        TAG: 'create-quiz'
+        TAG: 'create-quiz',
       },
       ATTEND_QUIZ: {
         PATH: 'attend-quiz',
-        TAG: 'attend-quiz ?quizId'
+        TAG: 'attend-quiz ?quizId',
       },
       DELETE_QUIZ: {
         PATH: 'delete-quiz',
-        TAG: 'delete-quiz ? quizId'
+        TAG: 'delete-quiz ? quizId',
       },
       EDIT_QUIZ_OPTIONS: {
         PATH: 'edit-quiz-options',
-        TAG: 'edit-quiz-options'
+        TAG: 'edit-quiz-options',
       },
       EDIT_QUIZ_QUESTIONS: {
         PATH: 'edit-quiz-questions',
-        TAG: 'edit-quiz-questions'
-      }
+        TAG: 'edit-quiz-questions',
+      },
     },
     ATTENDED_QUIZ: {
       CONTROLLER: 'attended-quiz',
@@ -120,7 +130,7 @@ export const CONSTANTS = {
       SUBMIT_QUIZ: {
         PATH: 'submit-quiz',
         TAG: 'submit-quiz',
-      }
+      },
     },
   },
   LOG: {
