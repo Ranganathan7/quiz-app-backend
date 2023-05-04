@@ -17,19 +17,35 @@ export class CacheService {
     try {
       return this.redis.get(key);
     } catch (err) {
+      this.logger.error('Error getting the value from cache. Retrying...', err);
       await new Promise((resolve) => setTimeout(resolve, this.retryMs));
       await this.get(key);
     }
   }
 
   async set(key: string, value: any): Promise<void> {
-    if (typeof value === 'object') {
-      value = JSON.stringify(value);
+    try {
+      if (typeof value === 'object') {
+        value = JSON.stringify(value);
+      }
+      await this.redis.set(key, value, { EX: this.ttl });
+    } catch (err) {
+      this.logger.error(
+        'Error setting the key and value in cache. Retrying...',
+        err,
+      );
+      await new Promise((resolve) => setTimeout(resolve, this.retryMs));
+      await this.set(key, value);
     }
-    await this.redis.set(key, value, { EX: this.ttl });
   }
 
   async delete(key: string): Promise<void> {
-    await this.redis.del(key);
+    try {
+      await this.redis.del(key);
+    } catch (err) {
+      this.logger.error('Error deleting the key from cache. Retrying...', err);
+      await new Promise((resolve) => setTimeout(resolve, this.retryMs));
+      await this.delete(key);
+    }
   }
 }
